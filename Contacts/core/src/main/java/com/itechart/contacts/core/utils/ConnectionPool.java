@@ -13,10 +13,10 @@ import javax.sql.DataSource;
  */
 public class ConnectionPool {
     private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    private static final String JDBC_DB_URL = "jdbc:mysql://localhost:3306/users_db";
+    private static final String JDBC_DB_URL = "jdbc:mysql://localhost:3306/contacts_db";
 
-    private static final String JDBC_USER = "root";
-    private static final String JDBC_PASS = "root";
+    private static final String JDBC_USER = "baymurat";
+    private static final String JDBC_PASS = "password";
 
     public ConnectionPool() {
         super();

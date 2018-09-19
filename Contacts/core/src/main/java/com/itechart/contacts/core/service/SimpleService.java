@@ -25,6 +25,10 @@ public class SimpleService {
     public SimpleService() {
     }
 
+    public void addRecord() {
+
+    }
+
     public Collection<Contact> getContacts() {
 
         JDBCContactDao contactDao = null;

@@ -16,6 +16,8 @@ public class RESTController {
 
     @RequestMapping("/fill-index")
     public Collection<Contact> getContacts() {
+        String asd = "";
         return simpleService.getContacts();
     }
+
 }
