@@ -27,16 +27,6 @@ public class TestingClass {
             JDBCAttachmentDao attachmentDao = new JDBCAttachmentDao(connection);
             JDBCPhonesDao phonesDao = new JDBCPhonesDao(connection);
 
-            List<Contact> contacts = contactDao.getAll();
-            List<Attachment> attachments = attachmentDao.getAll();
-            List<Phone> phones = phonesDao.getAll();
-
-            for (int i = 0; i < contacts.size(); i++) {
-                System.out.print("Current contact has: " + contacts.get(i).getName() + "  " + contacts.get(i).getSurName() + "  " + contacts.get(i).getMiddleName());
-                System.out.print("  " + attachments.get(i).getFileName() + "  ");
-                System.out.println(phones.get(i).getCodeOfCountry() + phones.get(i).getCodeOfOperator() + phones.get(i).getPhoneNumber());
-            }
-
         } catch (Exception e) {
             e.printStackTrace();
         }

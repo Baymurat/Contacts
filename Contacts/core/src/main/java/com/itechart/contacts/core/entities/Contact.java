@@ -19,8 +19,13 @@ public class Contact implements Serializable{
     private String webSite;
     private String email;
     private String currentJob;
+    private String country;
+    private String city;
+    private String streetHouseApart;
+    private int index;
+    private int id;
     private Date birthDate;
-    private Address address;
+
 
     private List<Phone> phones;
     private List<Attachment> attachments;
@@ -109,14 +114,6 @@ public class Contact implements Serializable{
         this.currentJob = currentJob;
     }
 
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
-    }
-
     public Collection<Phone> getPhones() {
         return phones;
     }
@@ -131,5 +128,45 @@ public class Contact implements Serializable{
 
     public void setAttachments(List<Attachment> attachments) {
         this.attachments = attachments;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getStreetHouseApart() {
+        return streetHouseApart;
+    }
+
+    public void setStreetHouseApart(String streetHouseApart) {
+        this.streetHouseApart = streetHouseApart;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

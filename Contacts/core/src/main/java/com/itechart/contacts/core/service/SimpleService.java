@@ -13,6 +13,8 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Admin on 13.09.2018
@@ -26,34 +28,30 @@ public class SimpleService {
     }
 
     public void addRecord() {
-
-    }
-
-    public Collection<Contact> getContacts() {
-
         JDBCContactDao contactDao = null;
         JDBCPhonesDao phonesDao = null;
         JDBCAttachmentDao attachmentsDao = null;
 
         ConnectionPool connectionPool = new ConnectionPool();
+    }
 
-        Collection<Contact> contacts = new ArrayList<>();
-        Collection<Phone> phones = new ArrayList<>();
-        Collection<Attachment> attachments = new ArrayList<>();
+    public Map<Integer, Contact> getContacts(int from) {
+
+        JDBCContactDao contactDao;
+
+        ConnectionPool connectionPool = new ConnectionPool();
+
+        Map<Integer, Contact> result ; new HashMap<>();
 
         try {
             DataSource dataSource = connectionPool.setUpPool();
             connection = dataSource.getConnection();
 
             contactDao = new JDBCContactDao(connection);
-            phonesDao = new JDBCPhonesDao(connection);
-            attachmentsDao = new JDBCAttachmentDao(connection);
 
-            attachments = attachmentsDao.getAll();
-            phones = phonesDao.getAll();
-            contacts = contactDao.getAll();
+            result = contactDao.getRecords(from);
 
-            return contacts;
+            return result;
 
         } catch (Exception e) {
             e.printStackTrace();

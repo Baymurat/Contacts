@@ -3,7 +3,14 @@
         return res.json();
     }).
     then(function(contacts) {
-        for(let i = 0; i < contacts.length; i++) {
+         console.log("Running index.js");
+        console.log(contacts.length);
+        for(let i = 0; i < contacts.length; i++ ) {
+            console.log(contacts[i]);
+        }
+
+        console.log(contacts);
+        /* for(let i = 0; i < contacts.length; i++) {
         
             let currentElement = contacts[i];
             
@@ -25,11 +32,11 @@
             tableRow.appendChild(dataAttachment);
     
             document.getElementById('myTable').appendChild(tableRow);
-        }
+        } */
     });
     
-    let addButton = document.getElementById('add-button');
+    /* let addButton = document.getElementById('add-button');
     
     addButton.addEventListener('click', function() {
         console.log("Pressed Add button")
-    })
+    }) */

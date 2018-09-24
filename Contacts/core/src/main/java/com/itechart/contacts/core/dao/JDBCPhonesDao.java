@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -44,36 +45,7 @@ public class JDBCPhonesDao implements DAO<Phone, Integer> {
     }
 
     @Override
-    public List<Phone> getAll() {
-        List<Phone> result = new ArrayList<>();
-        try {
-            preparedStatement = connection.prepareStatement("SELECT * FROM phone");
-            resultSet = preparedStatement.executeQuery();
-            simpleMethod(resultSet, result);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            CustomUtils.closeRsultSet(resultSet);
-            CustomUtils.closePreparedStatement(preparedStatement);
-        }
-        return result;
-    }
-
-    private void simpleMethod(ResultSet resultSet, Collection<Phone> phones) {
-        try {
-            while (resultSet.next()) {
-                Phone phone = new Phone();
-                phone.setCodeOfCountry(resultSet.getString("country_code"));
-                phone.setCodeOfOperator(resultSet.getString("operator_code"));
-                phone.setPhoneNumber(resultSet.getString("phone_number"));
-                phone.setType(resultSet.getString("number_type"));
-                phone.setComments(resultSet.getString("comments"));
-
-                phones.add(phone);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public HashMap<Integer, Phone> getRecords(int from) {
+        return null;
     }
 }

@@ -4,19 +4,19 @@ package com.itechart.contacts.core.entities;
  * Created by Admin on 12.09.2018
  */
 public class Phone {
-    private String phoneNumber;
+    private int phoneNumber;
+    private int codeOfCountry;
+    private int codeOfOperator;
     private String type;
     private String comments;
-    private String codeOfCountry;
-    private String codeOfOperator;
 
     public Phone() {}
 
-    public String getPhoneNumber() {
+    public int getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
+    public void setPhoneNumber(int phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
@@ -36,19 +36,19 @@ public class Phone {
         this.comments = comments;
     }
 
-    public String getCodeOfCountry() {
+    public int getCodeOfCountry() {
         return codeOfCountry;
     }
 
-    public void setCodeOfCountry(String codeOfCountry) {
+    public void setCodeOfCountry(int codeOfCountry) {
         this.codeOfCountry = codeOfCountry;
     }
 
-    public String getCodeOfOperator() {
+    public int getCodeOfOperator() {
         return codeOfOperator;
     }
 
-    public void setCodeOfOperator(String codeOfOperator) {
+    public void setCodeOfOperator(int codeOfOperator) {
         this.codeOfOperator = codeOfOperator;
     }
 }

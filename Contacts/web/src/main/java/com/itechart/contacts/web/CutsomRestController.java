@@ -6,18 +6,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
-
+import java.util.Map;
 
 
 @RestController
-public class RESTController {
+public class CutsomRestController {
 
     private SimpleService simpleService = new SimpleService();
 
     @RequestMapping("/fill-index")
-    public Collection<Contact> getContacts() {
-        String asd = "";
-        return simpleService.getContacts();
+    public Map<Integer, Contact> getContacts() {
+        return simpleService.getContacts(0);
     }
 
 }
