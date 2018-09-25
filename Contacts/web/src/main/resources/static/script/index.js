@@ -3,11 +3,7 @@
         return res.json();
     }).
     then(function(contacts) {
-         console.log("Running index.js");
-        console.log(contacts.length);
-        for(let i = 0; i < contacts.length; i++ ) {
-            console.log(contacts[i]);
-        }
+        
 
         console.log(contacts);
         /* for(let i = 0; i < contacts.length; i++) {

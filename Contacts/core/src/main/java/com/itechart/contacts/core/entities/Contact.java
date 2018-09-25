@@ -114,7 +114,7 @@ public class Contact implements Serializable{
         this.currentJob = currentJob;
     }
 
-    public Collection<Phone> getPhones() {
+    public List<Phone> getPhones() {
         return phones;
     }
 
@@ -122,7 +122,7 @@ public class Contact implements Serializable{
         this.phones = phones;
     }
 
-    public Collection<Attachment> getAttachments() {
+    public List<Attachment> getAttachments() {
         return attachments;
     }
 
@@ -168,5 +168,9 @@ public class Contact implements Serializable{
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String toString() {
+        return this.id + this.name;
     }
 }

@@ -28,7 +28,7 @@ CREATE TABLE phones (
     phonebumber INT(10),
     type ENUM ('home', 'mobile'),
     comments VARCHAR(50),
-    FOREIGN KEY (persons_id) REFERENCES persons(id)
+    FOREIGN KEY (persons_id) REFERENCES persons(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE attachments (
@@ -72,15 +72,19 @@ SELECT persons.id, name, persons_id, operatorcode, phonebumber, type, comments  
 SELECT * FROM persons /*JOIN phones ON (persons.id = phones.persons_id) */ JOIN attachments ON (persons.id = attachments.persons_id) GROUP BY name;
 
 SELECT * FROM phones JOIN (SELECT id, name FROM persons) te ON phones.persons_id = te.id;
-SELECT * FROM persons ;
+SELECT * FROM persons;
 SELECT * FROM phones;
 SELECT * FROM attachments;
 
 SELECT * FROM persons;
-DELETE FROM persons WHERE id = 5;
+DELETE FROM persons WHERE id = 6;
 
 ALTER TABLE phones ADD CONSTRAINT `phones_fk_persons_id` FOREIGN KEY  (persons_id) REFERENCES persons(id) ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE attachments ADD CONSTRAINT `attachmetns_fk_persons_id` FOREIGN KEY (persons_id) REFERENCES persons(id) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE attachments ADD CONSTRAINT `attachments_fk_persons_id` FOREIGN KEY (persons_id) REFERENCES persons(id) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE phones DROP FOREIGN KEY `phones_fk_persons_id`;
+ALTER TABLE attachments DROP FOREIGN KEY `attachmetns_fk_persons_id`;
+
 
 /* Corrects id sequences after deleting >*/
 SET @persons_id_conut = 0;
@@ -92,6 +96,8 @@ UPDATE phones SET phones.id = @phones_id_count:= @phones_id_count + 1;
 UPDATE attachments SET attachments.id = @attachments_id_count:= @attachments_id_count + 1;
 
 ALTER TABLE persons AUTO_INCREMENT = 1;
+ALTER TABLE phones AUTO_INCREMENT = 1;
+ALTER TABLE attachments AUTO_INCREMENT = 1;
 
 /* ^_________*/
 

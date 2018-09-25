@@ -16,8 +16,8 @@ import java.util.List;
  * Created by Admin on 13.09.2018
  */
 public class JDBCPhonesDao implements DAO<Phone, Integer> {
-    private ResultSet resultSet = null;
-    private PreparedStatement preparedStatement = null;
+    PreparedStatement preparedStatement = null;
+    ResultSet resultSetPhones = null;
     private Connection connection;
 
     public JDBCPhonesDao(Connection connection) {
@@ -31,21 +31,97 @@ public class JDBCPhonesDao implements DAO<Phone, Integer> {
 
     @Override
     public Phone update(Phone phone) {
+        try {
+            preparedStatement = connection.prepareStatement("UPDATE phones SET persons_id = ?, countrycode = ?," +
+                    "operatorcode = ?, phonebumber = ?, type = ?, comments = ? WHERE id = ?;");
+            preparedStatement.setInt(7, phone.getId());
+            statementExecutor(phone);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
     @Override
     public boolean delete(Integer id) {
+        try {
+            preparedStatement = connection.prepareStatement("DELETE FROM phones WHERE id = ?");
+            preparedStatement.setInt(1, id);
+            preparedStatement.executeUpdate();
+            preparedStatement = connection.prepareStatement("SET @phones_id_count = 0;");
+            preparedStatement.executeUpdate();
+            preparedStatement = connection.prepareStatement("UPDATE phones SET phones.id = @phones_id_count:= @phones_id_count + 1;");
+            preparedStatement.executeUpdate();
+            preparedStatement = connection.prepareStatement("ALTER TABLE phones AUTO_INCREMENT = 1");
+            preparedStatement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            CustomUtils.closePreparedStatement(preparedStatement);
+        }
         return false;
     }
 
     @Override
-    public boolean insert(Phone phone) {
-        return false;
+    public int insert(Phone phone) {
+        try {
+            preparedStatement = connection.prepareStatement("INSERT INTO phones VALUES (null, ?, ?, ?, ?, ?, ?);");
+            statementExecutor(phone);
+            return 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            CustomUtils.closePreparedStatement(preparedStatement);
+        }
+        return -1;
     }
 
     @Override
     public HashMap<Integer, Phone> getRecords(int from) {
+        int range = 11;
+
+        HashMap<Integer, Phone> resultMap = new HashMap<>();
+        try {
+            //preparedStatement = connection.prepareStatement("SELECT persons.id AS id, countrycode, operatorcode, phonebumber, comments FROM persons JOIN phones ON (persons.id = phones.persons_id) WHERE persons.id > " + from + " && persons.id < " + (from + range) + ";");
+            preparedStatement = connection.prepareStatement("SELECT * FROM phones WHERE persons_id > " + from + " && persons_id < " + (from + range) + ";");
+            resultSetPhones = preparedStatement.executeQuery();
+
+            while (resultSetPhones.next()) {
+                int currentId = resultSetPhones.getInt(1);
+
+                Phone phone = new Phone();
+                phone.setId(resultSetPhones.getInt("id"));
+                phone.setCodeOfCountry(resultSetPhones.getInt("countrycode"));
+                phone.setCodeOfOperator(resultSetPhones.getInt("operatorcode"));
+                phone.setPhoneNumber(resultSetPhones.getInt("phonebumber"));
+                phone.setComments(resultSetPhones.getString("comments"));
+                phone.setPersons_id(resultSetPhones.getInt("persons_id"));
+                resultMap.put(currentId, phone);
+            }
+
+            return resultMap;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            CustomUtils.closeRsultSet(resultSetPhones);
+            CustomUtils.closePreparedStatement(preparedStatement);
+        }
+
         return null;
+    }
+
+    private void statementExecutor(Phone phone) {
+        try {
+            preparedStatement.setInt(1, phone.getPersons_id());
+            preparedStatement.setInt(2, phone.getCodeOfCountry());
+            preparedStatement.setInt(3, phone.getCodeOfOperator());
+            preparedStatement.setInt(4, phone.getPhoneNumber());
+            preparedStatement.setString(5, phone.getType());
+            preparedStatement.setString(6, phone.getComments());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

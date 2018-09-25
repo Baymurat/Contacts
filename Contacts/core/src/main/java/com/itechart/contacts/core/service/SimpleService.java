@@ -11,10 +11,9 @@ import com.itechart.contacts.core.utils.CustomUtils;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.sql.SQLException;
+import java.sql.Savepoint;
+import java.util.*;
 
 /**
  * Created by Admin on 13.09.2018
@@ -27,31 +26,96 @@ public class SimpleService {
     public SimpleService() {
     }
 
-    public void addRecord() {
-        JDBCContactDao contactDao = null;
-        JDBCPhonesDao phonesDao = null;
-        JDBCAttachmentDao attachmentsDao = null;
+    public void delete(int i) {
+        JDBCContactDao contactDao;
 
         ConnectionPool connectionPool = new ConnectionPool();
+        Savepoint savepoint = null;
+        try {
+            DataSource dataSource = connectionPool.setUpPool();
+            connection = dataSource.getConnection();
+            connection.setAutoCommit(false);
+            savepoint = connection.setSavepoint();
+
+            contactDao = new JDBCContactDao(connection);
+
+            contactDao.delete(i);
+
+            connection.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            try {
+                connection.rollback(savepoint);
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+        } finally {
+            CustomUtils.closeConnection(connection);
+        }
+    }
+
+    public void addRecord(Contact contact, Attachment attachment, Phone phone) {
+        JDBCContactDao contactDao;
+        JDBCPhonesDao phonesDao;
+        JDBCAttachmentDao attachmentsDao;
+
+        ConnectionPool connectionPool = new ConnectionPool();
+        Savepoint savepoint = null;
+        try {
+            DataSource dataSource = connectionPool.setUpPool();
+            connection = dataSource.getConnection();
+            connection.setAutoCommit(false);
+            savepoint = connection.setSavepoint();
+
+            contactDao = new JDBCContactDao(connection);
+            attachmentsDao = new JDBCAttachmentDao(connection);
+            phonesDao = new JDBCPhonesDao(connection);
+
+            contactDao.insert(contact);
+            attachmentsDao.insert(attachment);
+            phonesDao.insert(phone);
+
+            connection.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            try {
+                connection.rollback(savepoint);
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+        } finally {
+            CustomUtils.closeConnection(connection);
+        }
     }
 
     public Map<Integer, Contact> getContacts(int from) {
 
         JDBCContactDao contactDao;
+        JDBCAttachmentDao attachmentDao;
+        JDBCPhonesDao phonesDao;
 
         ConnectionPool connectionPool = new ConnectionPool();
 
-        Map<Integer, Contact> result ; new HashMap<>();
+        HashMap<Integer, Contact> resultContactsMap;
+        HashMap<Integer, Attachment> resultAttachmentMap;
+        HashMap<Integer, Phone> resultPhoneMap;
 
         try {
             DataSource dataSource = connectionPool.setUpPool();
             connection = dataSource.getConnection();
 
             contactDao = new JDBCContactDao(connection);
+            attachmentDao = new JDBCAttachmentDao(connection);
+            phonesDao = new JDBCPhonesDao(connection);
 
-            result = contactDao.getRecords(from);
+            resultContactsMap = contactDao.getRecords(from);
+            resultAttachmentMap = attachmentDao.getRecords(from);
+            resultPhoneMap = phonesDao.getRecords(from);
 
-            return result;
+            bindPhonesAndContacts(resultPhoneMap, resultContactsMap);
+            bindAttachmentsAndContacts(resultAttachmentMap, resultContactsMap);
+
+            return resultContactsMap;
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -60,5 +124,24 @@ public class SimpleService {
         }
 
         return null;
+    }
+
+    private void bindPhonesAndContacts(HashMap<Integer, Phone> phoneMap, HashMap<Integer, Contact> contactMap) {
+        Iterator iterator = phoneMap.entrySet().iterator();
+
+        while (iterator.hasNext()) {
+            Map.Entry pair = (Map.Entry)iterator.next();
+            Phone tepmPhoneObj = (Phone)pair.getValue();
+            contactMap.get(tepmPhoneObj.getPersons_id()).getPhones().add(tepmPhoneObj);
+        }
+    }
+
+    private void bindAttachmentsAndContacts(HashMap<Integer, Attachment> attachmentMap, HashMap<Integer, Contact> contactMap) {
+        Iterator iterator = attachmentMap.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry pair = (Map.Entry)iterator.next();
+            Attachment tempAttachmentObj = (Attachment)pair.getValue();
+            contactMap.get(tempAttachmentObj.getPersons_id()).getAttachments().add(tempAttachmentObj);
+        }
     }
 }
