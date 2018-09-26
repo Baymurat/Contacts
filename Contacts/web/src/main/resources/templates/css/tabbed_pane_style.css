@@ -1,0 +1,34 @@
+#tabbed-pane {
+   
+}
+
+/* #person {
+    width: 500px;
+    height: 300px;
+} */
+
+#phone {
+    width: 600px;
+    height: 300px;
+}
+
+#attachment {
+    width: 600px;
+    height: 300px;
+}
+
+input {
+    margin: 10px;
+}
+
+.part-one {
+    display: inline-block;
+    height: 300px;
+    width: 280px;
+}
+
+.part-two {
+    display: inline-block;
+    height: 300px;
+    width: 280px;
+}

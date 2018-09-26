@@ -54,7 +54,7 @@ public class SimpleService {
         }
     }
 
-    public void addRecord(Contact contact, Attachment attachment, Phone phone) {
+    public void addRecord(Contact contact) {
         JDBCContactDao contactDao;
         JDBCPhonesDao phonesDao;
         JDBCAttachmentDao attachmentsDao;
@@ -62,6 +62,9 @@ public class SimpleService {
         ConnectionPool connectionPool = new ConnectionPool();
         Savepoint savepoint = null;
         try {
+            List<Phone> phones = contact.getPhones();
+            List<Attachment> attachments = contact.getAttachments();
+
             DataSource dataSource = connectionPool.setUpPool();
             connection = dataSource.getConnection();
             connection.setAutoCommit(false);
@@ -72,8 +75,14 @@ public class SimpleService {
             phonesDao = new JDBCPhonesDao(connection);
 
             contactDao.insert(contact);
-            attachmentsDao.insert(attachment);
-            phonesDao.insert(phone);
+
+            for (Phone p : phones) {
+                phonesDao.insert(p);
+            }
+
+            for (Attachment a : attachments) {
+                attachmentsDao.insert(a);
+            }
 
             connection.commit();
         } catch (Exception e) {
@@ -88,7 +97,7 @@ public class SimpleService {
         }
     }
 
-    public Map<Integer, Contact> getContacts(int from) {
+    public ArrayList<Contact> getContacts(int from) {
 
         JDBCContactDao contactDao;
         JDBCAttachmentDao attachmentDao;
@@ -115,7 +124,7 @@ public class SimpleService {
             bindPhonesAndContacts(resultPhoneMap, resultContactsMap);
             bindAttachmentsAndContacts(resultAttachmentMap, resultContactsMap);
 
-            return resultContactsMap;
+            return new ArrayList<>(resultContactsMap.values());
 
         } catch (Exception e) {
             e.printStackTrace();

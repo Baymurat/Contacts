@@ -17,18 +17,18 @@ import java.util.List;
  */
 public class TestingClass {
     public static void main(String[] args) {
-        ConnectionPool connectionPool = new ConnectionPool();
+        int[] values = {23, 12, 13, 17, 23, 19};
 
-        try {
-            DataSource dataSource = connectionPool.setUpPool();
-            Connection connection = dataSource.getConnection();
+        for (int i = 0; i < values.length - 1; i++) {
+            if (values[i] > values[i + 1]) {
+                int t = values[i];
+                values[i] = values[i + 1];
+                values[i + 1] = t;
+            }
+        }
 
-            JDBCContactDao contactDao = new JDBCContactDao(connection);
-            JDBCAttachmentDao attachmentDao = new JDBCAttachmentDao(connection);
-            JDBCPhonesDao phonesDao = new JDBCPhonesDao(connection);
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        for (int i : values) {
+            System.out.print(i + " ");
         }
     }
 }

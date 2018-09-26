@@ -171,6 +171,6 @@ public class Contact implements Serializable{
     }
 
     public String toString() {
-        return this.id + this.name;
+        return this.id + this.name + this.attachments;
     }
 }
