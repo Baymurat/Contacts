@@ -26,7 +26,7 @@ public class SimpleService {
     public SimpleService() {
     }
 
-    public void delete(int i) {
+    public void delete(Contact contact) {
         JDBCContactDao contactDao;
 
         ConnectionPool connectionPool = new ConnectionPool();
@@ -39,7 +39,7 @@ public class SimpleService {
 
             contactDao = new JDBCContactDao(connection);
 
-            contactDao.delete(i);
+            contactDao.delete(contact.getId());
 
             connection.commit();
         } catch (Exception e) {
@@ -77,10 +77,12 @@ public class SimpleService {
             contactDao.insert(contact);
 
             for (Phone p : phones) {
+                p.setPersons_id(contact.getId());
                 phonesDao.insert(p);
             }
 
             for (Attachment a : attachments) {
+                a.setPersons_id(contact.getId());
                 attachmentsDao.insert(a);
             }
 

@@ -7,10 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by Admin on 13.09.2018
@@ -48,12 +45,7 @@ public class JDBCPhonesDao implements DAO<Phone, Integer> {
             preparedStatement = connection.prepareStatement("DELETE FROM phones WHERE id = ?");
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
-            preparedStatement = connection.prepareStatement("SET @phones_id_count = 0;");
-            preparedStatement.executeUpdate();
-            preparedStatement = connection.prepareStatement("UPDATE phones SET phones.id = @phones_id_count:= @phones_id_count + 1;");
-            preparedStatement.executeUpdate();
-            preparedStatement = connection.prepareStatement("ALTER TABLE phones AUTO_INCREMENT = 1");
-            preparedStatement.executeUpdate();
+
             return true;
         } catch (SQLException e) {
             e.printStackTrace();

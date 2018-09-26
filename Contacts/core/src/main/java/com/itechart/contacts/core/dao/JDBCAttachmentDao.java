@@ -1,14 +1,10 @@
 package com.itechart.contacts.core.dao;
 
 import com.itechart.contacts.core.entities.Attachment;
-import com.itechart.contacts.core.entities.Contact;
 import com.itechart.contacts.core.utils.CustomUtils;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by Admin on 13.09.2018
@@ -48,12 +44,7 @@ public class JDBCAttachmentDao implements DAO<Attachment, Integer> {
             preparedStatement = connection.prepareStatement("DELETE FROM attachments WHERE id = ?");
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
-            preparedStatement = connection.prepareStatement("SET @attachments_id_count = 0;");
-            preparedStatement.executeUpdate();
-            preparedStatement = connection.prepareStatement("UPDATE attachments SET attachments.id = @attachments_id_count:= @attachments_id_count + 1;");
-            preparedStatement.executeUpdate();
-            preparedStatement = connection.prepareStatement("ALTER TABLE attachments AUTO_INCREMENT = 1");
-            preparedStatement.executeUpdate();
+
             return true;
         } catch (SQLException e) {
             e.printStackTrace();

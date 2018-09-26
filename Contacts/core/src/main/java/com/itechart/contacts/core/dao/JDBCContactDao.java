@@ -5,7 +5,6 @@ import com.itechart.contacts.core.entities.Contact;
 import com.itechart.contacts.core.entities.Phone;
 import com.itechart.contacts.core.utils.CustomUtils;
 
-import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -62,12 +61,7 @@ public class JDBCContactDao implements DAO<Contact, Integer> {
             preparedStatement = connection.prepareStatement("DELETE FROM persons WHERE id = ?");
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
-            preparedStatement = connection.prepareStatement("SET @persons_id_count = 0;");
-            preparedStatement.executeUpdate();
-            preparedStatement = connection.prepareStatement("UPDATE persons SET persons.id = @persons_id_count:= @persons_id_count + 1;");
-            preparedStatement.executeUpdate();
-            preparedStatement = connection.prepareStatement("ALTER TABLE persons AUTO_INCREMENT = 1");
-            preparedStatement.executeUpdate();
+
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -82,6 +76,8 @@ public class JDBCContactDao implements DAO<Contact, Integer> {
         try {
             preparedStatement = connection.prepareStatement("INSERT INTO persons VALUES (null, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
             statementExecutor(contact);
+            resultSetContacts = preparedStatement.executeQuery("select last_insert_id() as last_id from persons");
+            contact.setId(resultSetContacts.getInt("last_id"));
             return 0;
         } catch (SQLException e) {
             e.printStackTrace();
