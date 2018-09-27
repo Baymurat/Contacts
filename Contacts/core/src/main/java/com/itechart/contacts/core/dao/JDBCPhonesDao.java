@@ -60,6 +60,8 @@ public class JDBCPhonesDao implements DAO<Phone, Integer> {
         try {
             preparedStatement = connection.prepareStatement("INSERT INTO phones VALUES (null, ?, ?, ?, ?, ?, ?);");
             statementExecutor(phone);
+            resultSetPhones = preparedStatement.executeQuery("select last_insert_id() as last_id from phones");
+            phone.setId(resultSetPhones.getInt("last_id"));
             return 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -75,7 +77,6 @@ public class JDBCPhonesDao implements DAO<Phone, Integer> {
 
         HashMap<Integer, Phone> resultMap = new HashMap<>();
         try {
-            //preparedStatement = connection.prepareStatement("SELECT persons.id AS id, countrycode, operatorcode, phonebumber, comments FROM persons JOIN phones ON (persons.id = phones.persons_id) WHERE persons.id > " + from + " && persons.id < " + (from + range) + ";");
             preparedStatement = connection.prepareStatement("SELECT * FROM phones WHERE persons_id > " + from + " && persons_id < " + (from + range) + ";");
             resultSetPhones = preparedStatement.executeQuery();
 

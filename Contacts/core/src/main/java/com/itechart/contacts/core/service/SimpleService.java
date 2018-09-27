@@ -26,7 +26,108 @@ public class SimpleService {
     public SimpleService() {
     }
 
-    public void delete(Contact contact) {
+    public void updateRecord(Contact contact) {
+        JDBCContactDao contactDao;
+        JDBCPhonesDao phonesDao;
+        JDBCAttachmentDao attachmentsDao;
+
+        ConnectionPool connectionPool = new ConnectionPool();
+        Savepoint savepoint = null;
+        try {
+            List<Phone> phones = contact.getPhones();
+            List<Attachment> attachments = contact.getAttachments();
+
+            DataSource dataSource = connectionPool.setUpPool();
+            connection = dataSource.getConnection();
+            connection.setAutoCommit(false);
+            savepoint = connection.setSavepoint();
+
+            contactDao = new JDBCContactDao(connection);
+            attachmentsDao = new JDBCAttachmentDao(connection);
+            phonesDao = new JDBCPhonesDao(connection);
+
+            contactDao.update(contact);
+
+            for (Phone p : phones) {
+                p.setPersons_id(contact.getId());
+                phonesDao.update(p);
+            }
+
+            for (Attachment a : attachments) {
+                a.setPersons_id(contact.getId());
+                attachmentsDao.update(a);
+            }
+
+            connection.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            try {
+                connection.rollback(savepoint);
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+        } finally {
+            CustomUtils.closeConnection(connection);
+        }
+    }
+
+    public void deleteAttachment(Attachment attachment) {
+        JDBCAttachmentDao attachmentDao;
+
+        ConnectionPool connectionPool = new ConnectionPool();
+        Savepoint savepoint = null;
+        try {
+            DataSource dataSource = connectionPool.setUpPool();
+            connection = dataSource.getConnection();
+            connection.setAutoCommit(false);
+            savepoint = connection.setSavepoint();
+
+            attachmentDao = new JDBCAttachmentDao(connection);
+
+            attachmentDao.delete(attachment.getId());
+
+            connection.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            try {
+                connection.rollback(savepoint);
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+        } finally {
+            CustomUtils.closeConnection(connection);
+        }
+    }
+
+    public void deletePhone(Phone phone) {
+        JDBCPhonesDao phonestDao;
+
+        ConnectionPool connectionPool = new ConnectionPool();
+        Savepoint savepoint = null;
+        try {
+            DataSource dataSource = connectionPool.setUpPool();
+            connection = dataSource.getConnection();
+            connection.setAutoCommit(false);
+            savepoint = connection.setSavepoint();
+
+            phonestDao = new JDBCPhonesDao(connection);
+
+            phonestDao.delete(phone.getId());
+
+            connection.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            try {
+                connection.rollback(savepoint);
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+        } finally {
+            CustomUtils.closeConnection(connection);
+        }
+    }
+
+    public void deleteContact(Contact contact) {
         JDBCContactDao contactDao;
 
         ConnectionPool connectionPool = new ConnectionPool();

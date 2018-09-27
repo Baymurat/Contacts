@@ -59,6 +59,8 @@ public class JDBCAttachmentDao implements DAO<Attachment, Integer> {
         try {
             preparedStatement = connection.prepareStatement("INSERT INTO attachments VALUES (null, ?, ?, ?, ?);");
             statementExecutor(attachment);
+            resultSetAttachments = preparedStatement.executeQuery("select last_insert_id() as last_id from attachments");
+            attachment.setId(resultSetAttachments.getInt("last_id"));
 
             return 0;
         } catch (SQLException e) {
