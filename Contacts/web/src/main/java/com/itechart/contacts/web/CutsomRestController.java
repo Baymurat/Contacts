@@ -21,17 +21,17 @@ public class CutsomRestController {
 
     @RequestMapping("/delete-contact")
     public void delteContact(@RequestBody Contact contact) {
-        simpleService.deleteContact(contact);
+        simpleService.delete(contact);
     }
 
     @RequestMapping("/delete-phone")
     public void deltePhone(@RequestBody Phone phone) {
-        simpleService.deletePhone(phone);
+        simpleService.delete(phone);
     }
 
     @RequestMapping("/delete-attachment")
     public void delteAttachment(@RequestBody Attachment attachment) {
-        simpleService.deleteAttachment(attachment);
+        simpleService.delete(attachment);
     }
 
     @RequestMapping(value = "/add-record", method = RequestMethod.POST)

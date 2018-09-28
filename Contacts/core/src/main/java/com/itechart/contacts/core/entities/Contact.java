@@ -1,14 +1,13 @@
 package com.itechart.contacts.core.entities;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
 /**
  * Created by Admin on 11.09.2018
  */
-public class Contact implements Serializable{
+public class Contact extends Entity implements Serializable{
 
     private String name;
     private String surName;

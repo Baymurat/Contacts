@@ -3,7 +3,7 @@ package com.itechart.contacts.core.entities;
 /**
  * Created by Admin on 12.09.2018
  */
-public class Phone {
+public class Phone extends Entity {
     private int id;
     private int persons_id;
     private int phoneNumber;
