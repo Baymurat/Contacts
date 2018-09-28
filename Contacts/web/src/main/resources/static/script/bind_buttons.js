@@ -5,7 +5,7 @@ let searchButton = document.getElementById('search-button');
 let sendButton = document.getElementById('send-button');
 
 function addFunction() {
-    
+    window.location.replace('/add');
 }
 
 function editFunction() {

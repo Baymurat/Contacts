@@ -28,7 +28,10 @@ public class SimpleService {
     }
 
     public void updateRecord(Contact contact) {
-        JDBCContactDao contactDao;
+        deleteRecord(contact.getId());
+        addRecord(contact);
+
+        /*JDBCContactDao contactDao;
         JDBCPhonesDao phonesDao;
         JDBCAttachmentDao attachmentsDao;
 
@@ -69,7 +72,7 @@ public class SimpleService {
             }
         } finally {
             CustomUtils.closeConnection(connection);
-        }
+        }*/
     }
 
     /*public void deleteContact(Contact contact) {
@@ -100,9 +103,8 @@ public class SimpleService {
         }
     }*/
 
-    public void delete(Entity entity) {
-        JDBCAttachmentDao attachmentDao;
-        JDBCPhonesDao phonesDao;
+    public void deleteRecord(int contactId) {
+
         JDBCContactDao contactDao;
 
         ConnectionPool connectionPool = new ConnectionPool();
@@ -113,17 +115,8 @@ public class SimpleService {
             connection.setAutoCommit(false);
             savepoint = connection.setSavepoint();
 
-            if (entity instanceof Contact) {
-                contactDao = new JDBCContactDao(connection);
-                contactDao.delete(entity.getId());
-
-            } else if (entity instanceof Phone) {
-                phonesDao = new JDBCPhonesDao(connection);
-                phonesDao.delete(entity.getId());
-            } else {
-                attachmentDao = new JDBCAttachmentDao(connection);
-                attachmentDao.delete(entity.getId());
-            }
+            contactDao = new JDBCContactDao(connection);
+            contactDao.delete(contactId);
 
             connection.commit();
         } catch (Exception e) {

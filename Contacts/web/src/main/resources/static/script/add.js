@@ -1,47 +1,57 @@
-let addFunc = function() {
-    console.log("Add.js file start");
-    
+console.log("Add.js file start");
+
+function addRecordFunction() {
     let contact = {};
     let phone = {};
     let attachment = {};
     
-    phone.persons_id = 4;
+    //phone.persons_id = 0;
     phone.phoneNumber = 2579640;
     phone.codeOfCountry = 375;
     phone.codeOfOperator = 29;
-    phone.type = "home";
-    phone.comments = "Test phone number";
+    phone.type = 'mobile';
+    phone.comments = 'this is a test mobile phone';
     
-    attachment.fileName = "Test file";
-    attachment.comments = "Test file attachment";
-    attachment.loadDate = new Date();
-    attachment.persons_id = 4;
+    attachment.fileName = 'Test File name';
+    attachment.comments = 'This is a test file name';
+    //attachment.loadDate = new Date();
+    //attachment.persons_id = document.getElementById('');;
     
-    contact.name = "TestName";
-    contact.surName = "TestSurname";
-    contact.middleName = "TestMiddleName";
-    contact.gender = "TestGender";
-    contact.citizenship  = "Testcitizenship";
-    contact.familyStatus  = "TestfamilyStatus";
-    contact.webSite  = "TestwebSite";
-    contact.email  = "Testemail";
-    contact.currentJob  = "TestcurrentJob";
-    contact.country  = "Testcountry";
-    contact.city  = "Testcity";
-    contact.steetHouseApart  = "TeststeetHouseApart";
-    contact.index  = 99;
-    contact.birthDate  = new Date();
+    contact.name = document.getElementById('name').value;
+    contact.surName = document.getElementById('surname').value;
+    contact.middleName = document.getElementById('middlename').value;
+
+    let elementG = document.getElementById('gender');
+    contact.gender = elementG.options[elementG.selectedIndex].text;
+    contact.citizenship  = document.getElementById('citizenship').value;
+
+    let elementFS = document.getElementById('family-status');
+    contact.familyStatus  = elementFS.options[elementFS.selectedIndex].text;
+    contact.webSite  = document.getElementById('web-site').value;
+    contact.email  = document.getElementById('email').value;
+    contact.currentJob  = document.getElementById('currentjob').value;
+    
+    contact.country  = document.getElementById('country').value;
+    contact.city  = document.getElementById('city').value;
+    contact.steetHouseApart  = document.getElementById('street-house-apart').value;
+    contact.index  = document.getElementById('index').value;
+    //contact.birthDate  = new Date();
     contact.phones  = [];
     contact.attachments  = [];
-    contact.id = 4;
+    //contact.id = 4;
     contact.phones.push(phone) ;
     contact.attachments.push(attachment);
     
+    console.log(contact);
+
     let objectSend = JSON.stringify(contact);
     
     let xmlhttp = new XMLHttpRequest();
     xmlhttp.open("POST", "/add-record", true);
-    xmlhttp.send(contact);
+    //xmlhttp.setRequestHeader('Content-Type', 'application/json');
+    xmlhttp.setRequestHeader("Content-Type", "application/json");
+    xmlhttp.send(objectSend);
 }
 
-module.exports = addFunc;
+let acceptButton = document.getElementById('accept-button');
+acceptButton.addEventListener('click', addRecordFunction);

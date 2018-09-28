@@ -9,6 +9,136 @@
 </head>
 <body>
     <h1>THIS IS ADD PAGE</h1>
+    <div id="tabbed-pane">
+        <div class="tab">
+            <button class="tablinks" id="defaultOpen">Person</button>
+            <button class="tablinks">Phone</button>
+            <button class="tablinks">Attachment</button>
+        </div>
+
+        <div class="tabcontent" id="person">
+            <div class="part-one">
+                    <label for="name">Name</label>
+                    <input type="text" id="name">
+        
+                    <label for="surname">Surname</label>
+                    <input type="text" name="" id="surname">
+        
+                    <label for="middlename">Middlename</label>
+                    <input type="text" name="" id="middlename">
+        
+                    <label for="datebirth">Datebirth</label>
+                    <input type="date" name="" id="datebirth">
+        
+                    <label for="gender">Gender</label>
+                    <select name="" id="gender">
+                        <option value="">male</option>
+                        <option value="">female</option>
+                    </select>
+            </div>
+
+            <div class="part-two">
+                    <label for="citizenship">Citizenship</label>
+                    <input type="text" name="" id="citizenship">
+        
+                    <label for="family-status">Family status</label>
+                    <select name="" id="family-status">
+                        <option value="">single</option>
+                        <option value="">married</option>
+                    </select>
+        
+                    <label for="web-site">Website</label>
+                    <input type="text" name="" id="web-site">
+        
+                    <label for="email">Email</label>
+                    <input type="email" name="" id="email">
+        
+                    <label for="currentjob">Currentjob</label>
+                    <input type="text" name="" id="currentjob">
+        
+            </div>
+            
+
+            
+            <div id="address">
+                <label for="country">Country</label>
+                <input type="text" name="" id="country">
+
+                <label for="city">City</label>
+                <input type="text" name="" id="city">
+
+                <label for="street-house-apart">Street/House/Apart</label>
+                <input type="text" name="" id="street-house-apart">
+
+                <label for="index">Index</label>
+                <input type="number" name="" id="index">
+            </div>
+        </div>
+
+        <div class="tabcontent" id="phone">
+            <table id="phone-table">
+                <thead>
+                    <td>Phone number</td>
+                    <td>Description</td>
+                    <td>Comments</td>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+            <div id="">
+                <button id="phone-delete"></button>
+                <button id="phone-edit"></button>
+                <button id="phone-add"></button>
+            </div>
+        </div>
+
+        <div class="tabcontent" id="attachment">
+            <table id="attachment-table">
+                <thead>
+                    <td>File name</td>
+                    <td>Load date</td>
+                    <td>Comments</td>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+            <div id="">
+                <button id="attachment-delete"></button>
+                <button id="attachment-edit"></button>
+                <button id="attachment-add"></button>
+            </div>
+        </div>
+
+        <div id="add-pane-phone">
+            <label for="country-code">Country-code</label>
+            <input type="number" name="" id="country-code">
+
+            <label for="operator-code">Operator-code</label>
+            <input type="number" name="" id="operator-code">
+
+            <label for="phone-number">Phone-number</label>
+            <input type="number" name="" id="phone-number">
+
+            <label for="phone-number-type">Phone-number-type</label>
+            <select name="" id="phone-number-type">
+                <option value="">home</option>
+                <option value="">mobile</option>
+            </select>
+
+            <label for="comments"></label>
+        </div>
+
+        <div id="add-pane-attachment">
+            
+        </div>
+
+        <div>
+            <button id="accept-button">ACCEPT</button>
+
+        </div>
+    </div>
     <div class="simple-block"></div>
     <script src="./script/add.js"></script>
 </body>

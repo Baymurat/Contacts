@@ -9,7 +9,7 @@ import java.sql.SQLException;
  * Created by Admin on 18.09.2018
  */
 public class CustomUtils {
-    public static void closeRsultSet(ResultSet resultSet) {
+    public static void closeResultSet(ResultSet resultSet) {
         if (resultSet != null) {
             try {
                 resultSet.close();

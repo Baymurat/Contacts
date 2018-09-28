@@ -25,7 +25,7 @@ public class JDBCAttachmentDao implements DAO<Attachment, Integer> {
 
     @Override
     public Attachment update(Attachment attachment) {
-        try {
+        /*try {
             preparedStatement = connection.prepareStatement("UPDATE attachments SET persons_id = ?, filename = ?," +
                     "comments = ?, loaddate = ? WHERE id = ?");
             preparedStatement.setInt(5, attachment.getId());
@@ -34,13 +34,13 @@ public class JDBCAttachmentDao implements DAO<Attachment, Integer> {
             e.printStackTrace();
         } finally {
             CustomUtils.closePreparedStatement(preparedStatement);
-        }
+        }*/
         return null;
     }
 
     @Override
     public boolean delete(Integer id) {
-        try {
+        /*try {
             preparedStatement = connection.prepareStatement("DELETE FROM attachments WHERE id = ?");
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
@@ -50,7 +50,7 @@ public class JDBCAttachmentDao implements DAO<Attachment, Integer> {
             e.printStackTrace();
         } finally {
             CustomUtils.closePreparedStatement(preparedStatement);
-        }
+        }*/
         return false;
     }
 
@@ -58,14 +58,24 @@ public class JDBCAttachmentDao implements DAO<Attachment, Integer> {
     public int insert(Attachment attachment) {
         try {
             preparedStatement = connection.prepareStatement("INSERT INTO attachments VALUES (null, ?, ?, ?, ?);");
-            statementExecutor(attachment);
+            preparedStatement.setInt(1, attachment.getPersons_id());
+            preparedStatement.setString(2, attachment.getFileName());
+            preparedStatement.setString(3, attachment.getComments());
+            //java.lang.ClassCastException: java.util.Date cannot be cast to java.sql.Date
+            preparedStatement.setDate(4, (Date) attachment.getLoadDate());
+            preparedStatement.executeUpdate();
+
             resultSetAttachments = preparedStatement.executeQuery("select last_insert_id() as last_id from attachments");
-            attachment.setId(resultSetAttachments.getInt("last_id"));
+
+            if (resultSetAttachments.next()) {
+                attachment.setId(resultSetAttachments.getInt("last_id"));
+            }
 
             return 0;
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
+            CustomUtils.closeResultSet(resultSetAttachments);
             CustomUtils.closePreparedStatement(preparedStatement);
         }
         return -1;
@@ -96,22 +106,10 @@ public class JDBCAttachmentDao implements DAO<Attachment, Integer> {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            CustomUtils.closeRsultSet(resultSetAttachments);
+            CustomUtils.closeResultSet(resultSetAttachments);
             CustomUtils.closePreparedStatement(preparedStatement);
         }
 
         return null;
-    }
-
-    private void statementExecutor(Attachment attachment) {
-        try {
-            preparedStatement.setInt(1, attachment.getPersons_id());
-            preparedStatement.setString(2, attachment.getFileName());
-            preparedStatement.setString(3, attachment.getComments());
-            preparedStatement.setDate(4, (Date) attachment.getLoadDate());
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 }

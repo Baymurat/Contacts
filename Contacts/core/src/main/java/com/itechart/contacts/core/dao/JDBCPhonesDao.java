@@ -13,8 +13,8 @@ import java.util.HashMap;
  * Created by Admin on 13.09.2018
  */
 public class JDBCPhonesDao implements DAO<Phone, Integer> {
-    PreparedStatement preparedStatement = null;
-    ResultSet resultSetPhones = null;
+    private PreparedStatement preparedStatement = null;
+    private ResultSet resultSetPhones = null;
     private Connection connection;
 
     public JDBCPhonesDao(Connection connection) {
@@ -28,20 +28,20 @@ public class JDBCPhonesDao implements DAO<Phone, Integer> {
 
     @Override
     public Phone update(Phone phone) {
-        try {
+        /*try {
             preparedStatement = connection.prepareStatement("UPDATE phones SET persons_id = ?, countrycode = ?," +
                     "operatorcode = ?, phonebumber = ?, type = ?, comments = ? WHERE id = ?;");
             preparedStatement.setInt(7, phone.getId());
             statementExecutor(phone);
         } catch (SQLException e) {
             e.printStackTrace();
-        }
+        }*/
         return null;
     }
 
     @Override
     public boolean delete(Integer id) {
-        try {
+        /*try {
             preparedStatement = connection.prepareStatement("DELETE FROM phones WHERE id = ?");
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
@@ -51,7 +51,7 @@ public class JDBCPhonesDao implements DAO<Phone, Integer> {
             e.printStackTrace();
         } finally {
             CustomUtils.closePreparedStatement(preparedStatement);
-        }
+        }*/
         return false;
     }
 
@@ -59,13 +59,25 @@ public class JDBCPhonesDao implements DAO<Phone, Integer> {
     public int insert(Phone phone) {
         try {
             preparedStatement = connection.prepareStatement("INSERT INTO phones VALUES (null, ?, ?, ?, ?, ?, ?);");
-            statementExecutor(phone);
+            preparedStatement.setInt(1, phone.getPersons_id());
+            preparedStatement.setInt(2, phone.getCodeOfCountry());
+            preparedStatement.setInt(3, phone.getCodeOfOperator());
+            preparedStatement.setInt(4, phone.getPhoneNumber());
+            preparedStatement.setString(5, phone.getType());
+            preparedStatement.setString(6, phone.getComments());
+            preparedStatement.executeUpdate();
+
             resultSetPhones = preparedStatement.executeQuery("select last_insert_id() as last_id from phones");
-            phone.setId(resultSetPhones.getInt("last_id"));
+
+            if (resultSetPhones.next()) {
+                phone.setId(resultSetPhones.getInt("last_id"));
+            }
+
             return 0;
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
+            CustomUtils.closeResultSet(resultSetPhones);
             CustomUtils.closePreparedStatement(preparedStatement);
         }
         return -1;
@@ -97,24 +109,10 @@ public class JDBCPhonesDao implements DAO<Phone, Integer> {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            CustomUtils.closeRsultSet(resultSetPhones);
+            CustomUtils.closeResultSet(resultSetPhones);
             CustomUtils.closePreparedStatement(preparedStatement);
         }
 
         return null;
-    }
-
-    private void statementExecutor(Phone phone) {
-        try {
-            preparedStatement.setInt(1, phone.getPersons_id());
-            preparedStatement.setInt(2, phone.getCodeOfCountry());
-            preparedStatement.setInt(3, phone.getCodeOfOperator());
-            preparedStatement.setInt(4, phone.getPhoneNumber());
-            preparedStatement.setString(5, phone.getType());
-            preparedStatement.setString(6, phone.getComments());
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 }

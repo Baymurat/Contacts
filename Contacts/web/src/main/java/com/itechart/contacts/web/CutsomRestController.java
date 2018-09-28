@@ -1,8 +1,6 @@
 package com.itechart.contacts.web;
 
-import com.itechart.contacts.core.entities.Attachment;
 import com.itechart.contacts.core.entities.Contact;
-import com.itechart.contacts.core.entities.Phone;
 import com.itechart.contacts.core.service.SimpleService;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,24 +17,14 @@ public class CutsomRestController {
         return simpleService.getContacts(0);
     }
 
-    @RequestMapping("/delete-contact")
-    public void delteContact(@RequestBody Contact contact) {
-        simpleService.delete(contact);
-    }
-
-    @RequestMapping("/delete-phone")
-    public void deltePhone(@RequestBody Phone phone) {
-        simpleService.delete(phone);
-    }
-
-    @RequestMapping("/delete-attachment")
-    public void delteAttachment(@RequestBody Attachment attachment) {
-        simpleService.delete(attachment);
-    }
-
     @RequestMapping(value = "/add-record", method = RequestMethod.POST)
     public void addRecord(@RequestBody Contact contact) {
         simpleService.addRecord(contact);
+    }
+
+    @RequestMapping(value = "/delete-record", method = RequestMethod.GET)
+    public void deleteRecord(@RequestParam(name = "id") int id) {
+        simpleService.deleteRecord(id);
     }
 
     @RequestMapping(value = "/update-record", method = RequestMethod.POST)
