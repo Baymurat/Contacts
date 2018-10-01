@@ -5,7 +5,7 @@
      *
      *
      */
-    global.Modal = function (elt, userSettings) {
+    global.Modal = function (elt, userSettings, table, addFunction) {
         if (!elt) throw "please, specify element";
 
         var defaults = {
@@ -14,6 +14,8 @@
         };
 
         this.elt = elt;
+        this.table = table;
+        this.addFunction = addFunction;
         this.hide();
 
         this.settings = userSettings ? merge(defaults, userSettings) : defaults;
@@ -44,6 +46,29 @@
                 widget.hide();
             });
         })
+
+        this.elt.querySelector("#cancel-button").addEventListener("click", function () {
+            widget.hide();
+        });
+
+        this.elt.querySelector('#accept-button').addEventListener('click', function() {
+            widget.addFunction(widget.elt, widget.table);
+            widget.hide();
+        });
+
+        this.table.addEventListener('click', function(e) {
+            var target = e.target;
+            var parentNode = target.parentNode;
+            if(target && target.tagName == 'TD') {
+                if(!parentNode.classList.contains('selected')) {
+                    var selectedRow = widget.table.querySelector('.selected');
+                    if(selectedRow) {
+                        selectedRow.classList.toggle('selected');
+                    }
+                }
+                parentNode.classList.toggle('selected');
+            }
+        })
     };
 
     global.Modal.prototype.show = function () {
@@ -54,7 +79,20 @@
     global.Modal.prototype.hide = function () {
         hideFade();
         this.elt.style.display = "none";
+
+        var inputs = this.elt.querySelectorAll('input');
+        for (var i = 0; i < inputs.length; i++) {
+            inputs[i].value = "";
+        }
     };
+
+    //CONTINUE FROM HERE
+    global.Modal.prototype.edit = function() {
+        var widget = this;
+        var selectedRow = this.table.querySelector('.selected');
+        widget.show();
+
+    }
 
     function showFade() {
         var box = document.createElement("div");

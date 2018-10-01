@@ -40,6 +40,15 @@ table, th, td {
     border: 1px solid black;
 }
 
+tbody>tr:hover {
+    background: dodgerblue;
+    opacity: 0.3;
+}
+
+.selected {
+    background: aquamarine;
+}
+
 #phone {
     margin: 20px auto;
 }
