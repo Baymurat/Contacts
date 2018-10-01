@@ -40,6 +40,9 @@ CREATE TABLE attachments (
     FOREIGN KEY (persons_id) REFERENCES persons(id)
 );
 
+ALTER TABLE phones ADD CONSTRAINT `phones_fk_persons_id` FOREIGN KEY  (persons_id) REFERENCES persons(id) ON DELETE CASCADE;
+ALTER TABLE attachments ADD CONSTRAINT `attachments_fk_persons_id` FOREIGN KEY (persons_id) REFERENCES persons(id) ON DELETE CASCADE;
+
 INSERT INTO persons VALUES (null, 'Igor', 'Nikolaev', 'Andreevich', 'Uganda', 'married', 'web-site.com', 'some@mail.ru', 'gruzchik', 'male', '2002-02-10', 'Uganda', 'UgCapital', 'Street1/House1/Apart1', 11);
 INSERT INTO persons VALUES (null, 'Sergey', 'Lazarev', 'Dmitriyevich', 'Россия', 'single', 'Lazarev-site.com', 'sergey.lazarev@mail.ru', 'kassor', 'male', '13.12.2000', 'Россия', 'Воронеж', 'Street2/House2/Apart2', 22);
 INSERT INTO persons VALUES (null, 'Andrey', 'Romanenko', 'Vitalyevich', 'Украина', 'married', 'Romanenko-site.com', 'andrey.romanenko@mail.ru', 'kladovshik', 'male', '22.06.200', 'Украина', 'Львов', 'Street3/House3/Apart3', 33);
@@ -79,14 +82,13 @@ SELECT * FROM attachments;
 SELECT * FROM persons;
 DELETE FROM persons WHERE id = 6;
 
-ALTER TABLE phones ADD CONSTRAINT `phones_fk_persons_id` FOREIGN KEY  (persons_id) REFERENCES persons(id) ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE attachments ADD CONSTRAINT `attachments_fk_persons_id` FOREIGN KEY (persons_id) REFERENCES persons(id) ON DELETE CASCADE ON UPDATE CASCADE;
-
+/*
 ALTER TABLE phones DROP FOREIGN KEY `phones_fk_persons_id`;
 ALTER TABLE attachments DROP FOREIGN KEY `attachmetns_fk_persons_id`;
-
+*/
 
 /* Corrects id sequences after deleting >*/
+/*
 SET @persons_id_conut = 0;
 SET @phones_id_count = 0;
 SET @attachments_id_count = 0;
@@ -98,14 +100,12 @@ UPDATE attachments SET attachments.id = @attachments_id_count:= @attachments_id_
 ALTER TABLE persons AUTO_INCREMENT = 1;
 ALTER TABLE phones AUTO_INCREMENT = 1;
 ALTER TABLE attachments AUTO_INCREMENT = 1;
-
+*/
 /* ^_________*/
 
-
-
 /* Select all tables which has CASCADE property ON  */
-select * from INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS where DELETE_RULE ='CASCADE';
+/* select * from INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS where DELETE_RULE ='CASCADE';*/
 /* 1IMPORTANT1 */
 
-/*  Unsafe mode. Need stuff*/
-SET SQL_SAFE_UPDATES = 0;
+/*  Unsafe mode. Need stuff. Depends on situation*/
+/* SET SQL_SAFE_UPDATES = 0;*/

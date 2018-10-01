@@ -5,7 +5,6 @@ import com.itechart.contacts.core.dao.JDBCContactDao;
 import com.itechart.contacts.core.dao.JDBCPhonesDao;
 import com.itechart.contacts.core.entities.Attachment;
 import com.itechart.contacts.core.entities.Contact;
-import com.itechart.contacts.core.entities.Entity;
 import com.itechart.contacts.core.entities.Phone;
 import com.itechart.contacts.core.utils.ConnectionPool;
 import com.itechart.contacts.core.utils.CustomUtils;
@@ -30,78 +29,7 @@ public class SimpleService {
     public void updateRecord(Contact contact) {
         deleteRecord(contact.getId());
         addRecord(contact);
-
-        /*JDBCContactDao contactDao;
-        JDBCPhonesDao phonesDao;
-        JDBCAttachmentDao attachmentsDao;
-
-        ConnectionPool connectionPool = new ConnectionPool();
-        Savepoint savepoint = null;
-        try {
-            List<Phone> phones = contact.getPhones();
-            List<Attachment> attachments = contact.getAttachments();
-
-            DataSource dataSource = connectionPool.setUpPool();
-            connection = dataSource.getConnection();
-            connection.setAutoCommit(false);
-            savepoint = connection.setSavepoint();
-
-            contactDao = new JDBCContactDao(connection);
-            attachmentsDao = new JDBCAttachmentDao(connection);
-            phonesDao = new JDBCPhonesDao(connection);
-
-            contactDao.update(contact);
-
-            for (Phone p : phones) {
-                p.setPersons_id(contact.getId());
-                phonesDao.update(p);
-            }
-
-            for (Attachment a : attachments) {
-                a.setPersons_id(contact.getId());
-                attachmentsDao.update(a);
-            }
-
-            connection.commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-            try {
-                connection.rollback(savepoint);
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-            }
-        } finally {
-            CustomUtils.closeConnection(connection);
-        }*/
     }
-
-    /*public void deleteContact(Contact contact) {
-        JDBCContactDao contactDao;
-
-        ConnectionPool connectionPool = new ConnectionPool();
-        Savepoint savepoint = null;
-        try {
-            DataSource dataSource = connectionPool.setUpPool();
-            connection = dataSource.getConnection();
-            connection.setAutoCommit(false);
-            savepoint = connection.setSavepoint();
-
-            contactDao = new JDBCContactDao(connection);
-
-            contactDao.delete(contact.getId());
-
-            connection.commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-            try {
-                connection.rollback(savepoint);
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-            }
-        } finally {
-            CustomUtils.closeConnection(connection);
-        }
-    }*/
 
     public void deleteRecord(int contactId) {
 

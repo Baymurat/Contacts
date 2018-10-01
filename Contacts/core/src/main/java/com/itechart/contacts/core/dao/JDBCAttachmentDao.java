@@ -25,32 +25,11 @@ public class JDBCAttachmentDao implements DAO<Attachment, Integer> {
 
     @Override
     public Attachment update(Attachment attachment) {
-        /*try {
-            preparedStatement = connection.prepareStatement("UPDATE attachments SET persons_id = ?, filename = ?," +
-                    "comments = ?, loaddate = ? WHERE id = ?");
-            preparedStatement.setInt(5, attachment.getId());
-            statementExecutor(attachment);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            CustomUtils.closePreparedStatement(preparedStatement);
-        }*/
         return null;
     }
 
     @Override
     public boolean delete(Integer id) {
-        /*try {
-            preparedStatement = connection.prepareStatement("DELETE FROM attachments WHERE id = ?");
-            preparedStatement.setInt(1, id);
-            preparedStatement.executeUpdate();
-
-            return true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            CustomUtils.closePreparedStatement(preparedStatement);
-        }*/
         return false;
     }
 

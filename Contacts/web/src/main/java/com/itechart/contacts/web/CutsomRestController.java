@@ -12,7 +12,7 @@ public class CutsomRestController {
 
     private SimpleService simpleService = new SimpleService();
 
-    @RequestMapping("/fill-index")
+    @RequestMapping(value = "/fill-index", method = RequestMethod.GET)
     public List<Contact> getContacts() {
         return simpleService.getContacts(0);
     }

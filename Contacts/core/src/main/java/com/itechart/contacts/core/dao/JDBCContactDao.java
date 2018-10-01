@@ -24,25 +24,11 @@ public class JDBCContactDao implements DAO<Contact, Integer> {
 
     @Override
     public Contact getEntityById(Integer id) {
-        /*try {
-            preparedStatement = connection.prepareStatement("SELECT * FROM persons WHERE id = " + id + ";");
-            resultSetContacts = preparedStatement.executeQuery();
-            return new Contact();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            CustomUtils.closeResultSet(resultSetContacts);
-            CustomUtils.closePreparedStatement(preparedStatement);
-        }*/
         return null;
     }
 
     @Override
     public Contact update(Contact contact) {
-        /*delete(contact.getId());
-        insert(contact);*/
-
         return null;
     }
 
@@ -99,29 +85,6 @@ public class JDBCContactDao implements DAO<Contact, Integer> {
                 }
             }
             return 0;
-
-            /*
-            working part
-            preparedStatement = connection.prepareStatement("INSERT INTO persons VALUES (null, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
-            preparedStatement.setString(1, contact.getName());
-            preparedStatement.setString(2, contact.getSurName());
-            preparedStatement.setString(3, contact.getMiddleName());
-            preparedStatement.setString(4, contact.getCitizenship());
-            preparedStatement.setString(5, contact.getFamilyStatus());
-            preparedStatement.setString(6, contact.getWebSite());
-            preparedStatement.setString(7, contact.getEmail());
-            preparedStatement.setString(8, contact.getCurrentJob());
-            preparedStatement.setString(9, contact.getGender());
-            preparedStatement.setDate(10, (Date) contact.getBirthDate());
-            preparedStatement.setString(11, contact.getCountry());
-            preparedStatement.setString(12, contact.getCitizenship());
-            preparedStatement.setString(13, contact.getStreetHouseApart());
-            preparedStatement.setInt(14, contact.getIndex());
-            preparedStatement.executeUpdate();
-
-            resultSetContacts = preparedStatement.executeQuery("select last_insert_id() as last_id from persons");
-            contact.setId(resultSetContacts.getInt("last_id"));
-            return 0;*/
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {

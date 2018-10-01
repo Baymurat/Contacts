@@ -42,14 +42,11 @@ function addRecordFunction() {
     contact.phones.push(phone) ;
     contact.attachments.push(attachment);
     
-    console.log(contact);
-
     let objectSend = JSON.stringify(contact);
     
     let xmlhttp = new XMLHttpRequest();
     xmlhttp.open("POST", "/add-record", true);
-    //xmlhttp.setRequestHeader('Content-Type', 'application/json');
-    xmlhttp.setRequestHeader("Content-Type", "application/json");
+    xmlhttp.setRequestHeader('Content-Type', 'application/json');
     xmlhttp.send(objectSend);
 }
 

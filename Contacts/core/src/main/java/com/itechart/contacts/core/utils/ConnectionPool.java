@@ -7,16 +7,18 @@ import org.apache.commons.dbcp.PoolingDataSource;
 import org.apache.commons.pool.impl.GenericObjectPool;
 
 import javax.sql.DataSource;
+import java.util.ResourceBundle;
 
 /**
  * Created by Admin on 12.09.2018
  */
 public class ConnectionPool {
-    private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    private static final String JDBC_DB_URL = "jdbc:mysql://localhost:3306/contacts_db";
+    private ResourceBundle resourceBundle = ResourceBundle.getBundle("database");
+    private String JDBC_DRIVER = resourceBundle.getString("driver");
+    private String JDBC_DB_URL = resourceBundle.getString("path");
 
-    private static final String JDBC_USER = "baymurat";
-    private static final String JDBC_PASS = "password";
+    private String JDBC_USER = resourceBundle.getString("name");
+    private String JDBC_PASS = resourceBundle.getString("password");
 
     public ConnectionPool() {
         super();

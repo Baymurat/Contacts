@@ -28,30 +28,11 @@ public class JDBCPhonesDao implements DAO<Phone, Integer> {
 
     @Override
     public Phone update(Phone phone) {
-        /*try {
-            preparedStatement = connection.prepareStatement("UPDATE phones SET persons_id = ?, countrycode = ?," +
-                    "operatorcode = ?, phonebumber = ?, type = ?, comments = ? WHERE id = ?;");
-            preparedStatement.setInt(7, phone.getId());
-            statementExecutor(phone);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }*/
         return null;
     }
 
     @Override
     public boolean delete(Integer id) {
-        /*try {
-            preparedStatement = connection.prepareStatement("DELETE FROM phones WHERE id = ?");
-            preparedStatement.setInt(1, id);
-            preparedStatement.executeUpdate();
-
-            return true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            CustomUtils.closePreparedStatement(preparedStatement);
-        }*/
         return false;
     }
 

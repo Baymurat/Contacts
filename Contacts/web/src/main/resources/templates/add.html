@@ -5,18 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="./css/add.css">
+    <link rel="stylesheet" href="./css/modal.css">
     <title>Add</title>
+    <script src="./script/app.js"></script>
+    <script src="./script/modal.js"></script>
 </head>
 <body>
     <h1>THIS IS ADD PAGE</h1>
-    <div id="tabbed-pane">
-        <div class="tab">
-            <button class="tablinks" id="defaultOpen">Person</button>
-            <button class="tablinks">Phone</button>
-            <button class="tablinks">Attachment</button>
-        </div>
-
-        <div class="tabcontent" id="person">
+    <div id="container">
+        <div id="person">
             <div class="part-one">
                     <label for="name">Name</label>
                     <input type="text" id="name">
@@ -35,9 +32,7 @@
                         <option value="">male</option>
                         <option value="">female</option>
                     </select>
-            </div>
 
-            <div class="part-two">
                     <label for="citizenship">Citizenship</label>
                     <input type="text" name="" id="citizenship">
         
@@ -46,21 +41,18 @@
                         <option value="">single</option>
                         <option value="">married</option>
                     </select>
-        
-                    <label for="web-site">Website</label>
-                    <input type="text" name="" id="web-site">
-        
-                    <label for="email">Email</label>
-                    <input type="email" name="" id="email">
-        
-                    <label for="currentjob">Currentjob</label>
-                    <input type="text" name="" id="currentjob">
-        
             </div>
-            
 
-            
-            <div id="address">
+            <div class="part-two">
+                <label for="web-site">Website</label>
+                <input type="text" name="" id="web-site">
+    
+                <label for="email">Email</label>
+                <input type="email" name="" id="email">
+        
+                <label for="currentjob">Currentjob</label>
+                <input type="text" name="" id="currentjob">
+    
                 <label for="country">Country</label>
                 <input type="text" name="" id="country">
 
@@ -75,7 +67,7 @@
             </div>
         </div>
 
-        <div class="tabcontent" id="phone">
+        <div id="phone">
             <table id="phone-table">
                 <thead>
                     <td>Phone number</td>
@@ -87,9 +79,9 @@
                 </tbody>
             </table>
             <div id="">
-                <button id="phone-delete"></button>
-                <button id="phone-edit"></button>
-                <button id="phone-add"></button>
+                <button id="phone-delete">Delete</button>
+                <button id="phone-edit">Edit</button>
+                <button id="phone-add">Add</button>
             </div>
         </div>
 
@@ -105,38 +97,75 @@
                 </tbody>
             </table>
             <div id="">
-                <button id="attachment-delete"></button>
-                <button id="attachment-edit"></button>
-                <button id="attachment-add"></button>
+                <button id="attachment-delete">Delete</button>
+                <button id="attachment-edit">Edit</button>
+                <button id="attachment-add">Add</button>
             </div>
         </div>
 
-        <div id="add-pane-phone">
-            <label for="country-code">Country-code</label>
-            <input type="number" name="" id="country-code">
+        <div id="add-phone-modal" class="modal">
+            <div class="header">
+                <div class="title">Add phone pane</div>
+                <span class="close" data-role="close">X</span>
+            </div>
+            <div class="body">
+                <form>
+                    <div class="form-group">
+                        <label for="country-code">Country-code</label>
+                        <input type="number" name="" id="country-code">
+                    </div>
+                    <div class="form-group">
+                        <label for="operator-code">Operator-code</label>
+                        <input type="number" name="" id="operator-code">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone-number">Phone-number</label>
+                        <input type="number" name="" id="phone-number">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone-number-type">Phone-number-type</label>
+                        <select name="" id="phone-number-type">
+                            <option value="">home</option>
+                            <option value="">mobile</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone-comments">Commecnts</label>
+                        <input type="text" id="phone-comments">
+                    </div>
+                </form>
+            </div>
 
-            <label for="operator-code">Operator-code</label>
-            <input type="number" name="" id="operator-code">
-
-            <label for="phone-number">Phone-number</label>
-            <input type="number" name="" id="phone-number">
-
-            <label for="phone-number-type">Phone-number-type</label>
-            <select name="" id="phone-number-type">
-                <option value="">home</option>
-                <option value="">mobile</option>
-            </select>
-
-            <label for="comments"></label>
+            <div class="footer">
+                <button type="button" id="phone-accept-button">Add</button>
+                <button type="button" id="phone-cancel-button">Cancel</button>
+            </div>
         </div>
 
-        <div id="add-pane-attachment">
+        <div id="add-attachment-modal" class="modal">
+            <div class="header">
+                <div class="title">Add phone pane</div>
+                <span class="close" data-role="close">X</span>
+            </div>
+            <div class="body">
+                <div class="form-group">
+                    <label for="file-name">File name</label>
+                    <input type="text" id="file-name">
+
+                    <label for="attachment-comment">Comments</label>
+                    <input type="text" id="attachment-comment">
+                </div>
+            </div>
+            <div class="footer">
+                <button type="button" id="phone-accept-button">Add</button>
+                <button type="button" id="phone-cancel-button">Cancel</button>
+            </div>
             
         </div>
 
         <div>
-            <button id="accept-button">ACCEPT</button>
-
+            <button id="accept-button">Accept</button>
+            <button id="cancel-button">Cancel</button>
         </div>
     </div>
     <div class="simple-block"></div>

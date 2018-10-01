@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by Admin on 11.09.2018
  */
-public class Contact extends Entity implements Serializable{
+public class Contact implements Serializable{
 
     private String name;
     private String surName;

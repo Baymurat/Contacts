@@ -6,7 +6,7 @@ import java.util.Date;
 /**
  * Created by Admin on 12.09.2018
  */
-public class Attachment extends Entity implements Serializable {
+public class Attachment implements Serializable {
     private int id;
     private String fileName;
     private String comments;
