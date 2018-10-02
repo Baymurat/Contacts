@@ -1,22 +1,23 @@
+DROP DATABASE contacts_db;
 CREATE DATABASE contacts_db;
 
 USE contacts_db;
 
 CREATE TABLE persons (
 	id INT(10) UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(50) NOT NULL,
-    surname VARCHAR(50) NOT NULL,
-    middlename VARCHAR(50) NOT NULL,
-    citizenship VARCHAR(50),
+    name NVARCHAR(50) NOT NULL,
+    surname NVARCHAR(50) NOT NULL,
+    middlename NVARCHAR(50) NOT NULL,
+    citizenship NVARCHAR(50),
     familystatus ENUM('single', 'married'),
-    website VARCHAR(50),
-    email VARCHAR(50),
-    currentjob VARCHAR(50),
+    website NVARCHAR(50),
+    email NVARCHAR(50),
+    currentjob NVARCHAR(50),
     gender ENUM ('male', 'female'),
     datebirth DATE,
-    country VARCHAR(50),
-    city VARCHAR(50),
-    street_house_apart VARCHAR(50),
+    country NVARCHAR(50),
+    city NVARCHAR(50),
+    street_house_apart NVARCHAR(50),
     p_index INT(10)
 );
 
@@ -27,21 +28,18 @@ CREATE TABLE phones (
     operatorcode SMALLINT(10),
     phonebumber INT(10),
     type ENUM ('home', 'mobile'),
-    comments VARCHAR(50),
-    FOREIGN KEY (persons_id) REFERENCES persons(id) ON DELETE CASCADE ON UPDATE CASCADE
+    comments NVARCHAR(50),
+    CONSTRAINT `phones_fk_persons_id` FOREIGN KEY (persons_id) REFERENCES persons(id) ON DELETE CASCADE
 );
 
 CREATE TABLE attachments (
 	id INT(10) UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     persons_id INT(10) UNSIGNED,
-	filename VARCHAR(50),
-    comments VARCHAR(50),
+	filename NVARCHAR(50),
+    comments NVARCHAR(50),
     loaddate DATE,
-    FOREIGN KEY (persons_id) REFERENCES persons(id)
+    CONSTRAINT `attachments_fk_persons_id` FOREIGN KEY (persons_id) REFERENCES persons(id) ON DELETE CASCADE
 );
-
-ALTER TABLE phones ADD CONSTRAINT `phones_fk_persons_id` FOREIGN KEY  (persons_id) REFERENCES persons(id) ON DELETE CASCADE;
-ALTER TABLE attachments ADD CONSTRAINT `attachments_fk_persons_id` FOREIGN KEY (persons_id) REFERENCES persons(id) ON DELETE CASCADE;
 
 INSERT INTO persons VALUES (null, 'Igor', 'Nikolaev', 'Andreevich', 'Uganda', 'married', 'web-site.com', 'some@mail.ru', 'gruzchik', 'male', '2002-02-10', 'Uganda', 'UgCapital', 'Street1/House1/Apart1', 11);
 INSERT INTO persons VALUES (null, 'Sergey', 'Lazarev', 'Dmitriyevich', 'Россия', 'single', 'Lazarev-site.com', 'sergey.lazarev@mail.ru', 'kassor', 'male', '13.12.2000', 'Россия', 'Воронеж', 'Street2/House2/Apart2', 22);
@@ -57,7 +55,6 @@ INSERT INTO phones VALUES (null, 3, 375, 29, 3539630, 'mobile', 'Andrey mobile p
 INSERT INTO phones VALUES (null, 3, 375, 17, 3539630, 'home', 'Andrey home phone number');
 INSERT INTO phones VALUES (null, 4, 375, 29, 4549640, 'mobile', 'Irina mobile phone number');
 INSERT INTO phones VALUES (null, 4, 375, 17, 4549640, 'home', 'Irina home phone number');
-INSERT INTO phones VALUES (null, 1, null, null, null, null, null);
 
 INSERT INTO attachments VALUES (null, 1, 'homework.java', 'Home Work on Java courses', '2018-09-25');
 INSERT INTO attachments VALUES (null, 1, 'homework.sql', 'Home Work on Java courses sql file', '2018-09-25');
@@ -69,7 +66,6 @@ INSERT INTO attachments VALUES (null, 3, 'calc.java', 'Calculator implemented on
 INSERT INTO attachments VALUES (null, 4, 'HeadFirst.pdf', 'Book, yet don\'t know about what', '2018-09-25');
 INSERT INTO attachments VALUES (null, 4, 'notVirus.exe', 'Exactly not a virus. Trust me, I\'m an engineer', '2018-09-25');
 INSERT INTO attachments VALUES (null, 4, 'notVirus2.exe', 'Trust me again. Let it run by admin permissions', '2018-09-25');
-INSERT INTO attachments VALUES (null, 12, null, null, null);
 
 SELECT persons.id, name, persons_id, operatorcode, phonebumber, type, comments  FROM persons JOIN phones ON (persons.id = phones.persons_id) /*JOIN attachments ON (persons.id = attachments.persons_id) */;
 SELECT * FROM persons /*JOIN phones ON (persons.id = phones.persons_id) */ JOIN attachments ON (persons.id = attachments.persons_id) GROUP BY name;
@@ -79,13 +75,7 @@ SELECT * FROM persons;
 SELECT * FROM phones;
 SELECT * FROM attachments;
 
-SELECT * FROM persons;
-DELETE FROM persons WHERE id = 6;
-
-/*
-ALTER TABLE phones DROP FOREIGN KEY `phones_fk_persons_id`;
-ALTER TABLE attachments DROP FOREIGN KEY `attachmetns_fk_persons_id`;
-*/
+DELETE FROM persons WHERE id = 3;
 
 /* Corrects id sequences after deleting >*/
 /*

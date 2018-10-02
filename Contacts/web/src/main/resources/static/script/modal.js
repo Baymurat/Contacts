@@ -5,16 +5,30 @@
      *
      *
      */
-    global.Modal = function (elt, userSettings, table) {
-        if (!elt) throw "please, specify element";
+    global.Modal = function (element, userSettings, table) {
+        if (!element) throw "please, specify element";
+
+        var widget = this;
 
         var defaults = {
             closeOnEscape: true,
             closeOnClickOutside: true
         };
 
-        this.elt = elt;
+        this.element = element;
         this.table = table;
+        this.addFunction;
+        this.updateFunction;
+        this.status = 'add';
+
+        this.setAddFunction = function(func) {
+            widget.addFunction = func;
+        }
+
+        this.setUpdateFunction = function(func) {
+            widget.updateFunction = func;
+        }
+
         this.hide();
 
         this.settings = userSettings ? merge(defaults, userSettings) : defaults;
@@ -40,14 +54,29 @@
             })
         }
 
-        this.elt.querySelectorAll("[data-role = close]").forEach(function (button) {
+        this.element.querySelectorAll("[data-role = close]").forEach(function (button) {
             button.addEventListener("click", function () {
                 widget.hide();
             });
         })
 
-        this.elt.querySelector("#cancel-button").addEventListener("click", function () {
+        this.element.querySelector(".cancel-button").addEventListener("click", function () {
             widget.hide();
+        });
+
+        this.element.querySelector('.accept-button').addEventListener('click', function() {
+            var executeFunc;
+            if(widget.status === 'add') {
+                executeFunc = widget.addFunction;
+            } else if (widget.status === 'edit') {
+                executeFunc = widget.updateFunction;
+            }
+            
+            if(executeFunc(widget)) {
+                widget.hide();
+            } else {
+                alert("POPULATE FIELDS");
+            }
         });
 
         this.table.addEventListener('click', function(e) {
@@ -67,14 +96,14 @@
 
     global.Modal.prototype.show = function () {
         showFade();
-        this.elt.style.display = "block";
+        this.element.style.display = "block";
     };
 
     global.Modal.prototype.hide = function () {
         hideFade();
-        this.elt.style.display = "none";
+        this.element.style.display = "none";
 
-        var inputs = this.elt.querySelectorAll('input');
+        var inputs = this.element.querySelectorAll('input');
         for (var i = 0; i < inputs.length; i++) {
             inputs[i].value = "";
         }
@@ -83,12 +112,18 @@
     //CONTINUE FROM HERE
     global.Modal.prototype.edit = function(callback) {
         var widget = this;
-        var selectedRow = this.table.querySelector('.selected');
+        var selectedRow = widget.table.querySelector('.selected');
         
         if(selectedRow) {
+            widget.status = 'edit';
             widget.show();
-            callback(selectedRow);
+            callback(widget.element, selectedRow);
         }
+    }
+
+    global.Modal.prototype.add = function() {
+        this.status = 'add';
+        this.show();
     }
 
     global.Modal.prototype.delete = function(callback) {
@@ -98,14 +133,6 @@
         if(selectedRow) {
             callback(selectedRow);
         }
-    }
-
-    global.Modal.prototype.bindAddFuncAndButton = function(callback) {
-        var widget = this;
-        widget.elt.querySelector('#accept-button').addEventListener('click', function() {
-            callback(widget.elt, widget.table);
-            widget.hide();
-        });
     }
 
     function showFade() {
