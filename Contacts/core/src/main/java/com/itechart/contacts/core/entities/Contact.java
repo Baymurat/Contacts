@@ -1,7 +1,7 @@
 package com.itechart.contacts.core.entities;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
 /**

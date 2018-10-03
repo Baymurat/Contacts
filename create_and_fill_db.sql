@@ -75,8 +75,6 @@ SELECT * FROM persons;
 SELECT * FROM phones;
 SELECT * FROM attachments;
 
-DELETE FROM persons WHERE id = 3;
-
 /* Corrects id sequences after deleting >*/
 /*
 SET @persons_id_conut = 0;

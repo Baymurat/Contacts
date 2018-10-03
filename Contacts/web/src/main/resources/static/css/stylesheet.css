@@ -17,3 +17,13 @@ table, th, td {
 table {
     margin: 0 auto;
 }
+
+tbody>tr:hover {
+    background: dodgerblue;
+    opacity: 0.3;
+    cursor: pointer;
+}
+
+.selected {
+    background: aquamarine;
+}

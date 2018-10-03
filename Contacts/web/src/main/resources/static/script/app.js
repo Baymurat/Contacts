@@ -14,12 +14,12 @@ window.onload = function () {
     });
 
     button = document.querySelector('#phone-edit');
-    button.addEventListener("click", function() {
+    button.addEventListener("click", function () {
         phoneModal.edit(phoneInputsFill);
     });
 
     button = document.querySelector('#phone-delete');
-    button.addEventListener("click", function() {
+    button.addEventListener("click", function () {
         phoneModal.delete(deleteRow);
     });
 
@@ -28,19 +28,19 @@ window.onload = function () {
     var attachmentsModal = new Modal(attachmentsElement, null, attachmentTable);
     attachmentsModal.setAddFunction(addAttachment);
     attachmentsModal.setUpdateFunction(updateAttachment);
-    
+
     button = document.querySelector("#attachment-add");
     button.addEventListener("click", function () {
         attachmentsModal.add();
     });
-    
+
     button = document.querySelector('#attachment-edit');
-    button.addEventListener("click", function() {
+    button.addEventListener("click", function () {
         attachmentsModal.edit(attachmentInputsFill);
     });
 
     button = document.querySelector('#attachment-delete');
-    button.addEventListener("click", function() {
+    button.addEventListener("click", function () {
         attachmentsModal.delete(deleteRow);
     });
 };
@@ -56,16 +56,16 @@ function addPhone(context) {
     var operatorCode = context.element.querySelector('#operator-code').value;
     var number = context.element.querySelector('#phone-number').value;
 
-    if(countryCode && operatorCode && number) {
+    if (countryCode && operatorCode && number) {
         phoneNumber.innerHTML = countryCode + " " + operatorCode + " " + number;
         comments.innerHTML = context.element.querySelector('#phone-comments').value;
         var select = context.element.querySelector('#phone-number-type');
         phoneType.innerHTML = select.options[select.selectedIndex].text;
-    
+
         tableRow.appendChild(phoneNumber);
         tableRow.appendChild(phoneType);
         tableRow.appendChild(comments);
-        
+
         context.table.appendChild(tableRow);
 
         return true;
@@ -87,13 +87,13 @@ function addAttachment(context) {
     comments.innerHTML = context.element.querySelector('#attachment-comment').value;
     dateColumn.innerHTML = fullDate;
 
-    if(fileName.innerHTML) {
+    if (fileName.innerHTML) {
         tableRow.appendChild(fileName);
         tableRow.appendChild(dateColumn);
         tableRow.appendChild(comments);
-    
+
         context.table.appendChild(tableRow);
-        
+
         return true;
     } else {
         return false;
@@ -108,7 +108,7 @@ function updatePhone(context) {
     var operatorCode = context.element.querySelector('#operator-code').value;
     var number = context.element.querySelector('#phone-number').value;
 
-    if(countryCode && operatorCode && number) { 
+    if (countryCode && operatorCode && number) {
         cells.item(0).innerHTML = countryCode + " " + operatorCode + " " + number;
         var select = context.element.querySelector('#phone-number-type');
         cells.item(1).innerHTML = select.options[select.selectedIndex].text;
@@ -124,7 +124,7 @@ function updateAttachment(context) {
     var cells = selectedRow.cells;
 
     var fileName = context.element.querySelector('#file-name').value;
-    if(fileName) {
+    if (fileName) {
         cells.item(0).innerHTML = fileName;
         cells.item(0).innerHTML = context.element.querySelector('#attachment-comment').value;
         return true;
@@ -136,7 +136,7 @@ function updateAttachment(context) {
 function phoneInputsFill(element, selectedRow) {
     var cells = selectedRow.cells;
     var fullPhone = cells.item(0).innerHTML.split(' ');
-    
+
     var codeOfCountry = fullPhone[0];
     var codeOfOperator = fullPhone[1];
     var number = fullPhone[2];
@@ -152,7 +152,7 @@ function attachmentInputsFill(element, selectedRow) {
 
     element.querySelector('#file-name').value = cells.item(0).innerHTML;
     element.querySelector('#attachment-comment').value = cells.item(2).innerHTML;
-}   
+}
 
 
 

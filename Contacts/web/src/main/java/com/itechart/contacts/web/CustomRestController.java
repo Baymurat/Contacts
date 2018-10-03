@@ -8,9 +8,10 @@ import java.util.List;
 
 
 @RestController
-public class CutsomRestController {
+public class CustomRestController {
 
     private SimpleService simpleService = new SimpleService();
+    private Contact contactForEdit = null;
 
     @RequestMapping(value = "/fill-index", method = RequestMethod.GET)
     public List<Contact> getContacts() {
@@ -30,5 +31,17 @@ public class CutsomRestController {
     @RequestMapping(value = "/update-record", method = RequestMethod.POST)
     public void updateRecord(@RequestBody Contact contact) {
         simpleService.updateRecord(contact);
+    }
+
+
+    //??????????
+    @RequestMapping(value = "/set-contact-for-edit", method = RequestMethod.POST)
+    public void setContactForEdit(@RequestBody Contact contact) {
+        contactForEdit = contact;
+    }
+
+    @RequestMapping(value = "/get-contact-for-edit", method = RequestMethod.GET)
+    public Contact getContactForEdit() {
+        return contactForEdit;
     }
 }

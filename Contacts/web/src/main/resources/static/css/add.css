@@ -43,6 +43,7 @@ table, th, td {
 tbody>tr:hover {
     background: dodgerblue;
     opacity: 0.3;
+    cursor: pointer;
 }
 
 .selected {

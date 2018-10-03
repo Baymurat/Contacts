@@ -81,14 +81,18 @@ public class SimpleService {
 
             contactDao.insert(contact);
 
-            for (Phone p : phones) {
-                p.setPersons_id(contact.getId());
-                phonesDao.insert(p);
+            if(phones != null) {
+                for (Phone p : phones) {
+                    p.setPersons_id(contact.getId());
+                    phonesDao.insert(p);
+                }
             }
 
-            for (Attachment a : attachments) {
-                a.setPersons_id(contact.getId());
-                attachmentsDao.insert(a);
+            if (attachments != null) {
+                for (Attachment a : attachments) {
+                    a.setPersons_id(contact.getId());
+                    attachmentsDao.insert(a);
+                }
             }
 
             connection.commit();

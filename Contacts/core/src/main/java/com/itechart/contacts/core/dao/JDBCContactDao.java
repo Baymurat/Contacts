@@ -38,7 +38,6 @@ public class JDBCContactDao implements DAO<Contact, Integer> {
             preparedStatement = connection.prepareStatement("DELETE FROM persons WHERE id = ?");
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
-
             return true;
         } catch (SQLException e) {
             e.printStackTrace();

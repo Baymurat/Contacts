@@ -24,5 +24,8 @@ public class TemplateController {
         return "edit";
     }
 
-
+    @GetMapping("/about")
+    public String about() {
+        return "about";
+    }
 }

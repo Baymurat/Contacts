@@ -21,11 +21,11 @@
         this.updateFunction;
         this.status = 'add';
 
-        this.setAddFunction = function(func) {
+        this.setAddFunction = function (func) {
             widget.addFunction = func;
         }
 
-        this.setUpdateFunction = function(func) {
+        this.setUpdateFunction = function (func) {
             widget.updateFunction = func;
         }
 
@@ -64,28 +64,28 @@
             widget.hide();
         });
 
-        this.element.querySelector('.accept-button').addEventListener('click', function() {
+        this.element.querySelector('.accept-button').addEventListener('click', function () {
             var executeFunc;
-            if(widget.status === 'add') {
+            if (widget.status === 'add') {
                 executeFunc = widget.addFunction;
             } else if (widget.status === 'edit') {
                 executeFunc = widget.updateFunction;
             }
-            
-            if(executeFunc(widget)) {
+
+            if (executeFunc(widget)) {
                 widget.hide();
             } else {
                 alert("POPULATE FIELDS");
             }
         });
 
-        this.table.addEventListener('click', function(e) {
+        this.table.addEventListener('click', function (e) {
             var target = e.target;
             var parentNode = target.parentNode;
-            if(target && target.tagName == 'TD') {
-                if(!parentNode.classList.contains('selected')) {
+            if (target && target.tagName == 'TD') {
+                if (!parentNode.classList.contains('selected')) {
                     var selectedRow = widget.table.querySelector('.selected');
-                    if(selectedRow) {
+                    if (selectedRow) {
                         selectedRow.classList.toggle('selected');
                     }
                 }
@@ -110,27 +110,27 @@
     };
 
     //CONTINUE FROM HERE
-    global.Modal.prototype.edit = function(callback) {
+    global.Modal.prototype.edit = function (callback) {
         var widget = this;
         var selectedRow = widget.table.querySelector('.selected');
-        
-        if(selectedRow) {
+
+        if (selectedRow) {
             widget.status = 'edit';
             widget.show();
             callback(widget.element, selectedRow);
         }
     }
 
-    global.Modal.prototype.add = function() {
+    global.Modal.prototype.add = function () {
         this.status = 'add';
         this.show();
     }
 
-    global.Modal.prototype.delete = function(callback) {
+    global.Modal.prototype.delete = function (callback) {
         var widget = this;
         var selectedRow = this.table.querySelector('.selected');
-        
-        if(selectedRow) {
+
+        if (selectedRow) {
             callback(selectedRow);
         }
     }
