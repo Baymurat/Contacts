@@ -158,5 +158,14 @@ function attachmentInputsFill(element, selectedRow) {
 
 function deleteRow(selectedRow) {
     var parent = selectedRow.parentNode;
+
+    if (selectedRow.phoneId) {
+        window.deletePhonesList.push(selectedRow.phoneId);
+    } else if (selectedRow.attId) {
+        window.deleteAttachmentsList.push(selectedRow.attId);
+    }
     parent.removeChild(selectedRow);
 }
+
+window.deletePhonesList = [];
+window.deleteAttachmentsList = [];

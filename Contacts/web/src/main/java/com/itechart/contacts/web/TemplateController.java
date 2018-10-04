@@ -28,4 +28,9 @@ public class TemplateController {
     public String about() {
         return "about";
     }
+
+    @GetMapping("/search")
+    public String search() {
+        return "search";
+    }
 }

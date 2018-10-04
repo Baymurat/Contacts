@@ -28,8 +28,38 @@ public class JDBCContactDao implements DAO<Contact, Integer> {
     }
 
     @Override
-    public Contact update(Contact contact) {
-        return null;
+    public boolean update(Contact contact) {
+        try {
+            preparedStatement = connection.prepareStatement("UPDATE persons SET name = ?, surname = ?, " +
+                    "middlename = ?, citizenship = ?, familystatus = ?, website = ?, email = ?, currentjob = ?, " +
+                    "gender = ?, datebirth = ?, country = ?, city = ?, street_house_apart = ?, p_index = ? WHERE id = ?");
+
+            preparedStatement.setString(1, contact.getName());
+            preparedStatement.setString(2, contact.getSurName());
+            preparedStatement.setString(3, contact.getMiddleName());
+            preparedStatement.setString(4, contact.getCitizenship());
+            preparedStatement.setString(5, contact.getFamilyStatus());
+            preparedStatement.setString(6, contact.getWebSite());
+            preparedStatement.setString(7, contact.getEmail());
+            preparedStatement.setString(8, contact.getCurrentJob());
+            preparedStatement.setString(9, contact.getGender());
+            //java.lang.ClassCastException: java.util.Date cannot be cast to java.sql.Date
+            preparedStatement.setDate(10, contact.getBirthDate());
+            preparedStatement.setString(11, contact.getCountry());
+            preparedStatement.setString(12, contact.getCity());
+            preparedStatement.setString(13, contact.getStreetHouseApart());
+            preparedStatement.setInt(14, contact.getIndex());
+            preparedStatement.setInt(15, contact.getId());
+            preparedStatement.executeUpdate();
+
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            CustomUtils.closePreparedStatement(preparedStatement);
+        }
+
+        return false;
     }
 
     @Override
@@ -98,7 +128,9 @@ public class JDBCContactDao implements DAO<Contact, Integer> {
         int range = 11;
         HashMap<Integer, Contact> result = new HashMap<>();
         try {
-            preparedStatement = connection.prepareStatement("SELECT * FROM persons WHERE id > " + from + " && id < " + from + range);
+            preparedStatement = connection.prepareStatement("SELECT * FROM persons ORDER BY id LIMIT ?, ?");
+            preparedStatement.setInt(1, from);
+            preparedStatement.setInt(2, range);
             resultSetContacts = preparedStatement.executeQuery();
 
             while (resultSetContacts.next()) {

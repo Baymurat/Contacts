@@ -8,8 +8,8 @@ import java.util.Map;
  */
 public interface DAO<E, K> {
     E getEntityById(K id);
-    E update(E e);
-    boolean delete(K id);
+    boolean update(E e);
+    boolean delete(K k);
     int insert(E e);
     Map<K, E> getRecords(int from);
 }

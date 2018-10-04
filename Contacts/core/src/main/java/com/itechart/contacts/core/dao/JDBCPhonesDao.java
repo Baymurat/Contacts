@@ -27,12 +27,39 @@ public class JDBCPhonesDao implements DAO<Phone, Integer> {
     }
 
     @Override
-    public Phone update(Phone phone) {
-        return null;
+    public boolean update(Phone phone) {
+        try {
+            preparedStatement = connection.prepareStatement("UPDATE phones SET countrycode = ?, operatorcode = ?, " +
+                    "phonebumber = ?, type = ?, comments = ? WHERE id = ?;");
+            preparedStatement.setInt(1, phone.getCodeOfCountry());
+            preparedStatement.setInt(2, phone.getCodeOfOperator());
+            preparedStatement.setInt(3, phone.getPhoneNumber());
+            preparedStatement.setString(4, phone.getType());
+            preparedStatement.setString(5, phone.getComments());
+            preparedStatement.setInt(6, phone.getId());
+            int result = preparedStatement.executeUpdate();
+
+            return result == 1;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            CustomUtils.closePreparedStatement(preparedStatement);
+        }
+        return false;
     }
 
     @Override
     public boolean delete(Integer id) {
+        try {
+            preparedStatement = connection.prepareStatement("DELETE FROM phones WHERE id = ?");
+            preparedStatement.setInt(1, id);
+            preparedStatement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            CustomUtils.closePreparedStatement(preparedStatement);
+        }
         return false;
     }
 
@@ -70,7 +97,9 @@ public class JDBCPhonesDao implements DAO<Phone, Integer> {
 
         HashMap<Integer, Phone> resultMap = new HashMap<>();
         try {
-            preparedStatement = connection.prepareStatement("SELECT * FROM phones WHERE persons_id > " + from + " && persons_id < " + (from + range) + ";");
+            preparedStatement = connection.prepareStatement("SELECT * FROM phones ORDER BY id LIMIT ?, ?");
+            preparedStatement.setInt(1, from);
+            preparedStatement.setInt(2, range);
             resultSetPhones = preparedStatement.executeQuery();
 
             while (resultSetPhones.next()) {

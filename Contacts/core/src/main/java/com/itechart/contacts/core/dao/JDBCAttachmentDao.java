@@ -24,12 +24,36 @@ public class JDBCAttachmentDao implements DAO<Attachment, Integer> {
     }
 
     @Override
-    public Attachment update(Attachment attachment) {
-        return null;
+    public boolean update(Attachment attachment) {
+        try {
+            preparedStatement = connection.prepareStatement("UPDATE attachments SET filename = ?, comments = ?  WHERE id = ?;");
+
+            preparedStatement.setString(1, attachment.getFileName());
+            preparedStatement.setString(2, attachment.getComments());
+            preparedStatement.setInt(3, attachment.getId());
+            int result = preparedStatement.executeUpdate();
+
+            return result == 1;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            CustomUtils.closePreparedStatement(preparedStatement);
+        }
+        return false;
     }
 
     @Override
     public boolean delete(Integer id) {
+        try {
+            preparedStatement = connection.prepareStatement("DELETE FROM attachments WHERE id = ?");
+            preparedStatement.setInt(1, id);
+            preparedStatement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            CustomUtils.closePreparedStatement(preparedStatement);
+        }
         return false;
     }
 
@@ -66,7 +90,9 @@ public class JDBCAttachmentDao implements DAO<Attachment, Integer> {
 
         HashMap<Integer, Attachment> resultMap = new HashMap<>();
         try {
-            preparedStatement = connection.prepareStatement("SELECT * FROM attachments WHERE persons_id >" + from + " && persons_id < " + (from + range) +";");
+            preparedStatement = connection.prepareStatement("SELECT * FROM attachments ORDER BY id LIMIT ?, ? ");
+            preparedStatement.setInt(1, from);
+            preparedStatement.setInt(2, range);
             resultSetAttachments = preparedStatement.executeQuery();
 
             while (resultSetAttachments.next()) {

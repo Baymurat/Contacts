@@ -44,7 +44,7 @@ function deleteFunction() {
 }
 
 function searchFunction() {
-
+    window.location.replace('/search');
 }
 
 function sendFunction() {

@@ -29,6 +29,9 @@ public class Contact implements Serializable{
     private List<Phone> phones;
     private List<Attachment> attachments;
 
+    private List<Integer> deletePhonesList;
+    private List<Integer> deleteAttachmentsList;
+
 
     public Contact() {}
 
@@ -171,5 +174,21 @@ public class Contact implements Serializable{
 
     public String toString() {
         return this.id + this.name + this.attachments;
+    }
+
+    public List<Integer> getDeletePhonesList() {
+        return deletePhonesList;
+    }
+
+    public void setDeletePhonesList(List<Integer> deletePhonesList) {
+        this.deletePhonesList = deletePhonesList;
+    }
+
+    public List<Integer> getDeleteAttachmentsList() {
+        return deleteAttachmentsList;
+    }
+
+    public void setDeleteAttachmentsList(List<Integer> deleteAttachmentsList) {
+        this.deleteAttachmentsList = deleteAttachmentsList;
     }
 }

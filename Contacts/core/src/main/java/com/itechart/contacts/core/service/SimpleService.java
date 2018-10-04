@@ -27,8 +27,71 @@ public class SimpleService {
     }
 
     public void updateRecord(Contact contact) {
-        deleteRecord(contact.getId());
-        addRecord(contact);
+        JDBCContactDao contactDao;
+        JDBCPhonesDao phonesDao;
+        JDBCAttachmentDao attachmentsDao;
+
+        ConnectionPool connectionPool = new ConnectionPool();
+        Savepoint savepoint = null;
+        try {
+            List<Phone> phones = contact.getPhones();
+            List<Attachment> attachments = contact.getAttachments();
+
+            List<Integer> deletePhonesList = contact.getDeletePhonesList();
+            List<Integer> deleteAttachmentsList = contact.getDeleteAttachmentsList();
+
+            DataSource dataSource = connectionPool.setUpPool();
+            connection = dataSource.getConnection();
+            connection.setAutoCommit(false);
+            savepoint = connection.setSavepoint();
+
+            contactDao = new JDBCContactDao(connection);
+            phonesDao = new JDBCPhonesDao(connection);
+            attachmentsDao = new JDBCAttachmentDao(connection);
+
+            contactDao.update(contact);
+
+            if (phones != null) {
+                for (Phone p : phones) {
+                    if (!phonesDao.update(p)) {
+                        p.setPersons_id(contact.getId());
+                        phonesDao.insert(p);
+                    }
+                }
+            }
+
+            if (attachments != null) {
+                for (Attachment a : attachments) {
+                    if (!attachmentsDao.update(a)) {
+                        a.setPersons_id(contact.getId());
+                        attachmentsDao.insert(a);
+                    }
+                }
+            }
+
+            if (deletePhonesList != null) {
+                for (Integer i : deletePhonesList) {
+                    phonesDao.delete(i);
+                }
+            }
+
+            if (deleteAttachmentsList != null) {
+                for (Integer i : deleteAttachmentsList) {
+                    attachmentsDao.delete(i);
+                }
+            }
+
+            connection.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            try {
+                connection.rollback(savepoint);
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            } finally {
+                CustomUtils.closeConnection(connection);
+            }
+        }
     }
 
     public void deleteRecord(int contactId) {

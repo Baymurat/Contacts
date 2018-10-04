@@ -7,6 +7,7 @@ fetch('/fill-index').
 function fillIndex(contacts) {
     setButtonsStatus(false);
     window.allContacts = contacts;
+
     console.log(allContacts);
     for (var i = 0; i < contacts.length; i++) {
 

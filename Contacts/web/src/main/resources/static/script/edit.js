@@ -1,3 +1,9 @@
+fetch('/get-contact-for-edit').
+then(function (res) {
+    return res.json();
+}).
+then(fillInputs);
+
 var shareContact;
 
 function fillInputs(contact) {
@@ -58,7 +64,8 @@ function fillPhoneTable(list) {
             number.innerHTML = countryCode + " " + operatorCode + " " + phoneNumber;
             type.innerHTML = currentElement.type;
             comments.innerHTML = currentElement.comments;
-            console.log("call from fillPhoneTable() " + currentElement.type);
+
+            tableRow.phoneId = currentElement.id;
 
             tableRow.appendChild(number);
             tableRow.appendChild(type);
@@ -83,6 +90,8 @@ function fillAttachmentsTable(list) {
             loadDate.innerHTML = currentElement.loadDate;
             comments.innerHTML = currentElement.comments;
 
+            tableRow.attId = currentElement.id;
+
             tableRow.appendChild(fileName);
             tableRow.appendChild(loadDate);
             tableRow.appendChild(comments);
@@ -91,12 +100,6 @@ function fillAttachmentsTable(list) {
         }
     }
 }
-
-fetch('/get-contact-for-edit').
-    then(function (res) {
-        return res.json();
-    }).
-    then(fillInputs);
 
 //UPDATE 
 function editRecordFunction(contact) {
@@ -122,10 +125,13 @@ function editRecordFunction(contact) {
     contact.phones = getPhones();
     contact.attachments = getAttachments();
 
+    contact.deletePhonesList = window.deletePhonesList;
+    contact.deleteAttachmentsList = window.deleteAttachmentsList;
+
     var objectSend = JSON.stringify(contact);
 
     if (contact.name && contact.surName && contact.middleName) {
-        console.log(objectSend);
+        console.log(contact);
         var xmlhttp = new XMLHttpRequest();
         xmlhttp.open("POST", "/update-record", true);
         xmlhttp.setRequestHeader('Content-Type', 'application/json');
@@ -140,12 +146,12 @@ function editRecordFunction(contact) {
 
 function getPhones() {
     var phones = [];
-    var phone = {};
 
     var table = document.getElementById('phone-table');
     var rowLength = table.rows.length;
 
     for (var i = 1; i < rowLength; i++) {
+        var phone = {};
         var cells = table.rows.item(i).cells;
 
         var fullPhone = cells.item(0).innerHTML.split(' ');
@@ -154,6 +160,8 @@ function getPhones() {
         phone.phoneNumber = fullPhone[2];
         phone.type = cells.item(1).innerHTML;
         phone.comments = cells.item(2).innerHTML;
+        phone.id = table.rows.item(i).phoneId;
+        console.log("GETTING PHONE, iD: " + table.rows.item(i).phoneId);
         phones.push(phone);
     }
 
@@ -162,18 +170,19 @@ function getPhones() {
 
 function getAttachments() {
     var attachments = [];
-    var attachment = {};
 
     var table = document.getElementById('attachment-table');
     var rowLength = table.rows.length;
 
     for (var i = 1; i < rowLength; i++) {
+        var attachment = {};
         var cells = table.rows.item(i).cells;
 
         attachment.fileName = cells.item(0).innerHTML;
         attachment.loadDate = new Date().getTime();
         attachment.comments = cells.item(2).innerHTML;
-
+        attachment.id = table.rows.item(i).attId;
+        console.log("GETTING attachment, iD: " + table.rows.item(i).attId);
         attachments.push(attachment);
     }
 
