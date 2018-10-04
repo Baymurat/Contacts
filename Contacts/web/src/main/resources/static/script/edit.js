@@ -6,9 +6,9 @@ function fillInputs(contact) {
     document.getElementById('surname').value = contact.surName;
     document.getElementById('middlename').value = contact.middleName;
     document.getElementById('datebirth').value = contact.birthDate;
-    document.getElementById('gender').value = contact.gender;
+
     document.getElementById('citizenship').value = contact.citizenship;
-    document.getElementById('family-status').value = contact.familyStatus;
+
     document.getElementById('web-site').value = contact.webSite;
     document.getElementById('email').value = contact.email;
     document.getElementById('currentjob').value = contact.currentJob;
@@ -16,14 +16,34 @@ function fillInputs(contact) {
     document.getElementById('city').value = contact.city;
     document.getElementById('street-house-apart').value = contact.streetHouseApart;
     document.getElementById('index').value = contact.index;
-    
+
+    var gender = document.getElementById('gender');
+    var familyStatus = document.getElementById('family-status');
+
+    var selected;
+    if (contact.gender && contact.gender === 'male') {
+        selected = 0;
+    } else {
+        selected = 1;
+    }
+
+    gender.options.selectedIndex = selected;
+
+    if (contact.familyStatus && contact.familyStatus === 'single') {
+        selected = 0;
+    } else {
+        selected = 1;
+    }
+
+    familyStatus.options.selectedIndex = selected;
+
     fillPhoneTable(contact.phones);
     fillAttachmentsTable(contact.attachments);
 }
 
 function fillPhoneTable(list) {
-    if(list) {
-        for(var i = 0; i < list.length; i++) {
+    if (list) {
+        for (var i = 0; i < list.length; i++) {
             var currentElement = list[i];
             var tableRow = document.createElement('tr');
 
@@ -38,6 +58,7 @@ function fillPhoneTable(list) {
             number.innerHTML = countryCode + " " + operatorCode + " " + phoneNumber;
             type.innerHTML = currentElement.type;
             comments.innerHTML = currentElement.comments;
+            console.log("call from fillPhoneTable() " + currentElement.type);
 
             tableRow.appendChild(number);
             tableRow.appendChild(type);
@@ -49,8 +70,8 @@ function fillPhoneTable(list) {
 }
 
 function fillAttachmentsTable(list) {
-    if(list) {
-        for(var i = 0; i < list.length; i++) {
+    if (list) {
+        for (var i = 0; i < list.length; i++) {
             var currentElement = list[i];
             var tableRow = document.createElement('tr');
 
@@ -72,7 +93,7 @@ function fillAttachmentsTable(list) {
 }
 
 fetch('/get-contact-for-edit').
-    then(function(res) {
+    then(function (res) {
         return res.json();
     }).
     then(fillInputs);
@@ -83,11 +104,11 @@ function editRecordFunction(contact) {
     contact.surName = document.getElementById('surname').value;
     contact.middleName = document.getElementById('middlename').value;
 
-    let elementG = document.getElementById('gender');
+    var elementG = document.getElementById('gender');
     contact.gender = elementG.options[elementG.selectedIndex].text;
     contact.citizenship = document.getElementById('citizenship').value;
 
-    let elementFS = document.getElementById('family-status');
+    var elementFS = document.getElementById('family-status');
     contact.familyStatus = elementFS.options[elementFS.selectedIndex].text;
     contact.webSite = document.getElementById('web-site').value;
     contact.email = document.getElementById('email').value;
@@ -101,11 +122,11 @@ function editRecordFunction(contact) {
     contact.phones = getPhones();
     contact.attachments = getAttachments();
 
-    let objectSend = JSON.stringify(contact);
+    var objectSend = JSON.stringify(contact);
 
     if (contact.name && contact.surName && contact.middleName) {
         console.log(objectSend);
-        let xmlhttp = new XMLHttpRequest();
+        var xmlhttp = new XMLHttpRequest();
         xmlhttp.open("POST", "/update-record", true);
         xmlhttp.setRequestHeader('Content-Type', 'application/json');
         xmlhttp.send(objectSend);
@@ -159,15 +180,15 @@ function getAttachments() {
     return attachments;
 }
 
-let acceptButton = document.getElementById('accept-button');
+var cancelButton = document.getElementById('cancel-button');
+cancelButton.addEventListener('click', function () {
+    window.location.replace('/index');
+});
+
+var acceptButton = document.getElementById('accept-button');
 acceptButton.addEventListener('click', function () {
     if (editRecordFunction(shareContact)) {
         window.location.replace('/index');
     }
 
-});
-
-let cancelButton = document.getElementById('cancel-button');
-cancelButton.addEventListener('click', function () {
-    window.location.replace('/index');
 });

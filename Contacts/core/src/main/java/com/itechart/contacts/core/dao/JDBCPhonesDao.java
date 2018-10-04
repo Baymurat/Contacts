@@ -83,6 +83,7 @@ public class JDBCPhonesDao implements DAO<Phone, Integer> {
                 phone.setPhoneNumber(resultSetPhones.getInt("phonebumber"));
                 phone.setComments(resultSetPhones.getString("comments"));
                 phone.setPersons_id(resultSetPhones.getInt("persons_id"));
+                phone.setType(resultSetPhones.getString("type"));
                 resultMap.put(currentId, phone);
             }
 

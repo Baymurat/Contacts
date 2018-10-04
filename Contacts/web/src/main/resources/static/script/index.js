@@ -1,4 +1,11 @@
+fetch('/fill-index').
+    then(function (res) {
+        return res.json();
+    }).
+    then(fillIndex);
+
 function fillIndex(contacts) {
+    setButtonsStatus(false);
     window.allContacts = contacts;
     console.log(allContacts);
     for (var i = 0; i < contacts.length; i++) {
@@ -11,6 +18,8 @@ function fillIndex(contacts) {
         var userSurname = document.createElement('td');
         var userPhone = document.createElement('td');
         var dataAttachment = document.createElement('td');
+        var checkBox = document.createElement('input');
+        checkBox.type = 'checkbox';
 
         userName.innerHTML = currentElement.name;
         userSurname.innerHTML = currentElement.surName;
@@ -18,6 +27,7 @@ function fillIndex(contacts) {
         dataAttachment.innerHTML = currentElement.webSite;
 
         tableRow.id = currentElement.id;
+        tableRow.appendChild(checkBox);
         tableRow.appendChild(userName);
         tableRow.appendChild(userSurname);
         tableRow.appendChild(userPhone);
@@ -25,13 +35,8 @@ function fillIndex(contacts) {
 
         document.querySelector('#myTable>tbody').appendChild(tableRow);
     }
+    toggleCheckBoxes();
 }
-
-fetch('/fill-index').
-    then(function (res) {
-        return res.json();
-    }).
-    then(fillIndex);
 
 var myTable = document.getElementById('myTable');
 myTable.addEventListener('click', function (e) {
@@ -46,4 +51,39 @@ myTable.addEventListener('click', function (e) {
         }
         parentNode.classList.toggle('selected');
     }
+
+    setButtonsStatus(parentNode.classList.contains('selected'));
 })
+
+document.querySelector('#check-boxes-button').addEventListener('click', function() {
+    toggleButton();
+    toggleCheckBoxes();
+});
+
+function setButtonsStatus(status) {
+    document.querySelector('#edit-button').disabled = !status;
+    document.querySelector('#delete-button').disabled = !status;
+    document.querySelector('#about-button').disabled = !status;
+}
+
+function toggleCheckBoxes() {
+    var checkBoxes = document.querySelectorAll('input[type=checkbox]');
+
+    for (var i = 0; i < checkBoxes.length; i++) {
+        checkBoxes[i].classList.toggle('disable');
+    }
+    document.querySelector('#boxes').classList.toggle('disable');
+}
+
+function toggleButton() {
+    var button = document.querySelector('#check-boxes-button');
+
+    if (button.state === 'disabled') {
+        button.innerHTML = "Disable Check Boxes";
+        button.state = 'enabled';
+    } else {
+        button.innerHTML = "Enable Check Boxes";
+        button.state = 'disabled';
+    }
+
+}

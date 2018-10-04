@@ -1,43 +1,89 @@
 package TestPackage;
 
-import com.itechart.contacts.core.utils.ConnectionPool;
-import com.itechart.contacts.core.utils.CustomUtils;
-
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import java.util.Date;
+import java.util.Properties;
 
 public class TestClass {
     public static void main(String[] args) {
-        ConnectionPool connectionPool = new ConnectionPool();
+        /*// Recipient's email ID needs to be mentioned.
+        String to = "robbi92@mail.com";
+
+        // Sender's email ID needs to be mentioned
+        String from = "baymurat.orazov@mail.com";
+
+        // Assuming you are sending email from localhost
+        String host = "localhost";
+
+        // Get system properties
+        Properties properties = System.getProperties();
+
+        // Setup mail server
+        properties.setProperty("mail.smtp.host", host);
+
+        // Get the default Session object.
+        Session session = Session.getDefaultInstance(properties);
+
         try {
-            DataSource dataSource = connectionPool.setUpPool();
-            Connection connection = dataSource.getConnection();
-            //
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO persons VALUES (null, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
-            statement.setString(1, "Paren");
-            statement.setString(2, "Kakoyto");
-            statement.setString(3, "Otchestvo");
-            statement.setString(4, null);
-            statement.setString(5, null);
-            statement.setString(6, null);
-            statement.setString(7, null);
-            statement.setString(8, null);
-            statement.setString(9, null);
-            statement.setString(10, null);
-            statement.setString(11, null);
-            statement.setString(12, null);
-            statement.setString(13, null);
-            statement.setString(14, null);
+            // Create a default MimeMessage object.
+            MimeMessage message = new MimeMessage(session);
 
-            System.out.println(statement.executeUpdate());
+            // Set From: header field of the header.
+            message.setFrom(new InternetAddress(from));
 
-            CustomUtils.closePreparedStatement(statement);
-            CustomUtils.closeConnection(connection);
-        } catch (Exception e) {
-            e.printStackTrace();
+            // Set To: header field of the header.
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+
+            // Set Subject: header field
+            message.setSubject("This is the Subject Line!");
+
+            // Now set the actual message
+            message.setText("This is actual message");
+
+            // Send message
+            Transport.send(message);
+            System.out.println("Sent message successfully....");
+        } catch (MessagingException mex) {
+            mex.printStackTrace();
+        }*/
+
+        final String SSL_FACTORY = "javax.net.ssl.SSLSocketFactory";
+        // Get a Properties object
+        Properties props = System.getProperties();
+        props.setProperty("mail.smtp.host", "smtp.gmail.com");
+        props.setProperty("mail.smtp.socketFactory.class", SSL_FACTORY);
+        props.setProperty("mail.smtp.socketFactory.fallback", "false");
+        props.setProperty("mail.smtp.port", "465");
+        props.setProperty("mail.smtp.socketFactory.port", "465");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.debug", "true");
+        props.put("mail.store.protocol", "pop3");
+        props.put("mail.transport.protocol", "smtp");
+        final String username = "2@gmail.com";//
+        final String password = "2";
+        try{
+            Session session = Session.getDefaultInstance(props,
+                    new Authenticator(){
+                        protected PasswordAuthentication getPasswordAuthentication() {
+                            return new PasswordAuthentication(username, password);
+                        }});
+
+            // -- Create a new message --
+            Message msg = new MimeMessage(session);
+
+            // -- Set the FROM and TO fields --
+            msg.setFrom(new InternetAddress("robbi92@mail.ru"));
+            msg.setRecipients(Message.RecipientType.TO,
+                    InternetAddress.parse("baymurat.orazov@mail.ru",false));
+            msg.setSubject("Hello");
+            msg.setText("How are you");
+            msg.setSentDate(new Date());
+            Transport.send(msg);
+            System.out.println("Message sent.");
+        }catch (MessagingException e){ System.out.println("Erreur d'envoi, cause: " + e);
         }
-
     }
 }
 

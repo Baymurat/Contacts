@@ -1,9 +1,9 @@
-let addButton = document.getElementById('add-button');
-let editButton = document.getElementById('edit-button');
-let deleteButton = document.getElementById('delete-button');
-let searchButton = document.getElementById('search-button');
-let sendButton = document.getElementById('send-button');
-let aboutButton = document.getElementById('about-button');
+var addButton = document.getElementById('add-button');
+var editButton = document.getElementById('edit-button');
+var deleteButton = document.getElementById('delete-button');
+var searchButton = document.getElementById('search-button');
+var sendButton = document.getElementById('send-button');
+var aboutButton = document.getElementById('about-button');
 
 function addFunction() {
     window.location.replace('/add');
@@ -14,8 +14,8 @@ function editFunction() {
     var contacts = window.allContacts;
     var editContact;
 
-    for(var i = 0; i < contacts.length; i++) {
-        if(selectedRow.id == contacts[i].id) {
+    for (var i = 0; i < contacts.length; i++) {
+        if (selectedRow.id == contacts[i].id) {
             editContact = contacts[i];
             break;
         }
@@ -25,8 +25,8 @@ function editFunction() {
     xmlhttp.open('POST', '/set-contact-for-edit', true);
     xmlhttp.setRequestHeader('Content-Type', 'application/json');
     xmlhttp.send(JSON.stringify(editContact));
-    xmlhttp.onreadystatechange = function() {
-        if(xmlhttp.readyState === 4) {
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState === 4) {
             window.location.replace('/edit');
         }
     }
@@ -56,20 +56,22 @@ function aboutFunction() {
     var contacts = window.allContacts;
     var editContact;
 
-    for(var i = 0; i < contacts.length; i++) {
-        if(selectedRow.id == contacts[i].id) {
-            editContact = contacts[i];
-            break;
+    if (selectedRow) {
+        for (var i = 0; i < contacts.length; i++) {
+            if (selectedRow.id == contacts[i].id) {
+                editContact = contacts[i];
+                break;
+            }
         }
-    }
 
-    var xmlhttp = new XMLHttpRequest();
-    xmlhttp.open('POST', '/set-contact-for-edit', true);
-    xmlhttp.setRequestHeader('Content-Type', 'application/json');
-    xmlhttp.send(JSON.stringify(editContact));
-    xmlhttp.onreadystatechange = function() {
-        if(xmlhttp.readyState === 4) {
-            window.location.replace('/about');
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.open('POST', '/set-contact-for-edit', true);
+        xmlhttp.setRequestHeader('Content-Type', 'application/json');
+        xmlhttp.send(JSON.stringify(editContact));
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState === 4) {
+                window.location.replace('/about');
+            }
         }
     }
 }
