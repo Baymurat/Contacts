@@ -124,13 +124,12 @@ public class JDBCContactDao implements DAO<Contact, Integer> {
     }
 
     @Override
-    public HashMap<Integer, Contact> getRecords(int from) {
-        int range = 11;
+    public HashMap<Integer, Contact> getRecords(int from, int count) {
         HashMap<Integer, Contact> result = new HashMap<>();
         try {
-            preparedStatement = connection.prepareStatement("SELECT * FROM persons ORDER BY id LIMIT ?, ?");
+            preparedStatement = connection.prepareStatement("SELECT * FROM persons ORDER BY name LIMIT ?, ?");
             preparedStatement.setInt(1, from);
-            preparedStatement.setInt(2, range);
+            preparedStatement.setInt(2, count);
             resultSetContacts = preparedStatement.executeQuery();
 
             while (resultSetContacts.next()) {
@@ -166,5 +165,23 @@ public class JDBCContactDao implements DAO<Contact, Integer> {
             CustomUtils.closePreparedStatement(preparedStatement);
         }
         return result;
+    }
+
+    public int getAllElementsCount() {
+        int allElementsCount = 0;
+        try {
+            preparedStatement = connection.prepareStatement("SELECT COUNT(id) AS counts FROM persons");
+            resultSetContacts = preparedStatement.executeQuery();
+            while (resultSetContacts.next()) {
+                allElementsCount = resultSetContacts.getInt("counts");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            CustomUtils.closeResultSet(resultSetContacts);
+            CustomUtils.closePreparedStatement(preparedStatement);
+        }
+
+        return allElementsCount;
     }
 }

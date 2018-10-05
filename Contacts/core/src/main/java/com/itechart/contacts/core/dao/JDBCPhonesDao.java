@@ -92,14 +92,12 @@ public class JDBCPhonesDao implements DAO<Phone, Integer> {
     }
 
     @Override
-    public HashMap<Integer, Phone> getRecords(int from) {
-        int range = 11;
-
+    public HashMap<Integer, Phone> getRecords(int from, int count) {
         HashMap<Integer, Phone> resultMap = new HashMap<>();
         try {
             preparedStatement = connection.prepareStatement("SELECT * FROM phones ORDER BY id LIMIT ?, ?");
             preparedStatement.setInt(1, from);
-            preparedStatement.setInt(2, range);
+            preparedStatement.setInt(2, count);
             resultSetPhones = preparedStatement.executeQuery();
 
             while (resultSetPhones.next()) {

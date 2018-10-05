@@ -8,6 +8,7 @@ import com.itechart.contacts.core.entities.Contact;
 import com.itechart.contacts.core.entities.Phone;
 import com.itechart.contacts.core.utils.ConnectionPool;
 import com.itechart.contacts.core.utils.CustomUtils;
+import com.itechart.contacts.core.utils.Result;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -85,7 +86,7 @@ public class SimpleService {
         } catch (Exception e) {
             e.printStackTrace();
             try {
-                connection.rollback(savepoint);
+                connection.rollback();
             } catch (SQLException e1) {
                 e1.printStackTrace();
             } finally {
@@ -171,7 +172,9 @@ public class SimpleService {
         }
     }
 
-    public ArrayList<Contact> getContacts(int from) {
+    public Result getContacts(int from, int count) {
+        Result result = new Result();
+        int allElementsCount = 0;
 
         JDBCContactDao contactDao;
         JDBCAttachmentDao attachmentDao;
@@ -191,15 +194,19 @@ public class SimpleService {
             attachmentDao = new JDBCAttachmentDao(connection);
             phonesDao = new JDBCPhonesDao(connection);
 
-            resultContactsMap = contactDao.getRecords(from);
-            resultAttachmentMap = attachmentDao.getRecords(from);
-            resultPhoneMap = phonesDao.getRecords(from);
+            resultContactsMap = contactDao.getRecords(from, count);
+            resultAttachmentMap = attachmentDao.getRecords(from, count);
+            resultPhoneMap = phonesDao.getRecords(from, count);
+
+            allElementsCount = contactDao.getAllElementsCount();
 
             bindPhonesAndContacts(resultPhoneMap, resultContactsMap);
             bindAttachmentsAndContacts(resultAttachmentMap, resultContactsMap);
 
-            return new ArrayList<>(resultContactsMap.values());
+            result.setContactList(new ArrayList<>(resultContactsMap.values()));
+            result.setAllElementsCount(allElementsCount);
 
+            return result;
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

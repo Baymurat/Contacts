@@ -1,11 +1,12 @@
-fetch('/fill-index').
+fetch('/get-contacts?from=0&range=10').
     then(function (res) {
         return res.json();
     }).
     then(fillIndex);
 
-function fillIndex(contacts) {
+function fillIndex(result) {
     setButtonsStatus(false);
+    var contacts = result.contactList;
     window.allContacts = contacts;
 
     console.log(allContacts);

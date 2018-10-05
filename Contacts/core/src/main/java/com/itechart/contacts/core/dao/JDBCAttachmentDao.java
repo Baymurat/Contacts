@@ -85,14 +85,12 @@ public class JDBCAttachmentDao implements DAO<Attachment, Integer> {
     }
 
     @Override
-    public HashMap<Integer, Attachment> getRecords(int from) {
-        int range = 11;
-
+    public HashMap<Integer, Attachment> getRecords(int from, int count) {
         HashMap<Integer, Attachment> resultMap = new HashMap<>();
         try {
             preparedStatement = connection.prepareStatement("SELECT * FROM attachments ORDER BY id LIMIT ?, ? ");
             preparedStatement.setInt(1, from);
-            preparedStatement.setInt(2, range);
+            preparedStatement.setInt(2, count);
             resultSetAttachments = preparedStatement.executeQuery();
 
             while (resultSetAttachments.next()) {

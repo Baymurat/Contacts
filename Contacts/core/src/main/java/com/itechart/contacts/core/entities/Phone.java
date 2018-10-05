@@ -1,9 +1,11 @@
 package com.itechart.contacts.core.entities;
 
+import java.io.Serializable;
+
 /**
  * Created by Admin on 12.09.2018
  */
-public class Phone {
+public class Phone implements Serializable {
     private int id;
     private int persons_id;
     private int phoneNumber;

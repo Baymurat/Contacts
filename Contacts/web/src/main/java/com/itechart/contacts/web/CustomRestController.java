@@ -2,10 +2,8 @@ package com.itechart.contacts.web;
 
 import com.itechart.contacts.core.entities.Contact;
 import com.itechart.contacts.core.service.SimpleService;
+import com.itechart.contacts.core.utils.Result;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-
 
 @RestController
 public class CustomRestController {
@@ -13,9 +11,9 @@ public class CustomRestController {
     private SimpleService simpleService = new SimpleService();
     private Contact contactForEdit = null;
 
-    @RequestMapping(value = "/fill-index", method = RequestMethod.GET)
-    public List<Contact> getContacts() {
-        return simpleService.getContacts(0);
+    @RequestMapping(value = "/get-contacts", method = RequestMethod.GET)
+    public Result getContacts(@RequestParam(name = "from")  int from, @RequestParam(name = "range") int range) {
+        return simpleService.getContacts(from, range);
     }
 
     @RequestMapping(value = "/add-record", method = RequestMethod.POST)

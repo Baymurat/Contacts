@@ -11,5 +11,5 @@ public interface DAO<E, K> {
     boolean update(E e);
     boolean delete(K k);
     int insert(E e);
-    Map<K, E> getRecords(int from);
+    Map<K, E> getRecords(int from, int count);
 }
