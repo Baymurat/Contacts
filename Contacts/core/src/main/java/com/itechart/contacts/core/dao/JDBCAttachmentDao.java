@@ -4,7 +4,9 @@ import com.itechart.contacts.core.entities.Attachment;
 import com.itechart.contacts.core.utils.CustomUtils;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Admin on 13.09.2018
@@ -85,12 +87,12 @@ public class JDBCAttachmentDao implements DAO<Attachment, Integer> {
     }
 
     @Override
-    public HashMap<Integer, Attachment> getRecords(int from, int count) {
-        HashMap<Integer, Attachment> resultMap = new HashMap<>();
+    public HashMap<Integer, Attachment> getRecords(int from, int range) {
+        /*HashMap<Integer, Attachment> resultMap = new HashMap<>();
         try {
             preparedStatement = connection.prepareStatement("SELECT * FROM attachments ORDER BY id LIMIT ?, ? ");
             preparedStatement.setInt(1, from);
-            preparedStatement.setInt(2, count);
+            preparedStatement.setInt(2, range);
             resultSetAttachments = preparedStatement.executeQuery();
 
             while (resultSetAttachments.next()) {
@@ -111,8 +113,33 @@ public class JDBCAttachmentDao implements DAO<Attachment, Integer> {
         } finally {
             CustomUtils.closeResultSet(resultSetAttachments);
             CustomUtils.closePreparedStatement(preparedStatement);
-        }
+        }*/
 
         return null;
+    }
+
+    public List<Attachment> getContactAttachment(int persons_id) {
+        List<Attachment> result = new ArrayList<>();
+        try {
+            preparedStatement = connection.prepareStatement("SELECT * FROM attachments WHERE persons_id = ? ");
+            preparedStatement.setInt(1, persons_id);
+            resultSetAttachments = preparedStatement.executeQuery();
+
+            while (resultSetAttachments.next()) {
+                //int currentId = resultSetAttachments.getInt(1);
+
+                Attachment attachment = new Attachment();
+                attachment.setId(resultSetAttachments.getInt("id"));
+                attachment.setFileName(resultSetAttachments.getString("filename"));
+                attachment.setComments(resultSetAttachments.getString("comments"));
+                attachment.setLoadDate(resultSetAttachments.getDate("loaddate"));
+                attachment.setPersons_id(resultSetAttachments.getInt("persons_id"));
+                result.add(attachment);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return result;
     }
 }

@@ -9,11 +9,15 @@ import org.springframework.web.bind.annotation.*;
 public class CustomRestController {
 
     private SimpleService simpleService = new SimpleService();
-    private Contact contactForEdit = null;
 
     @RequestMapping(value = "/get-contacts", method = RequestMethod.GET)
     public Result getContacts(@RequestParam(name = "from")  int from, @RequestParam(name = "range") int range) {
-        return simpleService.getContacts(from, range);
+        return simpleService.getContacts(from, range, null);
+    }
+
+    @RequestMapping(value = "/get-contact", method = RequestMethod.GET)
+    public Contact getContact(@RequestParam(name = "id") int id) {
+        return simpleService.getContact(id);
     }
 
     @RequestMapping(value = "/add-record", method = RequestMethod.POST)
@@ -31,15 +35,8 @@ public class CustomRestController {
         simpleService.updateRecord(contact);
     }
 
-
-    //??????????
-    @RequestMapping(value = "/set-contact-for-edit", method = RequestMethod.POST)
-    public void setContactForEdit(@RequestBody Contact contact) {
-        contactForEdit = contact;
-    }
-
-    @RequestMapping(value = "/get-contact-for-edit", method = RequestMethod.GET)
-    public Contact getContactForEdit() {
-        return contactForEdit;
+    @RequestMapping(value = "/search-contact", method = RequestMethod.GET)
+    public Result searchContacts(@RequestParam(name = "from")  int from, @RequestParam(name = "range") int range, @RequestParam(name = "like") String like) {
+        return simpleService.getContacts(from, range, like);
     }
 }

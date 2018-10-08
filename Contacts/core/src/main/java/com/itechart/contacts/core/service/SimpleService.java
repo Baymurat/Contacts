@@ -172,19 +172,14 @@ public class SimpleService {
         }
     }
 
-    public Result getContacts(int from, int count) {
+    public Result getContacts(int from, int range, String searchDescription) {
         Result result = new Result();
-        int allElementsCount = 0;
 
         JDBCContactDao contactDao;
         JDBCAttachmentDao attachmentDao;
         JDBCPhonesDao phonesDao;
 
         ConnectionPool connectionPool = new ConnectionPool();
-
-        HashMap<Integer, Contact> resultContactsMap;
-        HashMap<Integer, Attachment> resultAttachmentMap;
-        HashMap<Integer, Phone> resultPhoneMap;
 
         try {
             DataSource dataSource = connectionPool.setUpPool();
@@ -194,28 +189,65 @@ public class SimpleService {
             attachmentDao = new JDBCAttachmentDao(connection);
             phonesDao = new JDBCPhonesDao(connection);
 
-            resultContactsMap = contactDao.getRecords(from, count);
-            resultAttachmentMap = attachmentDao.getRecords(from, count);
-            resultPhoneMap = phonesDao.getRecords(from, count);
+            List<Contact> contactList = contactDao.getContacts(from, range, searchDescription);
 
-            allElementsCount = contactDao.getAllElementsCount();
+            if (contactList != null) {
+                for (Contact c : contactList) {
+                    List<Attachment> attachmentList = attachmentDao.getContactAttachment(c.getId());
+                    List<Phone> phoneList = phonesDao.getContactPhones(c.getId());
 
-            bindPhonesAndContacts(resultPhoneMap, resultContactsMap);
-            bindAttachmentsAndContacts(resultAttachmentMap, resultContactsMap);
+                    c.setAttachments(attachmentList);
+                    c.setPhones(phoneList);
+                }
+            }
 
-            result.setContactList(new ArrayList<>(resultContactsMap.values()));
+            int allElementsCount = contactDao.getAllElementsCount();
+
+            result.setContactList(contactList);
             result.setAllElementsCount(allElementsCount);
-
-            return result;
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             CustomUtils.closeConnection(connection);
         }
 
-        return null;
+        return result;
     }
 
+    public Contact getContact(int id) {
+        Contact result = null;
+
+        JDBCContactDao contactDao;
+        JDBCAttachmentDao attachmentDao;
+        JDBCPhonesDao phonesDao;
+
+        ConnectionPool connectionPool = new ConnectionPool();
+
+        try {
+            DataSource dataSource = connectionPool.setUpPool();
+            connection = dataSource.getConnection();
+
+            contactDao = new JDBCContactDao(connection);
+            attachmentDao = new JDBCAttachmentDao(connection);
+            phonesDao = new JDBCPhonesDao(connection);
+
+            List<Attachment> attachmentList = attachmentDao.getContactAttachment(id);
+            List<Phone> phoneList = phonesDao.getContactPhones(id);
+
+            result = contactDao.getEntityById(id);
+            result.setAttachments(attachmentList);
+            result.setPhones(phoneList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            CustomUtils.closeConnection(connection);
+        }
+
+        return result;
+    }
+
+    /*
+    NEED DELETE
     private void bindPhonesAndContacts(HashMap<Integer, Phone> phoneMap, HashMap<Integer, Contact> contactMap) {
         Iterator iterator = phoneMap.entrySet().iterator();
 
@@ -233,5 +265,5 @@ public class SimpleService {
             Attachment tempAttachmentObj = (Attachment)pair.getValue();
             contactMap.get(tempAttachmentObj.getPersons_id()).getAttachments().add(tempAttachmentObj);
         }
-    }
+    }*/
 }

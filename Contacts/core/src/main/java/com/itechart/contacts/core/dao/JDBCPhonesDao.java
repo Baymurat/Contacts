@@ -7,7 +7,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Admin on 13.09.2018
@@ -92,12 +94,12 @@ public class JDBCPhonesDao implements DAO<Phone, Integer> {
     }
 
     @Override
-    public HashMap<Integer, Phone> getRecords(int from, int count) {
-        HashMap<Integer, Phone> resultMap = new HashMap<>();
+    public HashMap<Integer, Phone> getRecords(int from, int range) {
+        /*HashMap<Integer, Phone> resultMap = new HashMap<>();
         try {
             preparedStatement = connection.prepareStatement("SELECT * FROM phones ORDER BY id LIMIT ?, ?");
             preparedStatement.setInt(1, from);
-            preparedStatement.setInt(2, count);
+            preparedStatement.setInt(2, range);
             resultSetPhones = preparedStatement.executeQuery();
 
             while (resultSetPhones.next()) {
@@ -120,8 +122,35 @@ public class JDBCPhonesDao implements DAO<Phone, Integer> {
         } finally {
             CustomUtils.closeResultSet(resultSetPhones);
             CustomUtils.closePreparedStatement(preparedStatement);
-        }
+        }*/
 
         return null;
+    }
+
+    public List<Phone> getContactPhones(int persons_id) {
+        List<Phone> resultList = new ArrayList<>();
+        try {
+            preparedStatement = connection.prepareStatement("SELECT * FROM phones WHERE persons_id = ?");
+            preparedStatement.setInt(1, persons_id);
+            resultSetPhones = preparedStatement.executeQuery();
+
+            while (resultSetPhones.next()) {
+                //int currentId = resultSetPhones.getInt(1);
+
+                Phone phone = new Phone();
+                phone.setId(resultSetPhones.getInt("id"));
+                phone.setCodeOfCountry(resultSetPhones.getInt("countrycode"));
+                phone.setCodeOfOperator(resultSetPhones.getInt("operatorcode"));
+                phone.setPhoneNumber(resultSetPhones.getInt("phonebumber"));
+                phone.setComments(resultSetPhones.getString("comments"));
+                phone.setPersons_id(resultSetPhones.getInt("persons_id"));
+                phone.setType(resultSetPhones.getString("type"));
+                resultList.add(phone);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return resultList;
     }
 }

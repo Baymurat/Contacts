@@ -8,6 +8,7 @@ import com.itechart.contacts.core.utils.CustomUtils;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Admin on 12.09.2018
@@ -24,7 +25,42 @@ public class JDBCContactDao implements DAO<Contact, Integer> {
 
     @Override
     public Contact getEntityById(Integer id) {
-        return null;
+        Contact contact = new Contact();
+        try {
+            preparedStatement = connection.prepareStatement("SELECT * FROM persons WHERE id = ?");
+            preparedStatement.setInt(1, id);
+            resultSetContacts = preparedStatement.executeQuery();
+
+            while (resultSetContacts.next()) {
+                contact.setId(resultSetContacts.getInt(1));
+                contact.setName(resultSetContacts.getString("name"));
+                contact.setSurName(resultSetContacts.getString("surname"));
+                contact.setMiddleName(resultSetContacts.getString("middlename"));
+                contact.setCitizenship(resultSetContacts.getString("citizenship"));
+                contact.setFamilyStatus(resultSetContacts.getString("familystatus"));
+                contact.setWebSite(resultSetContacts.getString("website"));
+                contact.setEmail(resultSetContacts.getString("email"));
+                contact.setCurrentJob(resultSetContacts.getString("currentjob"));
+                contact.setGender(resultSetContacts.getString("gender"));
+                contact.setBirthDate(resultSetContacts.getDate("datebirth"));
+                contact.setCountry(resultSetContacts.getString("country"));
+                contact.setCity(resultSetContacts.getString("city"));
+                contact.setStreetHouseApart(resultSetContacts.getString("street_house_apart"));
+                contact.setIndex(resultSetContacts.getInt("p_index"));
+
+                ArrayList<Phone> phones = new ArrayList<>();
+                ArrayList<Attachment> attachments = new ArrayList<>();
+
+                contact.setPhones(phones);
+                contact.setAttachments(attachments);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            CustomUtils.closeResultSet(resultSetContacts);
+            CustomUtils.closePreparedStatement(preparedStatement);
+        }
+        return contact;
     }
 
     @Override
@@ -124,12 +160,12 @@ public class JDBCContactDao implements DAO<Contact, Integer> {
     }
 
     @Override
-    public HashMap<Integer, Contact> getRecords(int from, int count) {
-        HashMap<Integer, Contact> result = new HashMap<>();
+    public HashMap<Integer, Contact> getRecords(int from, int range) {
+        /*HashMap<Integer, Contact> result = new HashMap<>();
         try {
             preparedStatement = connection.prepareStatement("SELECT * FROM persons ORDER BY name LIMIT ?, ?");
             preparedStatement.setInt(1, from);
-            preparedStatement.setInt(2, count);
+            preparedStatement.setInt(2, range);
             resultSetContacts = preparedStatement.executeQuery();
 
             while (resultSetContacts.next()) {
@@ -157,6 +193,74 @@ public class JDBCContactDao implements DAO<Contact, Integer> {
                 contact.setAttachments(attachments);
 
                 result.put(contact.getId(), contact);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            CustomUtils.closeResultSet(resultSetContacts);
+            CustomUtils.closePreparedStatement(preparedStatement);
+        }
+        return result;*/
+
+        return null;
+    }
+
+    public List<Contact> getContacts(int from, int range, String searchDescription) {
+        List<Contact> result = new ArrayList<>();
+        try {
+            if (searchDescription == null) {
+                preparedStatement = connection.prepareStatement("SELECT * FROM persons ORDER BY name LIMIT ?, ?");
+                preparedStatement.setInt(1, from);
+                preparedStatement.setInt(2, range);
+            } else {
+                String like = "%" + searchDescription + "%";
+                preparedStatement = connection.prepareStatement("SELECT * FROM persons WHERE name LIKE ? OR surname LIKE ? OR " +
+                        "middlename LIKE ? OR citizenship LIKE ? OR familystatus LIKE ? OR website LIKE ? OR email LIKE ? OR  currentjob LIKE ? OR " +
+                        "gender LIKE ? OR country LIKE ? OR city LIKE ? OR street_house_apart LIKE ? OR p_index LIKE ? ORDER BY name LIMIT ?, ?");
+                preparedStatement.setString(1, like);
+                preparedStatement.setString(2, like);
+                preparedStatement.setString(3, like);
+                preparedStatement.setString(4, like);
+                preparedStatement.setString(5, like);
+                preparedStatement.setString(6, like);
+                preparedStatement.setString(7, like);
+                preparedStatement.setString(8, like);
+                preparedStatement.setString(9, like);
+                preparedStatement.setString(10, like);
+                preparedStatement.setString(11, like);
+                preparedStatement.setString(12, like);
+                preparedStatement.setString(13, like);
+                preparedStatement.setInt(14, from);
+                preparedStatement.setInt(15, range);
+            }
+
+            resultSetContacts = preparedStatement.executeQuery();
+
+            while (resultSetContacts.next()) {
+                Contact contact = new Contact();
+                contact.setId(resultSetContacts.getInt(1));
+                contact.setName(resultSetContacts.getString("name"));
+                contact.setSurName(resultSetContacts.getString("surname"));
+                contact.setMiddleName(resultSetContacts.getString("middlename"));
+                contact.setCitizenship(resultSetContacts.getString("citizenship"));
+                contact.setFamilyStatus(resultSetContacts.getString("familystatus"));
+                contact.setWebSite(resultSetContacts.getString("website"));
+                contact.setEmail(resultSetContacts.getString("email"));
+                contact.setCurrentJob(resultSetContacts.getString("currentjob"));
+                contact.setGender(resultSetContacts.getString("gender"));
+                contact.setBirthDate(resultSetContacts.getDate("datebirth"));
+                contact.setCountry(resultSetContacts.getString("country"));
+                contact.setCity(resultSetContacts.getString("city"));
+                contact.setStreetHouseApart(resultSetContacts.getString("street_house_apart"));
+                contact.setIndex(resultSetContacts.getInt("p_index"));
+
+                ArrayList<Phone> phones = new ArrayList<>();
+                ArrayList<Attachment> attachments = new ArrayList<>();
+
+                contact.setPhones(phones);
+                contact.setAttachments(attachments);
+
+                result.add(contact);
             }
         } catch (SQLException e) {
             e.printStackTrace();

@@ -3,9 +3,7 @@ function fillInputs(contact) {
     document.getElementById('surname').value = contact.surName;
     document.getElementById('middlename').value = contact.middleName;
     document.getElementById('datebirth').value = contact.birthDate;
-    document.getElementById('gender').value = contact.gender;
     document.getElementById('citizenship').value = contact.citizenship;
-    document.getElementById('family-status').value = contact.familyStatus;
     document.getElementById('web-site').value = contact.webSite;
     document.getElementById('email').value = contact.email;
     document.getElementById('currentjob').value = contact.currentJob;
@@ -13,7 +11,21 @@ function fillInputs(contact) {
     document.getElementById('city').value = contact.city;
     document.getElementById('street-house-apart').value = contact.streetHouseApart;
     document.getElementById('index').value = contact.index;
-    
+
+    var gender = document.getElementById('gender');
+    if (contact.gender === 'male') {
+        gender.selectedIndex = 0;
+    } else {
+        gender.selectedIndex = 1;
+    }
+
+    var familyStatus = document.getElementById('family-status');
+    if (contact.gender === 'single') {
+        familyStatus.selectedIndex = 0;
+    } else {
+        familyStatus.selectedIndex = 1;
+    }
+
     fillPhoneTable(contact.phones);
     fillAttachmentsTable(contact.attachments);
 }
@@ -68,8 +80,21 @@ function fillAttachmentsTable(list) {
     }
 }
 
-fetch('/get-contact-for-edit').
-    then(function(res) {
-        return res.json();
-    }).
-    then(fillInputs);
+var cancelButton = document.getElementById('cancel-button');
+cancelButton.addEventListener('click', function () {
+    window.location.replace('/index');
+});
+
+var url = new URL(window.location.href);
+var id = url.searchParams.get("id");
+
+var xmlhttp = new XMLHttpRequest();
+xmlhttp.open("GET", '/get-contact?id=' + id, true);
+xmlhttp.send();
+
+xmlhttp.onreadystatechange = function (ev) {
+    if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+        var contact = JSON.parse(xmlhttp.responseText);
+        fillInputs(contact);
+    }
+}

@@ -1,13 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="./css/stylesheet.css" type="text/css">
     <title>Document</title>
 </head>
+
 <body>
-    <h1>THIS IS SEARCH PAGE</h1>
-    
+    <header></header>
+    <main>
+        <div>
+            <button id="search-button">Search</button>
+            <input id="search-field" type="text">
+        </div>
+        <table id="myTable">
+            <thead>
+                <tr>
+                    <th id="boxes"></th>
+                    <th>Name</th>
+                    <th>Date</th>
+                    <th>Address</th>
+                    <th>Company</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+    </main>
+    <footer>
+        <button id="edit-button">Edit</button>
+        <button id="delete-button">Delete</button>
+        <button id="send-button">Send</button>
+        <button id="about-button">About</button>
+        <button id="check-boxes-button"></button>
+    </footer>
+
+    <script src="./script/search.js"></script>
+    <script src="./script/fill-table.js"></script>
+    <script src="./script/bind-buttons.js"></script>
 </body>
+
 </html>

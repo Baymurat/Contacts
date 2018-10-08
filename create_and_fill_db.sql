@@ -67,13 +67,14 @@ INSERT INTO attachments VALUES (null, 4, 'HeadFirst.pdf', 'Book, yet don\'t know
 INSERT INTO attachments VALUES (null, 4, 'notVirus.exe', 'Exactly not a virus. Trust me, I\'m an engineer', '2018-09-25');
 INSERT INTO attachments VALUES (null, 4, 'notVirus2.exe', 'Trust me again. Let it run by admin permissions', '2018-09-25');
 
-SELECT persons.id, name, persons_id, operatorcode, phonebumber, type, comments  FROM persons JOIN phones ON (persons.id = phones.persons_id) /*JOIN attachments ON (persons.id = attachments.persons_id) */;
-SELECT * FROM persons /*JOIN phones ON (persons.id = phones.persons_id) */ JOIN attachments ON (persons.id = attachments.persons_id) GROUP BY name;
-
+SELECT * FROM persons;
+DELETE FROM attachments WHERE id = 1;
+/*
 SELECT * FROM phones JOIN (SELECT id, name FROM persons) te ON phones.persons_id = te.id;
 SELECT * FROM persons;
 SELECT * FROM phones;
 SELECT * FROM attachments;
+*/
 
 /* Corrects id sequences after deleting >*/
 /*
@@ -91,6 +92,8 @@ ALTER TABLE attachments AUTO_INCREMENT = 1;
 */
 /* ^_________*/
 
+
+select * from INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS where DELETE_RULE ='CASCADE';
 /* Select all tables which has CASCADE property ON  */
 /* select * from INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS where DELETE_RULE ='CASCADE';*/
 /* 1IMPORTANT1 */
