@@ -5,6 +5,7 @@ import com.itechart.contacts.core.dao.JDBCContactDao;
 import com.itechart.contacts.core.dao.JDBCPhonesDao;
 import com.itechart.contacts.core.entities.Attachment;
 import com.itechart.contacts.core.entities.Contact;
+import com.itechart.contacts.core.entities.Message;
 import com.itechart.contacts.core.entities.Phone;
 import com.itechart.contacts.core.utils.ConnectionPool;
 import com.itechart.contacts.core.utils.CustomUtils;
@@ -95,7 +96,7 @@ public class SimpleService {
         }
     }
 
-    public void deleteRecord(int contactId) {
+    public void deleteRecord(int[] deleteContactsId) {
 
         JDBCContactDao contactDao;
 
@@ -108,7 +109,9 @@ public class SimpleService {
             savepoint = connection.setSavepoint();
 
             contactDao = new JDBCContactDao(connection);
-            contactDao.delete(contactId);
+            for (int i : deleteContactsId) {
+                contactDao.delete(i);
+            }
 
             connection.commit();
         } catch (Exception e) {
@@ -246,24 +249,14 @@ public class SimpleService {
         return result;
     }
 
-    /*
-    NEED DELETE
-    private void bindPhonesAndContacts(HashMap<Integer, Phone> phoneMap, HashMap<Integer, Contact> contactMap) {
-        Iterator iterator = phoneMap.entrySet().iterator();
-
-        while (iterator.hasNext()) {
-            Map.Entry pair = (Map.Entry)iterator.next();
-            Phone tepmPhoneObj = (Phone)pair.getValue();
-            contactMap.get(tepmPhoneObj.getPersons_id()).getPhones().add(tepmPhoneObj);
+    public void sendEmail(Message message) {
+        if (message.getReceivers() != null) {
+            for (String s : message.getReceivers()) {
+                System.out.println(s);
+            }
         }
+
+        System.out.println(message.getMessageTheme());
+        System.out.println(message.getMessageContent());
     }
-
-    private void bindAttachmentsAndContacts(HashMap<Integer, Attachment> attachmentMap, HashMap<Integer, Contact> contactMap) {
-        Iterator iterator = attachmentMap.entrySet().iterator();
-        while (iterator.hasNext()) {
-            Map.Entry pair = (Map.Entry)iterator.next();
-            Attachment tempAttachmentObj = (Attachment)pair.getValue();
-            contactMap.get(tempAttachmentObj.getPersons_id()).getAttachments().add(tempAttachmentObj);
-        }
-    }*/
 }

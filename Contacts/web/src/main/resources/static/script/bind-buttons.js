@@ -4,7 +4,8 @@ var deleteButton = document.getElementById('delete-button');
 var searchButton = document.getElementById('go-over-search-button');
 var sendButton = document.getElementById('send-button');
 var aboutButton = document.getElementById('about-button');
-var checkBoxesButton = document.querySelector('#check-boxes-button')
+var checkBoxesButton = document.querySelector('#check-boxes-button');
+var myTable = document.getElementById('myTable');
 
 function addFunction() {
     window.location.replace('/add');
@@ -19,14 +20,25 @@ function editFunction() {
 }
 
 function deleteFunction() {
-    var selectedRow = document.querySelector('.selected');
-    var url = '/delete-record';
-    var param = 'id=' + selectedRow.id;
+    var selectedRows = document.querySelectorAll('.selected');
+    if (selectedRows.length > 0) {
+        var deleteContactsId = [];
 
-    var xmlhhtp = new XMLHttpRequest();
-    xmlhhtp.open('GET', url + '?' + param, true);
-    xmlhhtp.send();
-    window.location.reload();
+        for (var i = 0; i < selectedRows.length; i++) {
+            deleteContactsId.push(selectedRows[i].id);
+        }
+
+
+        var xmlhhtp = new XMLHttpRequest();
+        xmlhhtp.open('POST', '/delete-record', true);
+        xmlhhtp.setRequestHeader('Content-Type', 'application/json');
+        xmlhhtp.send(JSON.stringify(deleteContactsId));
+        xmlhhtp.onreadystatechange = function (ev) {
+            if (xmlhhtp.readyState === 4 && xmlhhtp.status === 200) {
+                window.location.reload();
+            }
+        }
+    }
 }
 
 function searchFunction() {
@@ -34,7 +46,14 @@ function searchFunction() {
 }
 
 function sendFunction() {
+    var selectedRows = document.querySelectorAll('.selected');
+    var params = '?';
 
+    for (var i = 0; i < selectedRows.length; i++) {
+        params += i + 1 + '=' + selectedRows[i].cells[2].innerHTML + '&';
+    }
+
+    window.location.replace('/email' + params);
 }
 
 function aboutFunction() {
@@ -50,17 +69,67 @@ function toggleCheckBoxes() {
 
     for (var i = 0; i < checkBoxes.length; i++) {
         checkBoxes[i].classList.toggle('disable');
+        checkBoxes[i].checked = false;
     }
     document.querySelector('#boxes').classList.toggle('disable');
 
     var button = document.querySelector('#check-boxes-button');
 
+    setButtonsStatus(false);
+
     if (button.state === 'disabled') {
         button.innerHTML = "Disable Check Boxes";
         button.state = 'enabled';
+        myTable.removeEventListener('click', singleChoice);
+        myTable.addEventListener('click', multipleChoice);
+        setButtonsStatus(true);
     } else {
         button.innerHTML = "Enable Check Boxes";
         button.state = 'disabled';
+        myTable.removeEventListener('click', multipleChoice);
+        myTable.addEventListener('click', singleChoice);
+    }
+
+    var selectedRows = document.getElementsByClassName('selected');
+    if (selectedRows) {
+        while (selectedRows.length > 0) {
+            selectedRows[0].classList.toggle('selected');
+        }
+    }
+}
+
+function setButtonsStatus(status) {
+    document.querySelector('#edit-button').disabled = !status;
+    document.querySelector('#delete-button').disabled = !status;
+    document.querySelector('#about-button').disabled = !status;
+    document.querySelector('#send-button').disabled = !status;
+}
+
+function singleChoice(e) {
+    var target = e.target;
+    var parentNode = target.parentNode;
+
+    if (target && target.tagName === 'TD') {
+        if (!parentNode.classList.contains('selected')) {
+            var selectedRow = myTable.querySelector('.selected');
+            if (selectedRow) {
+                selectedRow.classList.toggle('selected');
+            }
+        }
+        parentNode.classList.toggle('selected');
+    }
+
+    setButtonsStatus(parentNode.classList.contains('selected'));
+}
+
+function multipleChoice(e) {
+    var target = e.target;
+    var parentNode = target.parentNode;
+    var checkBox = parentNode.firstChild;
+
+    if (target && (target.tagName === 'TD' || target.tagName === 'INPUT')) {
+        parentNode.classList.toggle('selected');
+        checkBox.checked = checkBox.checked !== true;
     }
 }
 
@@ -76,6 +145,7 @@ deleteButton.addEventListener('click', deleteFunction);
 sendButton.addEventListener('click', sendFunction);
 aboutButton.addEventListener('click', aboutFunction);
 checkBoxesButton.addEventListener('click', toggleCheckBoxes);
+
 
 toggleCheckBoxes();
 

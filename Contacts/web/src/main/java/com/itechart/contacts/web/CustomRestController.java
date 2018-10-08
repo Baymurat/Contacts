@@ -1,6 +1,7 @@
 package com.itechart.contacts.web;
 
 import com.itechart.contacts.core.entities.Contact;
+import com.itechart.contacts.core.entities.Message;
 import com.itechart.contacts.core.service.SimpleService;
 import com.itechart.contacts.core.utils.Result;
 import org.springframework.web.bind.annotation.*;
@@ -25,9 +26,9 @@ public class CustomRestController {
         simpleService.addRecord(contact);
     }
 
-    @RequestMapping(value = "/delete-record", method = RequestMethod.GET)
-    public void deleteRecord(@RequestParam(name = "id") int id) {
-        simpleService.deleteRecord(id);
+    @RequestMapping(value = "/delete-record", method = RequestMethod.POST)
+    public void deleteRecord(@RequestBody int[] deleteContactsId) {
+        simpleService.deleteRecord(deleteContactsId);
     }
 
     @RequestMapping(value = "/update-record", method = RequestMethod.POST)
@@ -38,5 +39,10 @@ public class CustomRestController {
     @RequestMapping(value = "/search-contact", method = RequestMethod.GET)
     public Result searchContacts(@RequestParam(name = "from")  int from, @RequestParam(name = "range") int range, @RequestParam(name = "like") String like) {
         return simpleService.getContacts(from, range, like);
+    }
+
+    @RequestMapping(value = "/send-email", method = RequestMethod.POST)
+    public void sendEmail(@RequestBody Message message) {
+        simpleService.sendEmail(message);
     }
 }

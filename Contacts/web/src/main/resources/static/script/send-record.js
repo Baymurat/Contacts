@@ -1,15 +1,15 @@
 window.sendRecord =  function(url) {
-    let contact = {};
+    var contact = {};
 
     contact.name = document.getElementById('name').value;
     contact.surName = document.getElementById('surname').value;
     contact.middleName = document.getElementById('middlename').value;
 
-    let elementG = document.getElementById('gender');
+    var elementG = document.getElementById('gender');
     contact.gender = elementG.options[elementG.selectedIndex].text;
     contact.citizenship = document.getElementById('citizenship').value;
 
-    let elementFS = document.getElementById('family-status');
+    var elementFS = document.getElementById('family-status');
     contact.familyStatus = elementFS.options[elementFS.selectedIndex].text;
     contact.webSite = document.getElementById('web-site').value;
     contact.email = document.getElementById('email').value;
@@ -23,11 +23,11 @@ window.sendRecord =  function(url) {
     contact.phones = getPhones();
     contact.attachments = getAttachments();
 
-    let objectSend = JSON.stringify(contact);
+    var objectSend = JSON.stringify(contact);
 
     if (contact.name && contact.surName && contact.middleName) {
         console.log(objectSend);
-        let xmlhttp = new XMLHttpRequest();
+        var xmlhttp = new XMLHttpRequest();
         xmlhttp.open("POST", url, true);
         xmlhttp.setRequestHeader('Content-Type', 'application/json');
         xmlhttp.send(objectSend);

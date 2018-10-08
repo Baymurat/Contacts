@@ -33,4 +33,9 @@ public class TemplateController {
     public String search() {
         return "search";
     }
+
+    @GetMapping("/email")
+    public String email() {
+        return "email";
+    }
 }
