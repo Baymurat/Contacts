@@ -1,4 +1,5 @@
-window.sendRecord =  function(url) {
+window.sendRecord = function (url) {
+
     var contact = {};
 
     contact.name = document.getElementById('name').value;
@@ -19,20 +20,30 @@ window.sendRecord =  function(url) {
     contact.city = document.getElementById('city').value;
     contact.steetHouseApart = document.getElementById('street-house-apart').value;
     contact.index = document.getElementById('index').value;
-    //contact.birthDate  = new Date();
     contact.phones = getPhones();
     contact.attachments = getAttachments();
 
-    var objectSend = JSON.stringify(contact);
+    contact.deletePhonesList = window.deletePhonesList;
+    contact.deleteAttachmentsList = window.deleteAttachmentsList;
+
+
 
     if (contact.name && contact.surName && contact.middleName) {
-        console.log(objectSend);
+        var formData = new FormData();
+        var objectSend = JSON.stringify(contact);
+
+        formData.append("contact", objectSend);
+        //getFiles(formData);
+
         var xmlhttp = new XMLHttpRequest();
         xmlhttp.open("POST", url, true);
-        xmlhttp.setRequestHeader('Content-Type', 'application/json');
-        xmlhttp.send(objectSend);
+        //xmlhttp.setRequestHeader('Content-Type', 'application/json');
+        //xmlhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        //xmlhttp.setRequestHeader('Content-Type', 'multipart/form-data');
+        xmlhttp.setRequestHeader('Content-Type', 'multipart/mixed');
+        xmlhttp.send(formData);
 
-        xmlhttp.onreadystatechange = function (ev) { 
+        xmlhttp.onreadystatechange = function (ev) {
             if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
                 window.location.replace('/index');
             }
@@ -82,4 +93,12 @@ function getAttachments() {
     }
 
     return attachments;
+}
+
+function getFiles(formData) {
+    var usersAttachment = document.querySelectorAll('input[name = users-attach]');
+
+    for (var i = 0; i < usersAttachment.length; i++) {
+        formData.append('files[]', usersAttachment[i].files[0]);
+    }
 }

@@ -32,4 +32,3 @@ window.fillTable = function fillIndex(result) {
         document.querySelector('#myTable>tbody').appendChild(tableRow);
     }
 };
-

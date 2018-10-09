@@ -4,7 +4,13 @@ import com.itechart.contacts.core.entities.Contact;
 import com.itechart.contacts.core.entities.Message;
 import com.itechart.contacts.core.service.SimpleService;
 import com.itechart.contacts.core.utils.Result;
+import org.springframework.http.MediaType;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 public class CustomRestController {
@@ -21,10 +27,18 @@ public class CustomRestController {
         return simpleService.getContact(id);
     }
 
-    @RequestMapping(value = "/add-record", method = RequestMethod.POST)
-    public void addRecord(@RequestBody Contact contact) {
-        simpleService.addRecord(contact);
+    @RequestMapping(value = "/add-record", method = RequestMethod.POST/*, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE*/)
+    public void addRecord(@RequestPart String contact) {
+        //simpleService.addRecord(contact);
+        System.out.println(contact);
     }
+
+
+    /*@RequestMapping(value = "/add-record", method = RequestMethod.POST, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    public void addRecord(@RequestParam("contact") Contact contact) {
+        simpleService.addRecord(contact);
+    }*/
+
 
     @RequestMapping(value = "/delete-record", method = RequestMethod.POST)
     public void deleteRecord(@RequestBody int[] deleteContactsId) {

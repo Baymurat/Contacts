@@ -8,18 +8,18 @@ window.onload = function () {
     phoneModal.setAddFunction(addPhone);
     phoneModal.setUpdateFunction(updatePhone);
 
-    var button = document.querySelector("#phone-add");
-    button.addEventListener("click", function () {
+    var buttonPhoneAdd = document.querySelector("#phone-add");
+    buttonPhoneAdd.addEventListener("click", function () {
         phoneModal.add();
     });
 
-    button = document.querySelector('#phone-edit');
-    button.addEventListener("click", function () {
+    var buttonPhoneEdit = document.querySelector('#phone-edit');
+    buttonPhoneEdit.addEventListener("click", function () {
         phoneModal.edit(phoneInputsFill);
     });
 
-    button = document.querySelector('#phone-delete');
-    button.addEventListener("click", function () {
+    var buttonPhoneDelete = document.querySelector('#phone-delete');
+    buttonPhoneDelete.addEventListener("click", function () {
         phoneModal.delete(deleteRow);
     });
 
@@ -29,18 +29,18 @@ window.onload = function () {
     attachmentsModal.setAddFunction(addAttachment);
     attachmentsModal.setUpdateFunction(updateAttachment);
 
-    button = document.querySelector("#attachment-add");
-    button.addEventListener("click", function () {
+    var buttonAttachmentAdd = document.querySelector("#attachment-add");
+    buttonAttachmentAdd.addEventListener("click", function () {
         attachmentsModal.add();
     });
 
-    button = document.querySelector('#attachment-edit');
-    button.addEventListener("click", function () {
+    var buttonAttachmentEdit = document.querySelector('#attachment-edit');
+    buttonAttachmentEdit.addEventListener("click", function () {
         attachmentsModal.edit(attachmentInputsFill);
     });
 
-    button = document.querySelector('#attachment-delete');
-    button.addEventListener("click", function () {
+    var buttonAttachmentDelete = document.querySelector('#attachment-delete');
+    buttonAttachmentDelete.addEventListener("click", function () {
         attachmentsModal.delete(deleteRow);
     });
 };
@@ -80,17 +80,25 @@ function addAttachment(context) {
     var fileName = document.createElement('td');
     var comments = document.createElement('td');
     var dateColumn = document.createElement('td');
+    var attachmentInput = document.createElement('input');
+    attachmentInput.type = 'file';
+    attachmentInput.style.display = 'none';
+    attachmentInput.name = 'users-attach';
+
     var date = new Date();
     var fullDate = date.getDay() + "." + date.getMonth() + "." + date.getFullYear();
 
     fileName.innerHTML = context.element.querySelector('#file-name').value;
     comments.innerHTML = context.element.querySelector('#attachment-comment').value;
+    attachmentInput.files = context.element.querySelector('input[name = files').files;
+
     dateColumn.innerHTML = fullDate;
 
     if (fileName.innerHTML) {
         tableRow.appendChild(fileName);
         tableRow.appendChild(dateColumn);
         tableRow.appendChild(comments);
+        tableRow.appendChild(attachmentInput);
 
         context.table.appendChild(tableRow);
 

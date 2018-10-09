@@ -103,7 +103,7 @@
         hideFade();
         this.element.style.display = "none";
 
-        var inputs = this.element.querySelectorAll('input');
+        var inputs = this.element.querySelectorAll('input:not([name = files])');
         for (var i = 0; i < inputs.length; i++) {
             inputs[i].value = "";
         }

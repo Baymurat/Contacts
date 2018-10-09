@@ -148,6 +148,3 @@ checkBoxesButton.addEventListener('click', toggleCheckBoxes);
 
 
 toggleCheckBoxes();
-
-
-

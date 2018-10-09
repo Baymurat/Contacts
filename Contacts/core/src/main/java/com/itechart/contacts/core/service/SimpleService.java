@@ -132,7 +132,7 @@ public class SimpleService {
         JDBCAttachmentDao attachmentsDao;
 
         ConnectionPool connectionPool = new ConnectionPool();
-        Savepoint savepoint = null;
+        //Savepoint savepoint = null;
         try {
             List<Phone> phones = contact.getPhones();
             List<Attachment> attachments = contact.getAttachments();
@@ -140,7 +140,7 @@ public class SimpleService {
             DataSource dataSource = connectionPool.setUpPool();
             connection = dataSource.getConnection();
             connection.setAutoCommit(false);
-            savepoint = connection.setSavepoint();
+            //savepoint = connection.setSavepoint();
 
             contactDao = new JDBCContactDao(connection);
             attachmentsDao = new JDBCAttachmentDao(connection);
@@ -166,7 +166,7 @@ public class SimpleService {
         } catch (Exception e) {
             e.printStackTrace();
             try {
-                connection.rollback(savepoint);
+                connection.rollback();
             } catch (SQLException e1) {
                 e1.printStackTrace();
             }
