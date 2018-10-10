@@ -1,5 +1,6 @@
 package com.itechart.contacts.web;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.itechart.contacts.core.entities.Contact;
 import com.itechart.contacts.core.entities.Message;
 import com.itechart.contacts.core.service.SimpleService;
@@ -7,8 +8,10 @@ import com.itechart.contacts.core.utils.Result;
 import org.springframework.http.MediaType;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -27,10 +30,19 @@ public class CustomRestController {
         return simpleService.getContact(id);
     }
 
-    @RequestMapping(value = "/add-record", method = RequestMethod.POST/*, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE*/)
-    public void addRecord(@RequestPart String contact) {
-        //simpleService.addRecord(contact);
-        System.out.println(contact);
+    @RequestMapping(value = "/add-record", method = RequestMethod.POST)
+    public void addRecord(@RequestParam("contact") String jsonRepresentation, @RequestPart("files") MultipartFile[] files) {
+        System.out.println(files.length);
+        System.out.println(jsonRepresentation);
+        ObjectMapper mapper = new ObjectMapper();
+        Contact contact = null;
+        try {
+            contact = mapper.readValue(jsonRepresentation, Contact.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        simpleService.addRecord(contact);
+
     }
 
 

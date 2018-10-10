@@ -1,5 +1,7 @@
 package com.itechart.contacts.core.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.List;
@@ -7,6 +9,7 @@ import java.util.List;
 /**
  * Created by Admin on 11.09.2018
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Contact implements Serializable{
 
     private String name;

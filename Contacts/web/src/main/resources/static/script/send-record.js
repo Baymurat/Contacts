@@ -32,26 +32,25 @@ window.sendRecord = function (url) {
         var formData = new FormData();
         var objectSend = JSON.stringify(contact);
 
+        getFiles(formData);
         formData.append("contact", objectSend);
-        //getFiles(formData);
 
         var xmlhttp = new XMLHttpRequest();
+
         xmlhttp.open("POST", url, true);
-        //xmlhttp.setRequestHeader('Content-Type', 'application/json');
-        //xmlhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        //xmlhttp.setRequestHeader('Content-Type', 'multipart/form-data');
-        xmlhttp.setRequestHeader('Content-Type', 'multipart/mixed');
         xmlhttp.send(formData);
 
         xmlhttp.onreadystatechange = function (ev) {
             if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
                 window.location.replace('/index');
+            } else {
+                //Handle errors.
             }
         }
     } else {
         alert("POPULATE FIELDS");
     }
-}
+};
 
 function getPhones() {
     var phones = [];
@@ -99,6 +98,6 @@ function getFiles(formData) {
     var usersAttachment = document.querySelectorAll('input[name = users-attach]');
 
     for (var i = 0; i < usersAttachment.length; i++) {
-        formData.append('files[]', usersAttachment[i].files[0]);
+        formData.append('files', usersAttachment[i].files[0]);
     }
 }
