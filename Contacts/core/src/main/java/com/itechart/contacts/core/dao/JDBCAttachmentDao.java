@@ -34,8 +34,9 @@ public class JDBCAttachmentDao implements DAO<Attachment, Integer> {
             preparedStatement.setString(2, attachment.getComments());
             preparedStatement.setInt(3, attachment.getId());
             int result = preparedStatement.executeUpdate();
+            boolean isNew = preparedStatement.execute("SELECT id FROM phones WHERE id = " + attachment.getId());
 
-            return result == 1;
+            return result == 1 || !isNew;
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -75,7 +76,6 @@ public class JDBCAttachmentDao implements DAO<Attachment, Integer> {
             if (resultSetAttachments.next()) {
                 attachment.setId(resultSetAttachments.getInt("last_id"));
             }
-
             return 0;
         } catch (SQLException e) {
             e.printStackTrace();

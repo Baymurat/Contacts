@@ -26,9 +26,17 @@ window.sendRecord = function (url) {
     contact.deletePhonesList = window.deletePhonesList;
     contact.deleteAttachmentsList = window.deleteAttachmentsList;
 
+    if (document.getElementById('user_id')) {
+        contact.id = document.getElementById('user_id').value;
+    }
 
 
     if (contact.name && contact.surName && contact.middleName) {
+        /* show(contact.phones);
+        show(contact.attachments);
+        show(contact.deletePhonesList);
+        show(contact.deleteAttachmentsList); */
+
         var formData = new FormData();
         var objectSend = JSON.stringify(contact);
 
@@ -62,6 +70,7 @@ function getPhones() {
     for (var i = 1; i < rowLength; i++) {
         var cells = table.rows.item(i).cells;
 
+        phone.id =  table.rows.item(i).phoneId;
         var fullPhone = cells.item(0).innerHTML.split(' ');
         phone.codeOfCountry = fullPhone[0];
         phone.codeOfOperator = fullPhone[1];
@@ -84,6 +93,7 @@ function getAttachments() {
     for (var i = 1; i < rowLength; i++) {
         var cells = table.rows.item(i).cells;
 
+        attachment.id = table.rows.item(i).attachId;
         attachment.fileName = cells.item(0).innerHTML;
         attachment.loadDate = new Date().getTime();
         attachment.comments = cells.item(2).innerHTML;
@@ -99,5 +109,12 @@ function getFiles(formData) {
 
     for (var i = 0; i < usersAttachment.length; i++) {
         formData.append('files', usersAttachment[i].files[0]);
+    }
+}
+
+function show(list) {
+    console.log("SHOW LIST");
+    for (var i = 0; i < list.length; i++) {
+        console.log(list[i]);
     }
 }

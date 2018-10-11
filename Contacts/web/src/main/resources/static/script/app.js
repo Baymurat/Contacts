@@ -48,6 +48,8 @@ window.onload = function () {
 function addPhone(context) {
     var tableRow = document.createElement('tr');
 
+    tableRow.phoneId = -1;
+
     var phoneNumber = document.createElement('td');
     var phoneType = document.createElement('td');
     var comments = document.createElement('td');
@@ -77,9 +79,12 @@ function addPhone(context) {
 function addAttachment(context) {
     var tableRow = document.createElement('tr');
 
+    tableRow.attachId = -1;
+
     var fileName = document.createElement('td');
     var comments = document.createElement('td');
     var dateColumn = document.createElement('td');
+
     var attachmentInput = document.createElement('input');
     attachmentInput.type = 'file';
     attachmentInput.style.display = 'none';
@@ -94,7 +99,7 @@ function addAttachment(context) {
 
     dateColumn.innerHTML = fullDate;
 
-    if (fileName.innerHTML) {
+    if (fileName.innerHTML && context.element.querySelector('input[name = files').value) {
         tableRow.appendChild(fileName);
         tableRow.appendChild(dateColumn);
         tableRow.appendChild(comments);
@@ -134,7 +139,7 @@ function updateAttachment(context) {
     var fileName = context.element.querySelector('#file-name').value;
     if (fileName) {
         cells.item(0).innerHTML = fileName;
-        cells.item(0).innerHTML = context.element.querySelector('#attachment-comment').value;
+        cells.item(2).innerHTML = context.element.querySelector('#attachment-comment').value;
         return true;
     } else {
         return false;
@@ -167,10 +172,10 @@ function attachmentInputsFill(element, selectedRow) {
 function deleteRow(selectedRow) {
     var parent = selectedRow.parentNode;
 
-    if (selectedRow.phoneId) {
+    if (selectedRow.phoneId > -1) {
         window.deletePhonesList.push(selectedRow.phoneId);
-    } else if (selectedRow.attId) {
-        window.deleteAttachmentsList.push(selectedRow.attId);
+    } else if (selectedRow.attachId > -1) {
+        window.deleteAttachmentsList.push(selectedRow.attachId);
     }
     parent.removeChild(selectedRow);
 }

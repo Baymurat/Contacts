@@ -9,9 +9,11 @@ import com.itechart.contacts.core.entities.Message;
 import com.itechart.contacts.core.entities.Phone;
 import com.itechart.contacts.core.utils.ConnectionPool;
 import com.itechart.contacts.core.utils.CustomUtils;
+import com.itechart.contacts.core.utils.FileManageService;
 import com.itechart.contacts.core.utils.Result;
 
 import javax.sql.DataSource;
+import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Savepoint;
@@ -24,11 +26,12 @@ import java.util.*;
 public class SimpleService {
 
     private Connection connection = null;
+    private FileManageService fileManageService = new FileManageService();
 
     public SimpleService() {
     }
 
-    public void updateRecord(Contact contact) {
+    public void updateRecord(Contact contact, List<Object> bytesAndExtensOfFiles) {
         JDBCContactDao contactDao;
         JDBCPhonesDao phonesDao;
         JDBCAttachmentDao attachmentsDao;
@@ -55,18 +58,28 @@ public class SimpleService {
 
             if (phones != null) {
                 for (Phone p : phones) {
-                    if (!phonesDao.update(p)) {
+                    if (p.getId() == -1) {
                         p.setPersons_id(contact.getId());
                         phonesDao.insert(p);
+                    } else {
+                        phonesDao.update(p);
                     }
                 }
             }
 
             if (attachments != null) {
+                int step = 0;
                 for (Attachment a : attachments) {
-                    if (!attachmentsDao.update(a)) {
+                    if (a.getId() == -1) {
                         a.setPersons_id(contact.getId());
                         attachmentsDao.insert(a);
+
+                        byte[] bytes = (byte[]) bytesAndExtensOfFiles.get(step * 2);
+                        String fileExtension = (String) bytesAndExtensOfFiles.get(step * 2 + 1);
+                        fileManageService.uploadFile(contact.getId(), a.getId(), bytes, fileExtension);
+                        step++;
+                    } else {
+                        attachmentsDao.update(a);
                     }
                 }
             }
@@ -81,6 +94,7 @@ public class SimpleService {
                 for (Integer i : deleteAttachmentsList) {
                     attachmentsDao.delete(i);
                 }
+                fileManageService.deleteFiles(contact.getId(), deleteAttachmentsList);
             }
 
             connection.commit();
@@ -114,6 +128,8 @@ public class SimpleService {
             }
 
             connection.commit();
+
+            fileManageService.deleteUsers(deleteContactsId);
         } catch (Exception e) {
             e.printStackTrace();
             try {
@@ -126,7 +142,7 @@ public class SimpleService {
         }
     }
 
-    public void addRecord(Contact contact) {
+    public void addRecord(Contact contact, List<Object> bytesAndExtensOfFiles) {
         JDBCContactDao contactDao;
         JDBCPhonesDao phonesDao;
         JDBCAttachmentDao attachmentsDao;
@@ -156,9 +172,14 @@ public class SimpleService {
             }
 
             if (attachments != null) {
-                for (Attachment a : attachments) {
-                    a.setPersons_id(contact.getId());
-                    attachmentsDao.insert(a);
+                for (int i = 0; i < attachments.size(); i++) {
+                    Attachment currentAtt = attachments.get(i);
+                    currentAtt.setPersons_id(contact.getId());
+                    attachmentsDao.insert(currentAtt);
+
+                    byte[] bytes = (byte[]) bytesAndExtensOfFiles.get(i * 2);
+                    String fileExtension = (String) bytesAndExtensOfFiles.get(i * 2 + 1);
+                    fileManageService.uploadFile(contact.getId(), currentAtt.getId(), bytes, fileExtension);
                 }
             }
 

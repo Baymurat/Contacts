@@ -40,8 +40,9 @@ public class JDBCPhonesDao implements DAO<Phone, Integer> {
             preparedStatement.setString(5, phone.getComments());
             preparedStatement.setInt(6, phone.getId());
             int result = preparedStatement.executeUpdate();
+            boolean isNew = preparedStatement.execute("SELECT id FROM phones WHERE id = " + phone.getId());
 
-            return result == 1;
+            return result == 1 || !isNew;
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {

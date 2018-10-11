@@ -111,6 +111,7 @@
 
     //CONTINUE FROM HERE
     global.Modal.prototype.edit = function (callback) {
+        document.querySelector('#upload-file').style.display = 'none';
         var widget = this;
         var selectedRow = widget.table.querySelector('.selected');
 
@@ -122,6 +123,7 @@
     }
 
     global.Modal.prototype.add = function () {
+        document.querySelector('#upload-file').style.display = 'block';
         this.status = 'add';
         this.show();
     }
@@ -159,5 +161,5 @@
 
         return mergedObject;
     }
-
+    
 }(window));

@@ -1,21 +1,19 @@
 package com.itechart.contacts.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.itechart.contacts.core.entities.Attachment;
 import com.itechart.contacts.core.entities.Contact;
 import com.itechart.contacts.core.entities.Message;
 import com.itechart.contacts.core.service.SimpleService;
 import com.itechart.contacts.core.utils.Result;
-import com.itechart.utils.FileManageService;
-import org.springframework.http.MediaType;
-import org.springframework.util.MultiValueMap;
+import com.itechart.contacts.core.utils.FileManageService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 public class CustomRestController {
@@ -34,29 +32,20 @@ public class CustomRestController {
     }
 
     @RequestMapping(value = "/add-record", method = RequestMethod.POST)
-    public void addRecord(@RequestParam("contact") String jsonRepresentation, @RequestPart("files") MultipartFile[] files) {
+    public void addRecord(@RequestParam("contact") String jsonRepresentation, @RequestPart("files") MultipartFile[] files ) {
         Contact contact = parseToContact(jsonRepresentation);
-        simpleService.addRecord(contact);
-        //remove null below
-        fileManageService.uploadFiles(files, null,contact.getId());
+        simpleService.addRecord(contact, getBytesAndExtOfFiles(files));
     }
 
     @RequestMapping(value = "/delete-record", method = RequestMethod.POST)
     public void deleteRecord(@RequestBody int[] deleteContactsId) {
         simpleService.deleteRecord(deleteContactsId);
-        fileManageService.deleteUsers(deleteContactsId);
     }
 
     @RequestMapping(value = "/update-record", method = RequestMethod.POST)
     public void updateRecord(@RequestParam("contact") String jsonRepresentation, @RequestPart("files") MultipartFile[] files) {
         Contact contact = parseToContact(jsonRepresentation);
-        simpleService.updateRecord(contact);
-        List<Integer> attachmentList = contact.getDeleteAttachmentsList();
-        if (attachmentList.size() > 0) {
-            fileManageService.deleteFiles(contact.getId(), attachmentList);
-        }
-        //fix below
-        fileManageService.uploadFiles(files, null, contact.getId());
+        simpleService.updateRecord(contact, getBytesAndExtOfFiles(files));
     }
 
     @RequestMapping(value = "/search-contact", method = RequestMethod.GET)
@@ -69,6 +58,12 @@ public class CustomRestController {
         simpleService.sendEmail(message);
     }
 
+    /*@RequestMapping(value = "/gyjhghjgh", method = RequestMethod.GET)
+    public ResponseEntity met() {
+
+        return ResponseEntity.status(200).header("file").body(byte[]);
+    }*/
+
     private Contact parseToContact(String jsonRepresentation) {
         ObjectMapper mapper = new ObjectMapper();
         Contact contact = null;
@@ -78,5 +73,23 @@ public class CustomRestController {
             e.printStackTrace();
         }
         return contact;
+    }
+
+    private List<Object> getBytesAndExtOfFiles(MultipartFile[] files) {
+        List<Object> result = new ArrayList<>();
+
+        for (MultipartFile f : files) {
+            try {
+                String fileExtension = f.getOriginalFilename().split("\\.")[1];
+                byte[] bytes = f.getBytes();
+
+                result.add(bytes);
+                result.add(fileExtension);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return result;
     }
 }

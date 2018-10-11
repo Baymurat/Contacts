@@ -14,6 +14,7 @@
     <div id="container">
         <div id="person">
             <div class="part-one">
+                <input type="text" id="user_id">
                 <label for="name">*Name</label>
                 <input type="text" id="name">
 
@@ -155,6 +156,10 @@
                     <input type="text" id="attachment-comment">
                 </div>
             </div>
+
+            <form enctype="multipart/form-data" id="upload-file">
+                <input type="file" name="files">
+            </form>
             <div class="footer">
                 <button type="button" class="accept-button">Accept</button>
                 <button type="button" class="cancel-button">Cancel</button>

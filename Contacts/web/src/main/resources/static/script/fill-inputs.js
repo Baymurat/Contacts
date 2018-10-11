@@ -1,4 +1,8 @@
 function fillInputs(contact) {
+    if (document.getElementById('user_id')) {
+        document.getElementById('user_id').value = contact.id;
+    }
+
     document.getElementById('name').value = contact.name;
     document.getElementById('surname').value = contact.surName;
     document.getElementById('middlename').value = contact.middleName;
@@ -36,6 +40,8 @@ function fillPhoneTable(list) {
             var currentElement = list[i];
             var tableRow = document.createElement('tr');
 
+            tableRow.phoneId = list[i].id;
+
             var number = document.createElement('td');
             var type = document.createElement('td');
             var comments = document.createElement('td');
@@ -63,14 +69,20 @@ function fillAttachmentsTable(list) {
             var currentElement = list[i];
             var tableRow = document.createElement('tr');
 
+            tableRow.attachId = list[i].id;
+
             var fileName = document.createElement('td');
             var loadDate = document.createElement('td');
             var comments = document.createElement('td');
+            var idHolder = document.createElement('td');
+            idHolder.style.display = 'none';
 
+            idHolder.innerHTML = currentElement.id;
             fileName.innerHTML = currentElement.fileName;
             loadDate.innerHTML = currentElement.loadDate;
             comments.innerHTML = currentElement.comments;
 
+            tableRow.appendChild(idHolder);
             tableRow.appendChild(fileName);
             tableRow.appendChild(loadDate);
             tableRow.appendChild(comments);
