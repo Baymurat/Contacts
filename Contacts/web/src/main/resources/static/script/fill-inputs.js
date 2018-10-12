@@ -31,7 +31,7 @@ function fillInputs(contact) {
     }
 
     fillPhoneTable(contact.phones);
-    fillAttachmentsTable(contact.attachments);
+    fillAttachmentsTable(contact.attachments, contact.id);
 }
 
 function fillPhoneTable(list) {
@@ -63,7 +63,7 @@ function fillPhoneTable(list) {
     }
 }
 
-function fillAttachmentsTable(list) {
+function fillAttachmentsTable(list, person_id) {
     if(list) {
         for(var i = 0; i < list.length; i++) {
             var currentElement = list[i];
@@ -74,15 +74,22 @@ function fillAttachmentsTable(list) {
             var fileName = document.createElement('td');
             var loadDate = document.createElement('td');
             var comments = document.createElement('td');
+            var fileLink = document.createElement('a');
+            var fileHref = '/attachment/?person_id=' + person_id + '&attach_id=' + currentElement.id;
+            /*
             var idHolder = document.createElement('td');
             idHolder.style.display = 'none';
-
             idHolder.innerHTML = currentElement.id;
-            fileName.innerHTML = currentElement.fileName;
+            tableRow.appendChild(idHolder);
+            */
+
+            fileLink.innerHTML = currentElement.fileName;
+            fileLink.href = fileHref;
+            fileName.appendChild(fileLink);
             loadDate.innerHTML = currentElement.loadDate;
             comments.innerHTML = currentElement.comments;
 
-            tableRow.appendChild(idHolder);
+
             tableRow.appendChild(fileName);
             tableRow.appendChild(loadDate);
             tableRow.appendChild(comments);

@@ -270,6 +270,23 @@ public class SimpleService {
         return result;
     }
 
+    public Attachment getAttachment(int id) {
+        JDBCAttachmentDao attachmentDao;
+        ConnectionPool connectionPool = new ConnectionPool();
+
+        try {
+            DataSource dataSource = connectionPool.setUpPool();
+            connection = dataSource.getConnection();
+
+            attachmentDao = new JDBCAttachmentDao(connection);
+            return attachmentDao.getEntityById(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     public void sendEmail(Message message) {
         if (message.getReceivers() != null) {
             for (String s : message.getReceivers()) {

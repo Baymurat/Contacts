@@ -26,10 +26,43 @@ public class FileManageService {
             }
     }
 
-    public void downloadFile(String person_id, String attach_id) {
-        String path = rootPath;
-
+    public File getFile(int personId, int attachId) {
+        String path = rootPath + personId + uploadFolder + getFileName(personId, attachId);
+        File file = new File(path);
+        if (file.exists()) {
+            return file;
+        }
+        return null;
     }
+    /*
+    VAR 1
+    public InputStream downloadFile(int person_id, int attach_id) {
+        String path = rootPath + person_id + uploadFolder + getFileName(person_id, attach_id);
+        File file = new File(path);
+        try {
+            return new BufferedInputStream(new FileInputStream(file));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }*/
+
+    /*public byte[] downloadFile(int person_id, int attach_id) {
+        String path = rootPath + person_id + uploadFolder + getFileName(person_id, attach_id);
+        File file = new File(path);
+        file.renameTo()
+        try {
+            byte[] bytes = new byte[(int)file.length()];
+            BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(file));
+            bufferedInputStream.read(bytes);
+            return bytes;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }*/
 
     public void deleteFiles(int person_id, List<Integer> attaches_id) {
         File userFolder = new File(rootPath + person_id + uploadFolder);
@@ -61,5 +94,18 @@ public class FileManageService {
             }
         }
         file.delete();
+    }
+
+    private String getFileName(int person_id, int attach_id) {
+        File userFolder = new File(rootPath + person_id + uploadFolder);
+        File[] files = userFolder.listFiles();
+            for (File f : files) {
+                String fName = f.getName().split("\\.")[0];
+                if (fName.equals(attach_id + "")) {
+                    return f.getName();
+                }
+            }
+
+            return null;
     }
 }

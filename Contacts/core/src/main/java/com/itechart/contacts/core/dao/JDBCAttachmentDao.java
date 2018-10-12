@@ -22,7 +22,24 @@ public class JDBCAttachmentDao implements DAO<Attachment, Integer> {
 
     @Override
     public Attachment getEntityById(Integer id) {
-        return null;
+        Attachment attachment = new Attachment();
+        try {
+            preparedStatement = connection.prepareStatement("SELECT * FROM attachments WHERE id = ?");
+            preparedStatement.setInt(1, id);
+            resultSetAttachments = preparedStatement.executeQuery();
+
+            while (resultSetAttachments.next()) {
+                attachment.setId(resultSetAttachments.getInt("id"));
+                attachment.setFileName(resultSetAttachments.getString("filename"));
+                attachment.setComments(resultSetAttachments.getString("comments"));
+                attachment.setLoadDate(resultSetAttachments.getDate("loaddate"));
+                attachment.setPersons_id(resultSetAttachments.getInt("persons_id"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return attachment;
     }
 
     @Override
@@ -34,9 +51,8 @@ public class JDBCAttachmentDao implements DAO<Attachment, Integer> {
             preparedStatement.setString(2, attachment.getComments());
             preparedStatement.setInt(3, attachment.getId());
             int result = preparedStatement.executeUpdate();
-            boolean isNew = preparedStatement.execute("SELECT id FROM phones WHERE id = " + attachment.getId());
 
-            return result == 1 || !isNew;
+            return result == 1;
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -67,8 +83,7 @@ public class JDBCAttachmentDao implements DAO<Attachment, Integer> {
             preparedStatement.setInt(1, attachment.getPersons_id());
             preparedStatement.setString(2, attachment.getFileName());
             preparedStatement.setString(3, attachment.getComments());
-            //java.lang.ClassCastException: java.util.Date cannot be cast to java.sql.Date
-            preparedStatement.setDate(4, (Date) attachment.getLoadDate());
+            preparedStatement.setDate(4, attachment.getLoadDate());
             preparedStatement.executeUpdate();
 
             resultSetAttachments = preparedStatement.executeQuery("select last_insert_id() as last_id from attachments");
@@ -88,33 +103,6 @@ public class JDBCAttachmentDao implements DAO<Attachment, Integer> {
 
     @Override
     public HashMap<Integer, Attachment> getRecords(int from, int range) {
-        /*HashMap<Integer, Attachment> resultMap = new HashMap<>();
-        try {
-            preparedStatement = connection.prepareStatement("SELECT * FROM attachments ORDER BY id LIMIT ?, ? ");
-            preparedStatement.setInt(1, from);
-            preparedStatement.setInt(2, range);
-            resultSetAttachments = preparedStatement.executeQuery();
-
-            while (resultSetAttachments.next()) {
-                int currentId = resultSetAttachments.getInt(1);
-
-                Attachment attachment = new Attachment();
-                attachment.setId(resultSetAttachments.getInt("id"));
-                attachment.setFileName(resultSetAttachments.getString("filename"));
-                attachment.setComments(resultSetAttachments.getString("comments"));
-                attachment.setLoadDate(resultSetAttachments.getDate("loaddate"));
-                attachment.setPersons_id(resultSetAttachments.getInt("persons_id"));
-                resultMap.put(currentId, attachment);
-            }
-
-            return resultMap;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            CustomUtils.closeResultSet(resultSetAttachments);
-            CustomUtils.closePreparedStatement(preparedStatement);
-        }*/
-
         return null;
     }
 

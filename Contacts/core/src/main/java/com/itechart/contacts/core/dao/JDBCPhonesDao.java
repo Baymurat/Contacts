@@ -40,9 +40,8 @@ public class JDBCPhonesDao implements DAO<Phone, Integer> {
             preparedStatement.setString(5, phone.getComments());
             preparedStatement.setInt(6, phone.getId());
             int result = preparedStatement.executeUpdate();
-            boolean isNew = preparedStatement.execute("SELECT id FROM phones WHERE id = " + phone.getId());
 
-            return result == 1 || !isNew;
+            return result == 1;
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -96,35 +95,6 @@ public class JDBCPhonesDao implements DAO<Phone, Integer> {
 
     @Override
     public HashMap<Integer, Phone> getRecords(int from, int range) {
-        /*HashMap<Integer, Phone> resultMap = new HashMap<>();
-        try {
-            preparedStatement = connection.prepareStatement("SELECT * FROM phones ORDER BY id LIMIT ?, ?");
-            preparedStatement.setInt(1, from);
-            preparedStatement.setInt(2, range);
-            resultSetPhones = preparedStatement.executeQuery();
-
-            while (resultSetPhones.next()) {
-                int currentId = resultSetPhones.getInt(1);
-
-                Phone phone = new Phone();
-                phone.setId(resultSetPhones.getInt("id"));
-                phone.setCodeOfCountry(resultSetPhones.getInt("countrycode"));
-                phone.setCodeOfOperator(resultSetPhones.getInt("operatorcode"));
-                phone.setPhoneNumber(resultSetPhones.getInt("phonebumber"));
-                phone.setComments(resultSetPhones.getString("comments"));
-                phone.setPersons_id(resultSetPhones.getInt("persons_id"));
-                phone.setType(resultSetPhones.getString("type"));
-                resultMap.put(currentId, phone);
-            }
-
-            return resultMap;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            CustomUtils.closeResultSet(resultSetPhones);
-            CustomUtils.closePreparedStatement(preparedStatement);
-        }*/
-
         return null;
     }
 
@@ -136,8 +106,6 @@ public class JDBCPhonesDao implements DAO<Phone, Integer> {
             resultSetPhones = preparedStatement.executeQuery();
 
             while (resultSetPhones.next()) {
-                //int currentId = resultSetPhones.getInt(1);
-
                 Phone phone = new Phone();
                 phone.setId(resultSetPhones.getInt("id"));
                 phone.setCodeOfCountry(resultSetPhones.getInt("countrycode"));

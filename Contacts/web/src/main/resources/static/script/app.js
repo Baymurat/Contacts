@@ -182,3 +182,31 @@ function deleteRow(selectedRow) {
 
 window.deletePhonesList = [];
 window.deleteAttachmentsList = [];
+
+/**
+ * ******************************************************************
+ */
+
+
+
+var imageDiv = document.getElementsByClassName('image-holder')[0];
+var imageInput = document.querySelector('#person-image');
+var image = document.querySelector('#image');
+
+imageDiv.addEventListener('click', function() {
+    imageInput.click();
+});
+
+imageInput.addEventListener('change', function() {
+    renderImage(imageInput.files[0]);
+});
+
+function renderImage(file) {
+    var reader = new FileReader();
+
+    reader.onload = function (ev) {
+        image.src = ev.target.result;
+    };
+
+    reader.readAsDataURL(file);
+}

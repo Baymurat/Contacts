@@ -62,12 +62,13 @@ window.sendRecord = function (url) {
 
 function getPhones() {
     var phones = [];
-    var phone = {};
+    
 
     var table = document.getElementById('phone-table');
     var rowLength = table.rows.length;
 
     for (var i = 1; i < rowLength; i++) {
+        var phone = {};
         var cells = table.rows.item(i).cells;
 
         phone.id =  table.rows.item(i).phoneId;
@@ -85,16 +86,20 @@ function getPhones() {
 
 function getAttachments() {
     var attachments = [];
-    var attachment = {};
-
+    
     var table = document.getElementById('attachment-table');
     var rowLength = table.rows.length;
 
     for (var i = 1; i < rowLength; i++) {
+        var attachment = {};
         var cells = table.rows.item(i).cells;
-
         attachment.id = table.rows.item(i).attachId;
-        attachment.fileName = cells.item(0).innerHTML;
+        
+        if (cells.item(0).children.length === 0) {
+            attachment.fileName = cells.item(0).innerHTML;
+        } else {
+            attachment.fileName = cells.item(0).children[0].innerHTML;
+        }
         attachment.loadDate = new Date().getTime();
         attachment.comments = cells.item(2).innerHTML;
 
