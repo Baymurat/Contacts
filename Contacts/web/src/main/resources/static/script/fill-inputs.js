@@ -32,6 +32,7 @@ function fillInputs(contact) {
 
     fillPhoneTable(contact.phones);
     fillAttachmentsTable(contact.attachments, contact.id);
+    getPhoto(contact.id);
 }
 
 function fillPhoneTable(list) {
@@ -116,4 +117,8 @@ xmlhttp.onreadystatechange = function (ev) {
         var contact = JSON.parse(xmlhttp.responseText);
         fillInputs(contact);
     }
+};
+
+function getPhoto(id) {
+    //implement image download
 }

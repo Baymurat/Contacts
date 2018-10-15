@@ -142,7 +142,7 @@ public class SimpleService {
         }
     }
 
-    public void addRecord(Contact contact, List<Object> bytesAndExtensOfFiles) {
+    public void addRecord(Contact contact, List<Object> bytesAndExtensOfFiles, List<Object> photo) {
         JDBCContactDao contactDao;
         JDBCPhonesDao phonesDao;
         JDBCAttachmentDao attachmentsDao;
@@ -181,6 +181,12 @@ public class SimpleService {
                     String fileExtension = (String) bytesAndExtensOfFiles.get(i * 2 + 1);
                     fileManageService.uploadFile(contact.getId(), currentAtt.getId(), bytes, fileExtension);
                 }
+            }
+
+            if (photo != null) {
+                byte[] bytes = (byte[]) photo.get(0);
+                String fileExtension = (String) photo.get(1);
+                fileManageService.savePhoto(contact.getId(), bytes, fileExtension);
             }
 
             connection.commit();

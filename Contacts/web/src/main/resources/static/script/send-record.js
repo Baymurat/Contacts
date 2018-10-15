@@ -111,9 +111,14 @@ function getAttachments() {
 
 function getFiles(formData) {
     var usersAttachment = document.querySelectorAll('input[name = users-attach]');
+    var userPhoto = document.querySelector('#person-image');
 
     for (var i = 0; i < usersAttachment.length; i++) {
         formData.append('files', usersAttachment[i].files[0]);
+    }
+
+    if (userPhoto.files.length > 0) {
+        formData.append('photo', userPhoto.files[0]);
     }
 }
 

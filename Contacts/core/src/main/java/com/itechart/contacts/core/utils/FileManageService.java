@@ -10,59 +10,35 @@ public class FileManageService {
     private final String uploadFolder = File.separator + "upload_folder" + File.separator;
 
     public void uploadFile(int persons_id, int attach_id, byte[] bytes, String fileExtension) {
-        String path = rootPath + persons_id + uploadFolder;
-            try {
-                File dir = new File(path);
-                if (!dir.exists()) {
-                    dir.mkdirs();
-                }
-                File serveFile = new File(path + attach_id + "." + fileExtension);
-                BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(serveFile));
-                outputStream.write(bytes);
-                outputStream.flush();
-                outputStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        String path = rootPath + persons_id + uploadFolder + "attachments" + File.separator;
+        String fileName = path + attach_id + "." + fileExtension;
+        writeFile(path, fileName, bytes);
+    }
+
+    public void savePhoto(int persons_id, byte[] bytes, String fileExtension) {
+        String path = rootPath + persons_id + uploadFolder + "photo" + File.separator;
+        String fileName = path + "photo." + fileExtension;
+        writeFile(path, fileName, bytes);
+    }
+
+    public File getPhoto(int personId) {
+        String path = rootPath + personId + uploadFolder + "photo";
+        File directory = new File(path);
+        if (directory.exists() && directory.list()[0].contains("photo")) {
+            return new File(directory.list()[0]);
+        }
+
+        return null;
     }
 
     public File getFile(int personId, int attachId) {
-        String path = rootPath + personId + uploadFolder + getFileName(personId, attachId);
+        String path = rootPath + personId + uploadFolder + "attachments" + File.separator + getFileName(personId, attachId);
         File file = new File(path);
         if (file.exists()) {
             return file;
         }
         return null;
     }
-    /*
-    VAR 1
-    public InputStream downloadFile(int person_id, int attach_id) {
-        String path = rootPath + person_id + uploadFolder + getFileName(person_id, attach_id);
-        File file = new File(path);
-        try {
-            return new BufferedInputStream(new FileInputStream(file));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }*/
-
-    /*public byte[] downloadFile(int person_id, int attach_id) {
-        String path = rootPath + person_id + uploadFolder + getFileName(person_id, attach_id);
-        File file = new File(path);
-        file.renameTo()
-        try {
-            byte[] bytes = new byte[(int)file.length()];
-            BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(file));
-            bufferedInputStream.read(bytes);
-            return bytes;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }*/
 
     public void deleteFiles(int person_id, List<Integer> attaches_id) {
         File userFolder = new File(rootPath + person_id + uploadFolder);
@@ -97,7 +73,7 @@ public class FileManageService {
     }
 
     private String getFileName(int person_id, int attach_id) {
-        File userFolder = new File(rootPath + person_id + uploadFolder);
+        File userFolder = new File(rootPath + person_id + uploadFolder + "attachments" + File.separator);
         File[] files = userFolder.listFiles();
             for (File f : files) {
                 String fName = f.getName().split("\\.")[0];
@@ -107,5 +83,22 @@ public class FileManageService {
             }
 
             return null;
+    }
+
+    private void writeFile(String path, String fileName, byte[] bytes) {
+        try {
+            File dir = new File(path);
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+
+            File serveFile = new File(fileName);
+            BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(serveFile));
+            outputStream.write(bytes);
+            outputStream.flush();
+            outputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

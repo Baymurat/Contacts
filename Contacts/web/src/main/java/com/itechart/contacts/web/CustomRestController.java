@@ -7,6 +7,8 @@ import com.itechart.contacts.core.entities.Message;
 import com.itechart.contacts.core.service.SimpleService;
 import com.itechart.contacts.core.utils.Result;
 import com.itechart.contacts.core.utils.FileManageService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,7 +39,11 @@ public class CustomRestController {
     public void addRecord(@RequestParam("contact") String jsonRepresentation, @RequestPart("files") MultipartFile[] files,
                           @RequestPart(value = "photo", required = false) MultipartFile photo) {
         Contact contact = parseToContact(jsonRepresentation);
-        simpleService.addRecord(contact, getBytesAndExtOfFiles(files));
+        if (photo == null) {
+            simpleService.addRecord(contact, getBytesAndExtOfFiles(files), null);
+        } else {
+            simpleService.addRecord(contact, getBytesAndExtOfFiles(files), getBytesAndExtOfFiles(new MultipartFile[]{photo}));
+        }
     }
 
     @RequestMapping(value = "/delete-record", method = RequestMethod.POST)
@@ -83,6 +89,13 @@ public class CustomRestController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @RequestMapping(value = "/photo", method = RequestMethod.GET)
+    public ResponseEntity getPhoto(@RequestParam(name = "id") int id) {
+        File photo = fileManageService.getPhoto(id);
+
+        return ResponseEntity.status(HttpStatus.OK).body(photo);
     }
 
     private Contact parseToContact(String jsonRepresentation) {
