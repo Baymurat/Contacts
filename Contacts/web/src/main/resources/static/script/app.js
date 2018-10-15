@@ -250,16 +250,15 @@ function keyUpValidation(evt) {
 }
 
 function focusOutValidation() {
-    var date = new Date();
-    
-    var today = date.getDay();
-    var month = date.getMonth();
-    var year = date.getFullYear();
-
     var values = el.value.split('/');
 
-    //FIX THIS PART
-    if (year < values[2] || month < values[1] || today < values[0]) {
+    var currentDate = new Date();
+    var specifiedDate = new Date(values[2] + "-" + values[1] + "-" + values[0]);
+
+    console.log("SPECIFIED " + specifiedDate);
+    console.log("CURRENT " + currentDate);
+
+    if (currentDate < specifiedDate) {
         alert("FUTURE SPECIFIED");
         el.value = '';
     }

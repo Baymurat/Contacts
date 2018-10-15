@@ -15,6 +15,7 @@ import com.itechart.contacts.core.utils.email.SendEmail;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Savepoint;
 import java.util.*;
@@ -306,7 +307,7 @@ public class SimpleService {
         }
     }
 
-    public List<Contact> getContactsByDateBirth(String dateBirth) {
+    public List<Contact> getContactsByDateBirth(Date dateBirth) {
         JDBCContactDao contactDao;
         ConnectionPool connectionPool = new ConnectionPool();
         List<Contact> contacts = new ArrayList<>();

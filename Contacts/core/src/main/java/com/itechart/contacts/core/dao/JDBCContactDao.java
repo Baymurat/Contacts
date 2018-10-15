@@ -254,12 +254,12 @@ public class JDBCContactDao implements DAO<Contact, Integer> {
         return allElementsCount;
     }
 
-    public List<Contact> getContactsByDateBirth(String dateBirth) {
+    public List<Contact> getContactsByDateBirth(Date dateBirth) {
         List<Contact> contactList = new ArrayList<>();
 
         try {
             preparedStatement = connection.prepareStatement("SELECT * FROM persons WHERE datebirth = ?");
-            preparedStatement.setString(1, dateBirth);
+            preparedStatement.setDate(1, dateBirth);
             resultSetContacts = preparedStatement.executeQuery();
 
             while (resultSetContacts.next()) {
@@ -279,15 +279,23 @@ public class JDBCContactDao implements DAO<Contact, Integer> {
     }
 
     private String parseToString(Date date) {
-        String string = date.toString();
-        String[] strings = string.split("-");
+        if (date != null) {
+            String string = date.toString();
+            String[] strings = string.split("-");
 
-        return strings[2] + "/" + strings[1] + "/" + strings[0];
+            return strings[2] + "/" + strings[1] + "/" + strings[0];
+        } else {
+            return null;
+        }
     }
 
     private Date parseToDate(String string) {
-        String[] strings = string.split("/");
+        if (string != null && !string.isEmpty()) {
+            String[] strings = string.split("/");
 
-        return Date.valueOf(strings[2] + "-" + strings[1] + "-" + strings[0]);
+            return Date.valueOf(strings[2] + "-" + strings[1] + "-" + strings[0]);
+        } else {
+            return null;
+        }
     }
 }

@@ -2,28 +2,40 @@ package com.itechart.contacts.web;
 
 import com.itechart.contacts.core.entities.Contact;
 import com.itechart.contacts.core.service.SimpleService;
+import com.itechart.contacts.core.utils.email.CustomMessageHolder;
+import org.apache.tomcat.util.digester.ArrayStack;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
 @Component
 public class ScheduledTask {
 
-    /*@Scheduled(fixedRate = 1000)
+    @Scheduled(fixedRate = 10000)
     public void task() {
         SimpleService simpleService = new SimpleService();
+        Date date = new Date(System.currentTimeMillis());
 
-        String pattern = "yyyy-mm-dd";
-        SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
-        String searchParam = dateFormat.format(new Date());
+        List<Contact> contacts = simpleService.getContactsByDateBirth(date);
+        if (contacts != null && contacts.size() > 0) {
+            StringBuilder receivers = new StringBuilder();
 
-        List<Contact> contacts = simpleService.getContactsByDateBirth(searchParam);
+            for (Contact c : contacts) {
+                receivers.append(c.getEmail());
+                receivers.append("  ");
+            }
 
-        for (Contact c : contacts) {
-            System.out.println(c.getName() + "  " + c.getSurName());
+            List<String> admin = new ArrayStack<>();
+            admin.add("ADMIN_EMAIL");
+
+            CustomMessageHolder messageHolder = new CustomMessageHolder();
+            messageHolder.setMessageTheme("Birthday");
+            messageHolder.setMessageText(receivers.toString());
+            messageHolder.setReceivers(admin);
+
+            simpleService.sendEmail(messageHolder);
         }
-    }*/
+    }
 }

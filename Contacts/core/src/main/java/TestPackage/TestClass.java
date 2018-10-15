@@ -3,24 +3,19 @@ package TestPackage;
 import com.itechart.contacts.core.entities.Contact;
 import com.itechart.contacts.core.service.SimpleService;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
 public class TestClass {
     public static void main(String[] args) {
-        /*SimpleService simpleService = new SimpleService();
+        SimpleService simpleService = new SimpleService();
+        java.sql.Date date = new Date(System.currentTimeMillis());
 
-        String pattern = "yyyy-mm-dd";
-        SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
-        String searchParam = dateFormat.format(new Date());
-
-        List<Contact> contacts = simpleService.getContactsByDateBirth(searchParam);
+        List<Contact> contacts = simpleService.getContactsByDateBirth(date);
 
         for (Contact c : contacts) {
             System.out.println(c.getName() + "  " + c.getSurName());
-        }*/
+        }
     }
 }
 

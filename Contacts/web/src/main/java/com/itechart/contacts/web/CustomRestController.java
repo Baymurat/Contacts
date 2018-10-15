@@ -64,9 +64,6 @@ public class CustomRestController {
 
     @RequestMapping(value = "/send-email", method = RequestMethod.POST)
     public void sendEmail(@RequestBody CustomMessageHolder message) {
-        System.out.println(message.getMessageText());
-        System.out.println(message.getMessageTheme());
-        System.out.println(message.getReceivers());
         simpleService.sendEmail(message);
     }
 
@@ -98,7 +95,7 @@ public class CustomRestController {
     public ResponseEntity getPhoto(@RequestParam(name = "id") int id) {
         File photo = fileManageService.getPhoto(id);
 
-        return ResponseEntity.status(HttpStatus.OK).body(photo);
+        return ResponseEntity.status(HttpStatus.OK).header("Content-Type", "image/jpg").body(photo);
     }
 
     private Contact parseToContact(String jsonRepresentation) {
