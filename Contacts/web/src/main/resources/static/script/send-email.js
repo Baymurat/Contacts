@@ -10,7 +10,7 @@ function sendMail() {
     var message = {};
 
     message.receivers = receivers;
-    message.messageContent = messageContent;
+    message.messageText = messageContent;
     message.messageTheme = messageTheme;
 
     var xmlhttp = new XMLHttpRequest();

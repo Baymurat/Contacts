@@ -26,7 +26,7 @@ public class Contact implements Serializable{
     private String streetHouseApart;
     private int index;
     private int id;
-    private Date birthDate;
+    private String birthDate;
 
 
     private List<Phone> phones;
@@ -61,14 +61,6 @@ public class Contact implements Serializable{
 
     public void setMiddleName(String middleName) {
         this.middleName = middleName;
-    }
-
-    public Date getBirthDate() {
-        return birthDate;
-    }
-
-    public void setBirthDate(Date birthDate) {
-        this.birthDate = birthDate;
     }
 
     public String getGender() {
@@ -193,5 +185,13 @@ public class Contact implements Serializable{
 
     public void setDeleteAttachmentsList(List<Integer> deleteAttachmentsList) {
         this.deleteAttachmentsList = deleteAttachmentsList;
+    }
+
+    public String getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(String birthDate) {
+        this.birthDate = birthDate;
     }
 }

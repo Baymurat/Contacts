@@ -3,10 +3,10 @@ package com.itechart.contacts.web;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.itechart.contacts.core.entities.Attachment;
 import com.itechart.contacts.core.entities.Contact;
-import com.itechart.contacts.core.entities.Message;
 import com.itechart.contacts.core.service.SimpleService;
 import com.itechart.contacts.core.utils.Result;
 import com.itechart.contacts.core.utils.FileManageService;
+import com.itechart.contacts.core.utils.email.CustomMessageHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.FileCopyUtils;
@@ -63,7 +63,10 @@ public class CustomRestController {
     }
 
     @RequestMapping(value = "/send-email", method = RequestMethod.POST)
-    public void sendEmail(@RequestBody Message message) {
+    public void sendEmail(@RequestBody CustomMessageHolder message) {
+        System.out.println(message.getMessageText());
+        System.out.println(message.getMessageTheme());
+        System.out.println(message.getReceivers());
         simpleService.sendEmail(message);
     }
 

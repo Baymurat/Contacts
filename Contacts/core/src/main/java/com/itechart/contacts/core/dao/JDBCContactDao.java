@@ -6,6 +6,7 @@ import com.itechart.contacts.core.entities.Phone;
 import com.itechart.contacts.core.utils.CustomUtils;
 
 import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,11 +43,13 @@ public class JDBCContactDao implements DAO<Contact, Integer> {
                 contact.setEmail(resultSetContacts.getString("email"));
                 contact.setCurrentJob(resultSetContacts.getString("currentjob"));
                 contact.setGender(resultSetContacts.getString("gender"));
-                contact.setBirthDate(resultSetContacts.getDate("datebirth"));
                 contact.setCountry(resultSetContacts.getString("country"));
                 contact.setCity(resultSetContacts.getString("city"));
                 contact.setStreetHouseApart(resultSetContacts.getString("street_house_apart"));
                 contact.setIndex(resultSetContacts.getInt("p_index"));
+
+                Date date = resultSetContacts.getDate("datebirth");
+                contact.setBirthDate(parseToString(date));
 
                 ArrayList<Phone> phones = new ArrayList<>();
                 ArrayList<Attachment> attachments = new ArrayList<>();
@@ -79,12 +82,14 @@ public class JDBCContactDao implements DAO<Contact, Integer> {
             preparedStatement.setString(7, contact.getEmail());
             preparedStatement.setString(8, contact.getCurrentJob());
             preparedStatement.setString(9, contact.getGender());
-            preparedStatement.setDate(10, contact.getBirthDate());
             preparedStatement.setString(11, contact.getCountry());
             preparedStatement.setString(12, contact.getCity());
             preparedStatement.setString(13, contact.getStreetHouseApart());
             preparedStatement.setInt(14, contact.getIndex());
             preparedStatement.setInt(15, contact.getId());
+
+            Date date = parseToDate(contact.getBirthDate());
+            preparedStatement.setDate(10, date);
             preparedStatement.executeUpdate();
 
             return true;
@@ -133,11 +138,13 @@ public class JDBCContactDao implements DAO<Contact, Integer> {
             preparedStatement.setString(8, contact.getEmail());
             preparedStatement.setString(9, contact.getCurrentJob());
             preparedStatement.setString(10, contact.getGender());
-            preparedStatement.setDate(11, contact.getBirthDate());
             preparedStatement.setString(12, contact.getCountry());
             preparedStatement.setString(13, contact.getCitizenship());
             preparedStatement.setString(14, contact.getStreetHouseApart());
             preparedStatement.setInt(15, contact.getIndex());
+
+            Date date = parseToDate(contact.getBirthDate());
+            preparedStatement.setDate(11, date);
             preparedStatement.executeUpdate();
 
             if (!existId) {
@@ -204,11 +211,13 @@ public class JDBCContactDao implements DAO<Contact, Integer> {
                 contact.setEmail(resultSetContacts.getString("email"));
                 contact.setCurrentJob(resultSetContacts.getString("currentjob"));
                 contact.setGender(resultSetContacts.getString("gender"));
-                contact.setBirthDate(resultSetContacts.getDate("datebirth"));
                 contact.setCountry(resultSetContacts.getString("country"));
                 contact.setCity(resultSetContacts.getString("city"));
                 contact.setStreetHouseApart(resultSetContacts.getString("street_house_apart"));
                 contact.setIndex(resultSetContacts.getInt("p_index"));
+
+                Date date = resultSetContacts.getDate("datebirth");
+                contact.setBirthDate(parseToString(date));
 
                 ArrayList<Phone> phones = new ArrayList<>();
                 ArrayList<Attachment> attachments = new ArrayList<>();
@@ -243,5 +252,42 @@ public class JDBCContactDao implements DAO<Contact, Integer> {
         }
 
         return allElementsCount;
+    }
+
+    public List<Contact> getContactsByDateBirth(String dateBirth) {
+        List<Contact> contactList = new ArrayList<>();
+
+        try {
+            preparedStatement = connection.prepareStatement("SELECT * FROM persons WHERE datebirth = ?");
+            preparedStatement.setString(1, dateBirth);
+            resultSetContacts = preparedStatement.executeQuery();
+
+            while (resultSetContacts.next()) {
+                Contact contact = new Contact();
+                contact.setId(resultSetContacts.getInt(1));
+                contact.setName(resultSetContacts.getString("name"));
+                contact.setSurName(resultSetContacts.getString("surname"));
+                contact.setMiddleName(resultSetContacts.getString("middlename"));
+                contact.setEmail(resultSetContacts.getString("email"));
+                contactList.add(contact);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return contactList;
+    }
+
+    private String parseToString(Date date) {
+        String string = date.toString();
+        String[] strings = string.split("-");
+
+        return strings[2] + "/" + strings[1] + "/" + strings[0];
+    }
+
+    private Date parseToDate(String string) {
+        String[] strings = string.split("/");
+
+        return Date.valueOf(strings[2] + "-" + strings[1] + "-" + strings[0]);
     }
 }

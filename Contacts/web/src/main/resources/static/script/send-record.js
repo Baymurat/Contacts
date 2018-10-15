@@ -15,7 +15,7 @@ window.sendRecord = function (url) {
     contact.webSite = document.getElementById('web-site').value;
     contact.email = document.getElementById('email').value;
     contact.currentJob = document.getElementById('currentjob').value;
-
+    contact.birthDate = document.getElementById('datebirth').value;
     contact.country = document.getElementById('country').value;
     contact.city = document.getElementById('city').value;
     contact.steetHouseApart = document.getElementById('street-house-apart').value;
@@ -122,9 +122,3 @@ function getFiles(formData) {
     }
 }
 
-function show(list) {
-    console.log("SHOW LIST");
-    for (var i = 0; i < list.length; i++) {
-        console.log(list[i]);
-    }
-}

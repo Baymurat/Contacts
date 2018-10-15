@@ -185,6 +185,7 @@ window.deleteAttachmentsList = [];
 
 /**
  * ******************************************************************
+ *
  */
 
 
@@ -210,3 +211,58 @@ function renderImage(file) {
 
     reader.readAsDataURL(file);
 }
+
+
+/**
+ * DATE VALIDATION
+ * ***************************************
+ */
+
+var el = document.getElementById("datebirth");
+var date = new Date();
+
+/* var today = date.getDay();
+var month = date.getMonth(); */
+var year = date.getFullYear();
+
+function keyUpValidation(evt) {
+    if((evt.keyCode >= 48 && evt.keyCode <= 57) || (evt.keyCode >= 96 &&
+        evt.keyCode <= 105)) {
+        evt = evt || window.event;
+
+        var value = el.value;
+        var size = value.length;
+
+        if ((size == 2 && value > 31)|| (size == 5 && Number(value.split('/')[1]) > 12) || (size >= 10 && Number(value.split('/')[2]) > year)) {
+            alert('Invalid Date');
+            document.getElementById('datebirth').value = '';
+            return;
+        }
+
+        if ((size == 2 && value < 32)|| (size == 5 && Number(value.split('/')[1]) < 13)) {
+            document.getElementById('datebirth').value += '/';
+        }
+
+    } else {
+        alert('Please enter valid date.')
+        document.getElementById('datebirth').value = '';
+    }
+}
+
+function focusOutValidation() {
+    var date = new Date();
+    
+    var today = date.getDay();
+    var month = date.getMonth();
+    var year = date.getFullYear();
+
+    var values = el.value.split('/');
+
+    //FIX THIS PART
+    if (year < values[2] || month < values[1] || today < values[0]) {
+        alert("FUTURE SPECIFIED");
+        el.value = '';
+    }
+}
+el.addEventListener('keyup', keyUpValidation);
+el.addEventListener('focusout', focusOutValidation);

@@ -5,15 +5,15 @@ import com.itechart.contacts.core.dao.JDBCContactDao;
 import com.itechart.contacts.core.dao.JDBCPhonesDao;
 import com.itechart.contacts.core.entities.Attachment;
 import com.itechart.contacts.core.entities.Contact;
-import com.itechart.contacts.core.entities.Message;
 import com.itechart.contacts.core.entities.Phone;
 import com.itechart.contacts.core.utils.ConnectionPool;
 import com.itechart.contacts.core.utils.CustomUtils;
 import com.itechart.contacts.core.utils.FileManageService;
 import com.itechart.contacts.core.utils.Result;
+import com.itechart.contacts.core.utils.email.CustomMessageHolder;
+import com.itechart.contacts.core.utils.email.SendEmail;
 
 import javax.sql.DataSource;
-import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Savepoint;
@@ -37,7 +37,6 @@ public class SimpleService {
         JDBCAttachmentDao attachmentsDao;
 
         ConnectionPool connectionPool = new ConnectionPool();
-        Savepoint savepoint = null;
         try {
             List<Phone> phones = contact.getPhones();
             List<Attachment> attachments = contact.getAttachments();
@@ -48,7 +47,6 @@ public class SimpleService {
             DataSource dataSource = connectionPool.setUpPool();
             connection = dataSource.getConnection();
             connection.setAutoCommit(false);
-            savepoint = connection.setSavepoint();
 
             contactDao = new JDBCContactDao(connection);
             phonesDao = new JDBCPhonesDao(connection);
@@ -148,7 +146,6 @@ public class SimpleService {
         JDBCAttachmentDao attachmentsDao;
 
         ConnectionPool connectionPool = new ConnectionPool();
-        //Savepoint savepoint = null;
         try {
             List<Phone> phones = contact.getPhones();
             List<Attachment> attachments = contact.getAttachments();
@@ -156,7 +153,6 @@ public class SimpleService {
             DataSource dataSource = connectionPool.setUpPool();
             connection = dataSource.getConnection();
             connection.setAutoCommit(false);
-            //savepoint = connection.setSavepoint();
 
             contactDao = new JDBCContactDao(connection);
             attachmentsDao = new JDBCAttachmentDao(connection);
@@ -293,14 +289,38 @@ public class SimpleService {
         return null;
     }
 
-    public void sendEmail(Message message) {
-        if (message.getReceivers() != null) {
-            for (String s : message.getReceivers()) {
-                System.out.println(s);
+    public void sendEmail(CustomMessageHolder messageHolder) {
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("email");
+
+        SendEmail.SMTP_SERVER = resourceBundle.getString("server");
+        SendEmail.SMTP_Port = resourceBundle.getString("port");
+        SendEmail.EMAIL_FROM = resourceBundle.getString("from");
+        SendEmail.SMTP_AUTH_USER = resourceBundle.getString("user");
+        SendEmail.SMTP_AUTH_PWD = resourceBundle.getString("pass");
+
+        for (String emailTo : messageHolder.getReceivers()) {
+            if (!emailTo.isEmpty()) {
+                SendEmail se = new SendEmail(emailTo, messageHolder.getMessageTheme());
+                se.sendMessage(messageHolder.getMessageText());
             }
         }
+    }
 
-        System.out.println(message.getMessageTheme());
-        System.out.println(message.getMessageContent());
+    public List<Contact> getContactsByDateBirth(String dateBirth) {
+        JDBCContactDao contactDao;
+        ConnectionPool connectionPool = new ConnectionPool();
+        List<Contact> contacts = new ArrayList<>();
+
+        try {
+            DataSource dataSource = connectionPool.setUpPool();
+            connection = dataSource.getConnection();
+            contactDao = new JDBCContactDao(connection);
+
+            contacts = contactDao.getContactsByDateBirth(dateBirth);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return contacts;
     }
 }

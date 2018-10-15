@@ -50,7 +50,7 @@ function sendFunction() {
     var params = '?';
 
     for (var i = 0; i < selectedRows.length; i++) {
-        params += i + 1 + '=' + selectedRows[i].cells[2].innerHTML + '&';
+        params += 'to' + '=' + selectedRows[i].cells[2].innerHTML + '&';
     }
 
     window.location.replace('/email' + params);
