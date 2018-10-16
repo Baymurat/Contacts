@@ -13,6 +13,12 @@
 <body>
     <div id="container">
         <div id="person">
+            <div class="partp-one image-holder">
+                <form>
+                    <input id="person-image" type="file" name="pic" accept="image/*" hidden>
+                </form>
+                <img id="image" height="300" width="300" src=""/>
+            </div>
             <div class="part-one">
                 <input type="text" id="user_id">
                 <label for="name">*Name</label>
@@ -178,6 +184,7 @@
     <script src="./script/modal.js"></script>
     <script src="./script/send-record.js"></script>
     <script src="./script/edit.js"></script>
+    <!--<script src="./script/get-photo.js"></script>-->
 </body>
 
 </html>

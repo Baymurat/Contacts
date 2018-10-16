@@ -28,6 +28,32 @@ tbody>tr:hover {
     background: aquamarine;
 }
 
-.disable {
+.disable, #input-for-current-page {
     display: none;
+}
+
+#page-buttons {
+    margin: auto;
+}
+
+a:hover {
+    cursor: pointer;
+}
+
+a {
+    display: inline-block;
+    margin: 2px;
+    color: coral;
+}
+
+a.disabled {
+    cursor: default;
+    background-image: none;
+    opacity: 0.65;
+    filter: alpha(opacity=65);
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    color: #333;
+    background-color: #E6E6E6;
 }

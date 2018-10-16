@@ -52,9 +52,15 @@ public class CustomRestController {
     }
 
     @RequestMapping(value = "/update-record", method = RequestMethod.POST)
-    public void updateRecord(@RequestParam("contact") String jsonRepresentation, @RequestPart("files") MultipartFile[] files) {
+    public void updateRecord(@RequestParam("contact") String jsonRepresentation, @RequestPart("files") MultipartFile[] files,
+                             @RequestPart(value = "photo", required = false) MultipartFile photo) {
         Contact contact = parseToContact(jsonRepresentation);
-        simpleService.updateRecord(contact, getBytesAndExtOfFiles(files));
+        //simpleService.updateRecord(contact, getBytesAndExtOfFiles(files));
+        if (photo == null) {
+            simpleService.updateRecord(contact, getBytesAndExtOfFiles(files), null);
+        } else {
+            simpleService.updateRecord(contact, getBytesAndExtOfFiles(files), getBytesAndExtOfFiles(new MultipartFile[]{photo}));
+        }
     }
 
     @RequestMapping(value = "/search-contact", method = RequestMethod.GET)
@@ -94,8 +100,12 @@ public class CustomRestController {
     @RequestMapping(value = "/photo", method = RequestMethod.GET)
     public ResponseEntity getPhoto(@RequestParam(name = "id") int id) {
         File photo = fileManageService.getPhoto(id);
+        String encodedFile = "";
+        if (photo != null) {
+            encodedFile = simpleService.encodeFileToBase64Binary(photo);
+        }
 
-        return ResponseEntity.status(HttpStatus.OK).header("Content-Type", "image/jpg").body(photo);
+        return ResponseEntity.status(HttpStatus.OK).header("Content-Type", "application/json").body(encodedFile);
     }
 
     private Contact parseToContact(String jsonRepresentation) {

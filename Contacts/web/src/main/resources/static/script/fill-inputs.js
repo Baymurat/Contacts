@@ -1,8 +1,5 @@
 function fillInputs(contact) {
-    if (document.getElementById('user_id')) {
-        document.getElementById('user_id').value = contact.id;
-    }
-
+    document.getElementById('user_id').value = contact.id;
     document.getElementById('name').value = contact.name;
     document.getElementById('surname').value = contact.surName;
     document.getElementById('middlename').value = contact.middleName;
@@ -119,6 +116,18 @@ xmlhttp.onreadystatechange = function (ev) {
     }
 };
 
-function getPhoto(id) {
-    //implement image download
+function getPhoto(param) {
+    var xmlhttp2 = new XMLHttpRequest();
+
+    xmlhttp2.open("GET", "/photo?id=" + param, true);
+    xmlhttp2.send();
+
+    xmlhttp2.onreadystatechange = function(ev) {
+        if (xmlhttp2.readyState === 4 && xmlhttp2.status === 200) {
+            var img = document.getElementById("image");
+            var srcValue = 'data:image/png;base64,' + xmlhttp2.responseText;
+            img.setAttribute('src', srcValue);
+        }
+    }
 }
+

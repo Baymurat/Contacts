@@ -1,7 +1,7 @@
-window.fillTable = function fillIndex(result) {
+window.fillTable = function fillIndex(result, currentPage) {
     var contacts = result.contactList;
 
-    console.log(contacts);
+    var new_body = document.createElement('tbody');
     for (var i = 0; i < contacts.length; i++) {
 
         var currentElement = contacts[i];
@@ -29,6 +29,15 @@ window.fillTable = function fillIndex(result) {
         tableRow.appendChild(userEmail);
         tableRow.appendChild(dataAttachment);
 
-        document.querySelector('#myTable>tbody').appendChild(tableRow);
+        new_body.appendChild(tableRow);
     }
+
+    var old_body = document.querySelector('#myTable tbody');
+    old_body.parentNode.replaceChild(new_body, old_body);
+
+    previous.disabled = currentPage <= 1;
+    next.disabled = currentPage * 2 >= result.allElementsCount;
 };
+
+var previous = document.getElementById('previous');
+var next = document.getElementById('next');

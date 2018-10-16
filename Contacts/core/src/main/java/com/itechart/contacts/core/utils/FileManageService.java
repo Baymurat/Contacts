@@ -21,12 +21,33 @@ public class FileManageService {
         writeFile(path, fileName, bytes);
     }
 
-    public File getPhoto(int personId) {
+    /*public File getPhoto(int personId) {
         String path = rootPath + personId + uploadFolder + "photo";
         File directory = new File(path);
         if (directory.exists() && directory.list()[0].contains("photo")) {
             return new File(directory.list()[0]);
         }
+
+        return null;
+    }*/
+
+    public File getPhoto(int personId) {
+        String path = rootPath + personId + uploadFolder + "photo";
+        File directory = new File(path);
+        if (directory.exists() && directory.list()[0].contains("photo")) {
+            return directory.listFiles()[0];
+        }
+
+        /*String encodedfile = null;
+        try {
+            FileInputStream fileInputStreamReader = new FileInputStream(file);
+            byte[] bytes = new byte[(int)file.length()];
+            fileInputStreamReader.read(bytes);
+            encodedfile = new String(Base64.getEncoder().encode(bytes), StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }*/
 
         return null;
     }

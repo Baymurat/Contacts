@@ -14,6 +14,11 @@ import com.itechart.contacts.core.utils.email.CustomMessageHolder;
 import com.itechart.contacts.core.utils.email.SendEmail;
 
 import javax.sql.DataSource;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
@@ -32,7 +37,7 @@ public class SimpleService {
     public SimpleService() {
     }
 
-    public void updateRecord(Contact contact, List<Object> bytesAndExtensOfFiles) {
+    public void updateRecord(Contact contact, List<Object> bytesAndExtensOfFiles, List<Object> photo) {
         JDBCContactDao contactDao;
         JDBCPhonesDao phonesDao;
         JDBCAttachmentDao attachmentsDao;
@@ -94,6 +99,12 @@ public class SimpleService {
                     attachmentsDao.delete(i);
                 }
                 fileManageService.deleteFiles(contact.getId(), deleteAttachmentsList);
+            }
+
+            if (photo != null) {
+                byte[] bytes = (byte[]) photo.get(0);
+                String fileExtension = (String) photo.get(1);
+                fileManageService.savePhoto(contact.getId(), bytes, fileExtension);
             }
 
             connection.commit();
@@ -232,6 +243,8 @@ public class SimpleService {
 
             result.setContactList(contactList);
             result.setAllElementsCount(allElementsCount);
+            /*result.setHaveNext(from + range > allElementsCount);
+            result.setHavePrevious(from > range);*/
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -323,5 +336,20 @@ public class SimpleService {
         }
 
         return contacts;
+    }
+
+    public String encodeFileToBase64Binary(File file){
+        String encodedfile = null;
+        try {
+            FileInputStream fileInputStreamReader = new FileInputStream(file);
+            byte[] bytes = new byte[(int)file.length()];
+            fileInputStreamReader.read(bytes);
+            encodedfile = new String(Base64.getEncoder().encode(bytes), StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return encodedfile;
     }
 }
