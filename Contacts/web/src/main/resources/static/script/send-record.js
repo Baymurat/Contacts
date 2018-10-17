@@ -18,7 +18,7 @@ window.sendRecord = function (url) {
     contact.birthDate = document.getElementById('datebirth').value;
     contact.country = document.getElementById('country').value;
     contact.city = document.getElementById('city').value;
-    contact.steetHouseApart = document.getElementById('street-house-apart').value;
+    contact.streetHouseApart = document.getElementById('street-house-apart').value;
     contact.index = document.getElementById('index').value;
     contact.phones = getPhones();
     contact.attachments = getAttachments();
@@ -32,11 +32,6 @@ window.sendRecord = function (url) {
 
 
     if (contact.name && contact.surName && contact.middleName) {
-        /* show(contact.phones);
-        show(contact.attachments);
-        show(contact.deletePhonesList);
-        show(contact.deleteAttachmentsList); */
-
         var formData = new FormData();
         var objectSend = JSON.stringify(contact);
 
@@ -56,7 +51,7 @@ window.sendRecord = function (url) {
             }
         }
     } else {
-        alert("POPULATE FIELDS");
+        alert("Populate required fields");
     }
 };
 
@@ -121,4 +116,3 @@ function getFiles(formData) {
         formData.append('photo', userPhoto.files[0]);
     }
 }
-

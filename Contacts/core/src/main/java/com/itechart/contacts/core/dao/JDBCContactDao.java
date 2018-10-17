@@ -3,7 +3,9 @@ package com.itechart.contacts.core.dao;
 import com.itechart.contacts.core.entities.Attachment;
 import com.itechart.contacts.core.entities.Contact;
 import com.itechart.contacts.core.entities.Phone;
+import com.itechart.contacts.core.utils.CustomErrorHandler;
 import com.itechart.contacts.core.utils.CustomUtils;
+import org.apache.log4j.Logger;
 
 import java.sql.*;
 import java.text.SimpleDateFormat;
@@ -58,7 +60,7 @@ public class JDBCContactDao implements DAO<Contact, Integer> {
                 contact.setAttachments(attachments);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            CustomErrorHandler.logger.error("Exception in ContactDAO getEntityById() method", e);
         } finally {
             CustomUtils.closeResultSet(resultSetContacts);
             CustomUtils.closePreparedStatement(preparedStatement);
@@ -94,7 +96,7 @@ public class JDBCContactDao implements DAO<Contact, Integer> {
 
             return true;
         } catch (SQLException e) {
-            e.printStackTrace();
+            CustomErrorHandler.logger.error("Exception in ContactDAO update() method", e);
         } finally {
             CustomUtils.closePreparedStatement(preparedStatement);
         }
@@ -110,7 +112,7 @@ public class JDBCContactDao implements DAO<Contact, Integer> {
             preparedStatement.executeUpdate();
             return true;
         } catch (SQLException e) {
-            e.printStackTrace();
+            CustomErrorHandler.logger.error("Exception in ContactDAO delete() method", e);
         } finally {
             CustomUtils.closePreparedStatement(preparedStatement);
         }
@@ -155,7 +157,7 @@ public class JDBCContactDao implements DAO<Contact, Integer> {
             }
             return 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            CustomErrorHandler.logger.error("Exception in ContactDAO insert() method", e);
         } finally {
             CustomUtils.closeResultSet(resultSetContacts);
             CustomUtils.closePreparedStatement(preparedStatement);
@@ -228,7 +230,7 @@ public class JDBCContactDao implements DAO<Contact, Integer> {
                 result.add(contact);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            CustomErrorHandler.logger.error("Exception in ContactDAO getRecords() method", e);
         } finally {
             CustomUtils.closeResultSet(resultSetContacts);
             CustomUtils.closePreparedStatement(preparedStatement);
@@ -245,7 +247,7 @@ public class JDBCContactDao implements DAO<Contact, Integer> {
                 allElementsCount = resultSetContacts.getInt("counts");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            CustomErrorHandler.logger.error("Exception in ContactDAO getAllElementsCount() method", e);
         } finally {
             CustomUtils.closeResultSet(resultSetContacts);
             CustomUtils.closePreparedStatement(preparedStatement);
@@ -272,7 +274,7 @@ public class JDBCContactDao implements DAO<Contact, Integer> {
                 contactList.add(contact);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            CustomErrorHandler.logger.error("Exception in ContactDAO getAllElementsCount() method", e);
         }
 
         return contactList;
@@ -297,5 +299,82 @@ public class JDBCContactDao implements DAO<Contact, Integer> {
         } else {
             return null;
         }
+    }
+
+    public List<Contact> getByAdvancedSearch(Contact contact) {
+        List<Contact> result = new ArrayList<>();
+        try {
+            StringBuilder query = new StringBuilder();
+            query.append("SELECT * FROM persons WHERE ");
+
+            if (!contact.getName().isEmpty()) {
+                query.append(" name = ").append(contact.getName());
+            }
+            if (!contact.getSurName().isEmpty()) {
+                query.append(" AND surname = ").append(contact.getSurName());
+            }
+            if (!contact.getMiddleName().isEmpty()) {
+                query.append(" AND middlename = ").append(contact.getMiddleName());
+            }
+            if (!contact.getCitizenship().isEmpty()) {
+                query.append(" AND citizenship = ").append(contact.getCitizenship());
+            }
+            if (!contact.getFamilyStatus().isEmpty()) {
+                query.append(" AND familystatus = ").append(contact.getFamilyStatus());
+            }
+            if (!contact.getWebSite().isEmpty()) {
+                query.append(" AND website = ").append(contact.getWebSite());
+            }
+            if (!contact.getEmail().isEmpty()) {
+                query.append(" AND email = ").append(contact.getEmail());
+            }
+            if (!contact.getCurrentJob().isEmpty()) {
+                query.append(" AND currentjob = ").append(contact.getCurrentJob());
+            }
+            if (!contact.getGender().isEmpty()) {
+                query.append(" AND gender = ").append(contact.getGender());
+            }
+            /*if (!contact.getBirthDate().isEmpty()) {
+                query.append(" AND datebirth = ").append(contact.getBirthDate());
+            }*/
+            if (!contact.getCountry().isEmpty()) {
+                query.append(" AND country = ").append(contact.getCountry());
+            }
+            if (!contact.getCity().isEmpty()) {
+                query.append(" AND city = ").append(contact.getCity());
+            }
+            if (!contact.getStreetHouseApart().isEmpty() && contact.getStreetHouseApart() != null) {
+                query.append(" AND street_house_apart = ").append(contact.getStreetHouseApart());
+            }
+            if (contact.getIndex() > 0) {
+                query.append(" AND p_index = ").append(contact.getIndex());
+            }
+
+            preparedStatement = connection.prepareStatement(query.toString());
+
+            resultSetContacts = preparedStatement.executeQuery();
+
+            while (resultSetContacts.next()) {
+                Contact temp = new Contact();
+                temp.setId(resultSetContacts.getInt(1));
+                temp.setName(resultSetContacts.getString("name"));
+                temp.setSurName(resultSetContacts.getString("surname"));
+                temp.setMiddleName(resultSetContacts.getString("middlename"));
+                temp.setEmail(resultSetContacts.getString("email"));
+
+                ArrayList<Phone> phones = new ArrayList<>();
+                ArrayList<Attachment> attachments = new ArrayList<>();
+
+                temp.setPhones(phones);
+                temp.setAttachments(attachments);
+
+                result.add(temp);
+            }
+
+            return result;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

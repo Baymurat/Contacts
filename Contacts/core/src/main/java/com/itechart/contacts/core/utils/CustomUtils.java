@@ -14,7 +14,7 @@ public class CustomUtils {
             try {
                 resultSet.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                CustomErrorHandler.logger.error("Unable close resultSet", e);
             }
         }
     }
@@ -24,7 +24,7 @@ public class CustomUtils {
             try {
                 preparedStatement.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                CustomErrorHandler.logger.error("Unable close preparedStatement", e);
             }
         }
     }
@@ -34,7 +34,7 @@ public class CustomUtils {
             try {
                 connection.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                CustomErrorHandler.logger.error("Unable close connection", e);
             }
         }
     }

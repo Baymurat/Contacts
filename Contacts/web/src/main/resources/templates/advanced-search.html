@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Advanced Search</title>
+    <link rel="stylesheet" href="./css/add.css">
+    <link rel="stylesheet" href="./css/stylesheet.css" type="text/css">
+</head>
+<body>
+<div id="container">
+    <div id="person">
+        <div class="part-one">
+            <input type="text" id="user_id">
+            <label for="name">*Name</label>
+            <input type="text" id="name">
+
+            <label for="surname">*Surname</label>
+            <input type="text" name="" id="surname">
+
+            <label for="middlename">*Middlename</label>
+            <input type="text" name="" id="middlename">
+
+            <label for="datebirth">Datebirth</label>
+            <input type="text" name="" id="datebirth" placeholder="__/__/____">
+
+            <label for="gender">Gender</label>
+            <select name="" id="gender">
+                <option value="">male</option>
+                <option value="">female</option>
+            </select>
+
+            <label for="citizenship">Citizenship</label>
+            <input type="text" name="" id="citizenship">
+
+            <label for="family-status">Family status</label>
+            <select name="" id="family-status">
+                <option value="">single</option>
+                <option value="">married</option>
+            </select>
+        </div>
+
+        <div class="part-two">
+            <label for="web-site">Website</label>
+            <input type="text" name="" id="web-site">
+
+            <label for="email">Email</label>
+            <input type="email" name="" id="email">
+
+            <label for="currentjob">Currentjob</label>
+            <input type="text" name="" id="currentjob">
+
+            <label for="country">Country</label>
+            <input type="text" name="" id="country">
+
+            <label for="city">City</label>
+            <input type="text" name="" id="city">
+
+            <label for="street-house-apart">Street/House/Apart</label>
+            <input type="text" name="" id="street-house-apart">
+
+            <label for="index">Index</label>
+            <input type="number" name="" id="index">
+        </div>
+    </div>
+
+    <div>
+        <button id="search-button">Search</button>
+    </div>
+</div>
+
+<table id="myTable">
+    <thead>
+    <tr>
+        <th id="boxes"></th>
+        <th>Name</th>
+        <th>Date</th>
+        <th>Address</th>
+        <th>Company</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+</table>
+</main>
+<footer>
+    <button id="edit-button">Edit</button>
+    <button id="delete-button">Delete</button>
+    <button id="send-button">Send</button>
+    <button id="about-button">About</button>
+    <button id="check-boxes-button"></button>
+</footer>
+
+<div>
+    <button id="back-to-index">Back</button>
+</div>
+
+    <script src="./script/advanced-search.js"></script>
+    <script src="./script/fill-table.js"></script>
+    <script src="./script/bind-buttons.js"></script>
+</body>
+</html>

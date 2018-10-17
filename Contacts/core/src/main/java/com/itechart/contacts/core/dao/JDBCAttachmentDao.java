@@ -1,7 +1,9 @@
 package com.itechart.contacts.core.dao;
 
 import com.itechart.contacts.core.entities.Attachment;
+import com.itechart.contacts.core.utils.CustomErrorHandler;
 import com.itechart.contacts.core.utils.CustomUtils;
+import org.apache.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -36,7 +38,7 @@ public class JDBCAttachmentDao implements DAO<Attachment, Integer> {
                 attachment.setPersons_id(resultSetAttachments.getInt("persons_id"));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            CustomErrorHandler.logger.error("Exception in AttachmentDAO getEntityById() method", e);
         }
 
         return attachment;
@@ -54,7 +56,7 @@ public class JDBCAttachmentDao implements DAO<Attachment, Integer> {
 
             return result == 1;
         } catch (SQLException e) {
-            e.printStackTrace();
+            CustomErrorHandler.logger.error("Exception in AttachmentDAO update() method", e);
         } finally {
             CustomUtils.closePreparedStatement(preparedStatement);
         }
@@ -69,7 +71,7 @@ public class JDBCAttachmentDao implements DAO<Attachment, Integer> {
             preparedStatement.executeUpdate();
             return true;
         } catch (SQLException e) {
-            e.printStackTrace();
+            CustomErrorHandler.logger.error("Exception in AttachmentDAO delete() method", e);
         } finally {
             CustomUtils.closePreparedStatement(preparedStatement);
         }
@@ -93,7 +95,7 @@ public class JDBCAttachmentDao implements DAO<Attachment, Integer> {
             }
             return 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            CustomErrorHandler.logger.error("Exception in AttachmentDAO insert() method", e);
         } finally {
             CustomUtils.closeResultSet(resultSetAttachments);
             CustomUtils.closePreparedStatement(preparedStatement);
@@ -125,7 +127,7 @@ public class JDBCAttachmentDao implements DAO<Attachment, Integer> {
                 result.add(attachment);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            CustomErrorHandler.logger.error("Exception in AttachmentDAO getRecords() method", e);
         }
 
         return result;

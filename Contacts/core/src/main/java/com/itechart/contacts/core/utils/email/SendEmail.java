@@ -1,5 +1,7 @@
 package com.itechart.contacts.core.utils.email;
 
+import com.itechart.contacts.core.utils.CustomErrorHandler;
+
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
@@ -37,8 +39,7 @@ public class SendEmail {
             message.setRecipient(Message.RecipientType.TO, email_to);
             message.setSubject(thema);
         } catch (MessagingException e) {
-            System.err.println(e.getMessage());
-            e.printStackTrace();
+            CustomErrorHandler.logger.error("Error in SendEmail class constructor ", e);
         }
     }
 
@@ -55,7 +56,7 @@ public class SendEmail {
             Transport.send(message);
             result = true;
         } catch (MessagingException e) {
-            e.printStackTrace();
+            CustomErrorHandler.logger.error("Error in Service class, sendMessage() method", e);
         }
         return result;
     }

@@ -35,8 +35,12 @@ window.fillTable = function fillIndex(result, currentPage) {
     var old_body = document.querySelector('#myTable tbody');
     old_body.parentNode.replaceChild(new_body, old_body);
 
-    previous.disabled = currentPage <= 1;
-    next.disabled = currentPage * 2 >= result.allElementsCount;
+    var range = 10;
+    if (previous && next) {
+        previous.disabled = currentPage <= 1;
+        next.disabled = currentPage * range >= result.allElementsCount;
+    }
+
 };
 
 var previous = document.getElementById('previous');

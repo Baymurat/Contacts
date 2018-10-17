@@ -27,7 +27,7 @@ function sendMail() {
 
 sendEmailButton.addEventListener('click', sendMail);
 
-var cancelButton = document.getElementById('cancel-button');
+var cancelButton = document.getElementById('back-to-index');
 cancelButton.addEventListener('click', function() {
-    window.location.replace('/index');
+    window.location.href = 'index';
 });

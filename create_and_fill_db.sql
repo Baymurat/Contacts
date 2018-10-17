@@ -76,6 +76,9 @@ SELECT * FROM phones;
 SELECT * FROM attachments;
 
 SELECT COUNT(id) AS counts FROM persons;
+
+SELECT * FROM persons WHERE datebirth = '2013-12-20';
+SELECT * FROM persons WHERE name = 'Мурат'AND surname = 'null';
 /* Corrects id sequences after deleting >*/
 /*
 SET @persons_id_conut = 0;

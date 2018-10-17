@@ -1,7 +1,9 @@
 package com.itechart.contacts.core.dao;
 
 import com.itechart.contacts.core.entities.Phone;
+import com.itechart.contacts.core.utils.CustomErrorHandler;
 import com.itechart.contacts.core.utils.CustomUtils;
+import org.apache.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,6 +17,7 @@ import java.util.List;
  * Created by Admin on 13.09.2018
  */
 public class JDBCPhonesDao implements DAO<Phone, Integer> {
+
     private PreparedStatement preparedStatement = null;
     private ResultSet resultSetPhones = null;
     private Connection connection;
@@ -43,7 +46,7 @@ public class JDBCPhonesDao implements DAO<Phone, Integer> {
 
             return result == 1;
         } catch (SQLException e) {
-            e.printStackTrace();
+            CustomErrorHandler.logger.error("Exception in ContactDAO getEntityById() method", e);
         } finally {
             CustomUtils.closePreparedStatement(preparedStatement);
         }
@@ -58,7 +61,7 @@ public class JDBCPhonesDao implements DAO<Phone, Integer> {
             preparedStatement.executeUpdate();
             return true;
         } catch (SQLException e) {
-            e.printStackTrace();
+            CustomErrorHandler.logger.error("Exception in ContactDAO delete() method", e);
         } finally {
             CustomUtils.closePreparedStatement(preparedStatement);
         }
@@ -85,7 +88,7 @@ public class JDBCPhonesDao implements DAO<Phone, Integer> {
 
             return 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            CustomErrorHandler.logger.error("Exception in ContactDAO insert() method", e);
         } finally {
             CustomUtils.closeResultSet(resultSetPhones);
             CustomUtils.closePreparedStatement(preparedStatement);
@@ -117,7 +120,7 @@ public class JDBCPhonesDao implements DAO<Phone, Integer> {
                 resultList.add(phone);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            CustomErrorHandler.logger.error("Exception in ContactDAO getRecords() method", e);
         }
 
         return resultList;

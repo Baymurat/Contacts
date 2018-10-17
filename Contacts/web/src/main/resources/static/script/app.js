@@ -58,22 +58,40 @@ function addPhone(context) {
     var operatorCode = context.element.querySelector('#operator-code').value;
     var number = context.element.querySelector('#phone-number').value;
 
-    if (countryCode && operatorCode && number) {
-        phoneNumber.innerHTML = countryCode + " " + operatorCode + " " + number;
-        comments.innerHTML = context.element.querySelector('#phone-comments').value;
-        var select = context.element.querySelector('#phone-number-type');
-        phoneType.innerHTML = select.options[select.selectedIndex].text;
+    var resultObject = {};
 
-        tableRow.appendChild(phoneNumber);
-        tableRow.appendChild(phoneType);
-        tableRow.appendChild(comments);
-
-        context.table.appendChild(tableRow);
-
-        return true;
-    } else {
-        return false;
+    if (!countryCode) {
+        resultObject.status = false;
+        resultObject.textOfError = "Enter country code";
+        return resultObject;
     }
+
+    if (!operatorCode) {
+        resultObject.status = false;
+        resultObject.textOfError = "Enter operator code";
+        return resultObject;
+    }
+
+    if (!number) {
+        resultObject.status = false;
+        resultObject.textOfError = "Enter number of phone";
+        return resultObject;
+    }
+
+    phoneNumber.innerHTML = countryCode + " " + operatorCode + " " + number;
+    comments.innerHTML = context.element.querySelector('#phone-comments').value;
+    var select = context.element.querySelector('#phone-number-type');
+    phoneType.innerHTML = select.options[select.selectedIndex].text;
+
+    tableRow.appendChild(phoneNumber);
+    tableRow.appendChild(phoneType);
+    tableRow.appendChild(comments);
+
+    context.table.appendChild(tableRow);
+
+    resultObject.status = true;
+
+    return resultObject;
 }
 
 function addAttachment(context) {
@@ -99,18 +117,28 @@ function addAttachment(context) {
 
     dateColumn.innerHTML = fullDate;
 
-    if (fileName.innerHTML && context.element.querySelector('input[name = files').value) {
-        tableRow.appendChild(fileName);
-        tableRow.appendChild(dateColumn);
-        tableRow.appendChild(comments);
-        tableRow.appendChild(attachmentInput);
+    var resultObject = {};
 
-        context.table.appendChild(tableRow);
-
-        return true;
-    } else {
-        return false;
+    if (!fileName.innerHTML) {
+        resultObject.status = false;
+        resultObject.textOfError = "Enter file name";
+        return resultObject;
     }
+
+    if (!context.element.querySelector('input[name = files').value) {
+        resultObject.status = false;
+        resultObject.textOfError = "Specify file";
+        return resultObject;
+    }
+    tableRow.appendChild(fileName);
+    tableRow.appendChild(dateColumn);
+    tableRow.appendChild(comments);
+    tableRow.appendChild(attachmentInput);
+
+    context.table.appendChild(tableRow);
+
+    resultObject.status = true;
+    return resultObject;
 }
 
 function updatePhone(context) {
@@ -121,15 +149,33 @@ function updatePhone(context) {
     var operatorCode = context.element.querySelector('#operator-code').value;
     var number = context.element.querySelector('#phone-number').value;
 
-    if (countryCode && operatorCode && number) {
-        cells.item(0).innerHTML = countryCode + " " + operatorCode + " " + number;
-        var select = context.element.querySelector('#phone-number-type');
-        cells.item(1).innerHTML = select.options[select.selectedIndex].text;
-        cells.item(2).innerHTML = context.element.querySelector('#phone-comments').value;
-        return true;
-    } else {
-        return false;
+    var resultObject = {};
+
+    if (!countryCode) {
+        resultObject.status = false;
+        resultObject.textOfError = "Enter country code";
+        return resultObject;
     }
+
+    if (!operatorCode) {
+        resultObject.status = false;
+        resultObject.textOfError = "Enter operator code";
+        return resultObject;
+    }
+
+    if (!number) {
+        resultObject.status = false;
+        resultObject.textOfError = "Enter number of phone";
+        return resultObject;
+    }
+    cells.item(0).innerHTML = countryCode + " " + operatorCode + " " + number;
+    var select = context.element.querySelector('#phone-number-type');
+    cells.item(1).innerHTML = select.options[select.selectedIndex].text;
+    cells.item(2).innerHTML = context.element.querySelector('#phone-comments').value;
+
+    resultObject.status = true;
+
+    return resultObject;
 }
 
 function updateAttachment(context) {
@@ -137,13 +183,20 @@ function updateAttachment(context) {
     var cells = selectedRow.cells;
 
     var fileName = context.element.querySelector('#file-name').value;
-    if (fileName) {
-        cells.item(0).innerHTML = fileName;
-        cells.item(2).innerHTML = context.element.querySelector('#attachment-comment').value;
-        return true;
-    } else {
-        return false;
+
+    var resultObject = {};
+
+    if (!fileName) {
+        resultObject.status = false;
+        resultObject.textOfError = "Enter file name";
+        return resultObject;
     }
+
+    cells.item(0).innerHTML = fileName;
+    cells.item(2).innerHTML = context.element.querySelector('#attachment-comment').value;
+
+    resultObject.status = true;
+    return resultObject;
 }
 
 function phoneInputsFill(element, selectedRow) {
@@ -166,7 +219,6 @@ function attachmentInputsFill(element, selectedRow) {
     element.querySelector('#file-name').value = cells.item(0).innerHTML;
     element.querySelector('#attachment-comment').value = cells.item(2).innerHTML;
 }
-
 
 
 function deleteRow(selectedRow) {
@@ -194,11 +246,11 @@ var imageDiv = document.getElementsByClassName('image-holder')[0];
 var imageInput = document.querySelector('#person-image');
 var image = document.querySelector('#image');
 
-imageDiv.addEventListener('click', function() {
+imageDiv.addEventListener('click', function () {
     imageInput.click();
 });
 
-imageInput.addEventListener('change', function() {
+imageInput.addEventListener('change', function () {
     renderImage(imageInput.files[0]);
 });
 
@@ -226,20 +278,20 @@ var month = date.getMonth(); */
 var year = date.getFullYear();
 
 function keyUpValidation(evt) {
-    if((evt.keyCode >= 48 && evt.keyCode <= 57) || (evt.keyCode >= 96 &&
+    if ((evt.keyCode >= 48 && evt.keyCode <= 57) || (evt.keyCode >= 96 &&
         evt.keyCode <= 105)) {
         evt = evt || window.event;
 
         var value = el.value;
         var size = value.length;
 
-        if ((size == 2 && value > 31)|| (size == 5 && Number(value.split('/')[1]) > 12) || (size >= 10 && Number(value.split('/')[2]) > year)) {
+        if ((size == 2 && value > 31) || (size == 5 && Number(value.split('/')[1]) > 12) || (size >= 10 && Number(value.split('/')[2]) > year)) {
             alert('Invalid Date');
             document.getElementById('datebirth').value = '';
             return;
         }
 
-        if ((size == 2 && value < 32)|| (size == 5 && Number(value.split('/')[1]) < 13)) {
+        if ((size == 2 && value < 32) || (size == 5 && Number(value.split('/')[1]) < 13)) {
             document.getElementById('datebirth').value += '/';
         }
 
@@ -263,5 +315,6 @@ function focusOutValidation() {
         el.value = '';
     }
 }
+
 el.addEventListener('keyup', keyUpValidation);
 el.addEventListener('focusout', focusOutValidation);

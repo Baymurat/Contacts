@@ -97,9 +97,9 @@ function fillAttachmentsTable(list, person_id) {
     }
 }
 
-var cancelButton = document.getElementById('cancel-button');
+var cancelButton = document.getElementById('back-to-index');
 cancelButton.addEventListener('click', function () {
-    window.location.replace('/index');
+    window.location.href = '/index';
 });
 
 var url = new URL(window.location.href);

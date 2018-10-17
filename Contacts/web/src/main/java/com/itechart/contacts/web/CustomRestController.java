@@ -108,6 +108,11 @@ public class CustomRestController {
         return ResponseEntity.status(HttpStatus.OK).header("Content-Type", "application/json").body(encodedFile);
     }
 
+    @RequestMapping(value = "/advanced-search", method = RequestMethod.POST)
+    public Result advancedSearh(@RequestBody Contact contact) {
+        return simpleService.advancedSearch(contact);
+    }
+
     private Contact parseToContact(String jsonRepresentation) {
         ObjectMapper mapper = new ObjectMapper();
         Contact contact = null;

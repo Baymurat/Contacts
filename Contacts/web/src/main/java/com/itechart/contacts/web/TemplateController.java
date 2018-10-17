@@ -38,4 +38,9 @@ public class TemplateController {
     public String email() {
         return "email";
     }
+
+    @GetMapping("/advanced-search")
+    public String advancedSearch() {
+        return "advanced-search";
+    }
 }

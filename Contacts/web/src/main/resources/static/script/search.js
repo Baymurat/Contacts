@@ -18,3 +18,13 @@ searchButton.addEventListener('click', function (ev) {
        }
    }
 });
+
+var cancelButton = document.getElementById('back-to-index');
+cancelButton.addEventListener('click', function () {
+    window.location.replace('/index');
+});
+
+var advancedSearch = document.getElementById('advanced-search');
+advancedSearch.addEventListener('click', function (ev) {
+    window.location.replace('/advanced-search');
+})

@@ -53,7 +53,7 @@ function sendFunction() {
         params += 'to' + '=' + selectedRows[i].cells[2].innerHTML + '&';
     }
 
-    window.location.replace('/email' + params);
+    window.location.href = '/email' + params;
 }
 
 function aboutFunction() {
@@ -75,19 +75,19 @@ function toggleCheckBoxes() {
 
     var button = document.querySelector('#check-boxes-button');
 
-    setButtonsStatus(false);
+
 
     if (button.state === 'disabled') {
         button.innerHTML = "Disable Check Boxes";
         button.state = 'enabled';
         myTable.removeEventListener('click', singleChoice);
         myTable.addEventListener('click', multipleChoice);
-        setButtonsStatus(true);
     } else {
         button.innerHTML = "Enable Check Boxes";
         button.state = 'disabled';
         myTable.removeEventListener('click', multipleChoice);
         myTable.addEventListener('click', singleChoice);
+        setButtonsStatus(false);
     }
 
     var selectedRows = document.getElementsByClassName('selected');
@@ -131,6 +131,9 @@ function multipleChoice(e) {
         parentNode.classList.toggle('selected');
         checkBox.checked = checkBox.checked !== true;
     }
+
+    var selectedRow = myTable.querySelector('.selected');
+    setButtonsStatus(selectedRow !== undefined);
 }
 
 if (addButton) {
@@ -146,5 +149,9 @@ sendButton.addEventListener('click', sendFunction);
 aboutButton.addEventListener('click', aboutFunction);
 checkBoxesButton.addEventListener('click', toggleCheckBoxes);
 
+/*var cancelButton = document.getElementById('back-to-index');
+cancelButton.addEventListener('click', function () {
+    window.location.replace('/index');
+});*/
 
 toggleCheckBoxes();

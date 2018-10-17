@@ -23,7 +23,7 @@ var next = document.getElementById('next');
 previous.addEventListener('click', prevFunc);
 next.addEventListener('click', nextFunc);
 
-var range = 2;
+var range = 10;
 
 function prevFunc() {
     var currentPage = document.getElementById('input-for-current-page').value;
