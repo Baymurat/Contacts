@@ -353,6 +353,8 @@ public class SimpleService {
         List<Contact> contactList = null;
 
         JDBCContactDao contactDao;
+        JDBCAttachmentDao attachmentDao;
+        JDBCPhonesDao phonesDao;
 
         ConnectionPool connectionPool = new ConnectionPool();
 
@@ -361,9 +363,25 @@ public class SimpleService {
             connection = dataSource.getConnection();
 
             contactDao = new JDBCContactDao(connection);
+            attachmentDao = new JDBCAttachmentDao(connection);
+            phonesDao = new JDBCPhonesDao(connection);
 
             contactList = contactDao.getByAdvancedSearch(contact);
+
+            if (contactList != null) {
+                for (Contact c : contactList) {
+                    List<Attachment> attachmentList = attachmentDao.getContactAttachment(c.getId());
+                    List<Phone> phoneList = phonesDao.getContactPhones(c.getId());
+
+                    c.setPhones(phoneList);
+                    c.setAttachments(attachmentList);
+                }
+            }
+
+            int allElementsCount = contactDao.getAllElementsCount();
+
             result.setContactList(contactList);
+            result.setAllElementsCount(allElementsCount);
         } catch (Exception e) {
             CustomErrorHandler.logger.error("Error in Service class, getContact() method", e);
         } finally

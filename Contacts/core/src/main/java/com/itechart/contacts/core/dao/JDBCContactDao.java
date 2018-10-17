@@ -5,7 +5,6 @@ import com.itechart.contacts.core.entities.Contact;
 import com.itechart.contacts.core.entities.Phone;
 import com.itechart.contacts.core.utils.CustomErrorHandler;
 import com.itechart.contacts.core.utils.CustomUtils;
-import org.apache.log4j.Logger;
 
 import java.sql.*;
 import java.text.SimpleDateFormat;
@@ -303,75 +302,108 @@ public class JDBCContactDao implements DAO<Contact, Integer> {
 
     public List<Contact> getByAdvancedSearch(Contact contact) {
         List<Contact> result = new ArrayList<>();
+        List<String> parameters = new ArrayList<String>();
+        boolean isDateEmpty = true;
         try {
-            StringBuilder query = new StringBuilder();
-            query.append("SELECT * FROM persons WHERE ");
+            StringBuilder firstPart = new StringBuilder();
+            StringBuilder secondPart = new StringBuilder();
+
+            firstPart.append("SELECT * FROM persons WHERE");
 
             if (!contact.getName().isEmpty()) {
-                query.append(" name = ").append(contact.getName());
+                secondPart.append(" name LIKE ?");
+                parameters.add("%" + contact.getName() + "%");
             }
             if (!contact.getSurName().isEmpty()) {
-                query.append(" AND surname = ").append(contact.getSurName());
+                secondPart.append(" AND surname LIKE ?");
+                parameters.add("%" + contact.getSurName() + "%");
             }
             if (!contact.getMiddleName().isEmpty()) {
-                query.append(" AND middlename = ").append(contact.getMiddleName());
+                secondPart.append(" AND middlename LIKE ?");
+                parameters.add("%" + contact.getMiddleName() + "%");
             }
             if (!contact.getCitizenship().isEmpty()) {
-                query.append(" AND citizenship = ").append(contact.getCitizenship());
+                secondPart.append(" AND citizenship LIKE ?");
+                parameters.add("%" + contact.getCitizenship() + "%");
             }
             if (!contact.getFamilyStatus().isEmpty()) {
-                query.append(" AND familystatus = ").append(contact.getFamilyStatus());
+                secondPart.append(" AND familystatus LIKE ?");
+                parameters.add("%" + contact.getFamilyStatus() + "%");
             }
             if (!contact.getWebSite().isEmpty()) {
-                query.append(" AND website = ").append(contact.getWebSite());
+                secondPart.append(" AND website LIKE ?");
+                parameters.add("%" + contact.getWebSite() + "%");
             }
             if (!contact.getEmail().isEmpty()) {
-                query.append(" AND email = ").append(contact.getEmail());
+                secondPart.append(" AND email LIKE ?");
+                parameters.add("%" + contact.getEmail() + "%");
             }
             if (!contact.getCurrentJob().isEmpty()) {
-                query.append(" AND currentjob = ").append(contact.getCurrentJob());
+                secondPart.append(" AND currentjob LIKE ?");
+                parameters.add("%" + contact.getCurrentJob() + "%");
             }
             if (!contact.getGender().isEmpty()) {
-                query.append(" AND gender = ").append(contact.getGender());
+                secondPart.append(" AND gender LIKE ?");
+                parameters.add("%" + contact.getGender() + "%");
             }
-            /*if (!contact.getBirthDate().isEmpty()) {
-                query.append(" AND datebirth = ").append(contact.getBirthDate());
-            }*/
             if (!contact.getCountry().isEmpty()) {
-                query.append(" AND country = ").append(contact.getCountry());
+                secondPart.append(" AND country LIKE ?");
+                parameters.add("%" + contact.getCountry() + "%");
             }
             if (!contact.getCity().isEmpty()) {
-                query.append(" AND city = ").append(contact.getCity());
+                secondPart.append(" AND city LIKE ?");
+                parameters.add("%" + contact.getCity() + "%");
             }
-            if (!contact.getStreetHouseApart().isEmpty() && contact.getStreetHouseApart() != null) {
-                query.append(" AND street_house_apart = ").append(contact.getStreetHouseApart());
+            if (!contact.getStreetHouseApart().isEmpty()) {
+                secondPart.append(" AND street_house_apart LIKE ?");
+                parameters.add("%" + contact.getStreetHouseApart() + "%");
             }
             if (contact.getIndex() > 0) {
-                query.append(" AND p_index = ").append(contact.getIndex());
+                secondPart.append(" AND p_index LIKE ?");
+                parameters.add("%" + contact.getIndex() + "%");
+            }
+            if (!contact.getBirthDate().isEmpty()) {
+                secondPart.append(" AND datebirth = ?");
+                isDateEmpty = false;
             }
 
-            preparedStatement = connection.prepareStatement(query.toString());
+            if (secondPart.length() > 0) {
+                firstPart.append(secondPart);
+                String string = firstPart.toString();
+                string = string.replace("WHERE AND", "WHERE");
+                preparedStatement = connection.prepareStatement(string);
 
-            resultSetContacts = preparedStatement.executeQuery();
+                for (int i = 0; i < parameters.size(); i++) {
+                    preparedStatement.setString(i + 1, parameters.get(i));
+                }
 
-            while (resultSetContacts.next()) {
-                Contact temp = new Contact();
-                temp.setId(resultSetContacts.getInt(1));
-                temp.setName(resultSetContacts.getString("name"));
-                temp.setSurName(resultSetContacts.getString("surname"));
-                temp.setMiddleName(resultSetContacts.getString("middlename"));
-                temp.setEmail(resultSetContacts.getString("email"));
+                if (!isDateEmpty) {
+                    Date date = parseToDate(contact.getBirthDate());
+                    preparedStatement.setDate(parameters.size() + 1, date);
+                }
 
-                ArrayList<Phone> phones = new ArrayList<>();
-                ArrayList<Attachment> attachments = new ArrayList<>();
+                resultSetContacts = preparedStatement.executeQuery();
 
-                temp.setPhones(phones);
-                temp.setAttachments(attachments);
+                while (resultSetContacts.next()) {
+                    Contact temp = new Contact();
+                    temp.setId(resultSetContacts.getInt(1));
+                    temp.setName(resultSetContacts.getString("name"));
+                    temp.setSurName(resultSetContacts.getString("surname"));
+                    temp.setMiddleName(resultSetContacts.getString("middlename"));
+                    temp.setEmail(resultSetContacts.getString("email"));
 
-                result.add(temp);
+                    ArrayList<Phone> phones = new ArrayList<>();
+                    ArrayList<Attachment> attachments = new ArrayList<>();
+
+                    temp.setPhones(phones);
+                    temp.setAttachments(attachments);
+
+                    result.add(temp);
+                }
+
+                return result;
             }
 
-            return result;
         } catch (SQLException e) {
             e.printStackTrace();
         }

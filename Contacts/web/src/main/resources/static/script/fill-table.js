@@ -1,46 +1,48 @@
 window.fillTable = function fillIndex(result, currentPage) {
     var contacts = result.contactList;
 
-    var new_body = document.createElement('tbody');
-    for (var i = 0; i < contacts.length; i++) {
+    if (contacts) {
+        var new_body = document.createElement('tbody');
 
-        var currentElement = contacts[i];
+        for (var i = 0; i < contacts.length; i++) {
 
-        var tableRow = document.createElement('tr');
+            var currentElement = contacts[i];
 
-        var userName = document.createElement('td');
-        var userSurname = document.createElement('td');
-        var userEmail = document.createElement('td');
-        userEmail.name = 'email';
-        var dataAttachment = document.createElement('td');
-        var checkBox = document.createElement('input');
-        checkBox.type = 'checkbox';
-        checkBox.classList.add('disable');
+            var tableRow = document.createElement('tr');
 
-        userName.innerHTML = currentElement.name;
-        userSurname.innerHTML = currentElement.surName;
-        userEmail.innerHTML = currentElement.email;
-        dataAttachment.innerHTML = currentElement.webSite;
+            var userName = document.createElement('td');
+            var userSurname = document.createElement('td');
+            var userEmail = document.createElement('td');
+            userEmail.name = 'email';
+            var dataAttachment = document.createElement('td');
+            var checkBox = document.createElement('input');
+            checkBox.type = 'checkbox';
+            checkBox.classList.add('disable');
 
-        tableRow.id = currentElement.id;
-        tableRow.appendChild(checkBox);
-        tableRow.appendChild(userName);
-        tableRow.appendChild(userSurname);
-        tableRow.appendChild(userEmail);
-        tableRow.appendChild(dataAttachment);
+            userName.innerHTML = currentElement.name;
+            userSurname.innerHTML = currentElement.surName;
+            userEmail.innerHTML = currentElement.email;
+            dataAttachment.innerHTML = currentElement.webSite;
 
-        new_body.appendChild(tableRow);
+            tableRow.id = currentElement.id;
+            tableRow.appendChild(checkBox);
+            tableRow.appendChild(userName);
+            tableRow.appendChild(userSurname);
+            tableRow.appendChild(userEmail);
+            tableRow.appendChild(dataAttachment);
+
+            new_body.appendChild(tableRow);
+        }
+
+        var old_body = document.querySelector('#myTable tbody');
+        old_body.parentNode.replaceChild(new_body, old_body);
+
+        var range = 10;
+        if (previous && next) {
+            previous.disabled = currentPage <= 1;
+            next.disabled = currentPage * range >= result.allElementsCount;
+        }
     }
-
-    var old_body = document.querySelector('#myTable tbody');
-    old_body.parentNode.replaceChild(new_body, old_body);
-
-    var range = 10;
-    if (previous && next) {
-        previous.disabled = currentPage <= 1;
-        next.disabled = currentPage * range >= result.allElementsCount;
-    }
-
 };
 
 var previous = document.getElementById('previous');

@@ -38,4 +38,4 @@ function nextFunc() {
     makeRequest(currentPage * range, range, 1 + currentPage);
 }
 
-makeRequest(0, 2, 1);
+makeRequest(0, range, 1);
