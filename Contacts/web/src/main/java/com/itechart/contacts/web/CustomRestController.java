@@ -7,6 +7,7 @@ import com.itechart.contacts.core.service.SimpleService;
 import com.itechart.contacts.core.utils.Result;
 import com.itechart.contacts.core.utils.FileManageService;
 import com.itechart.contacts.core.utils.email.CustomMessageHolder;
+import com.itechart.contacts.core.utils.error.CustomException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.FileCopyUtils;
@@ -26,18 +27,18 @@ public class CustomRestController {
     private FileManageService fileManageService = new FileManageService();
 
     @RequestMapping(value = "/get-contacts", method = RequestMethod.GET)
-    public Result getContacts(@RequestParam(name = "from")  int from, @RequestParam(name = "range") int range) {
+    public Result getContacts(@RequestParam(name = "from")  int from, @RequestParam(name = "range") int range) throws Exception {
         return simpleService.getContacts(from, range, null);
     }
 
     @RequestMapping(value = "/get-contact", method = RequestMethod.GET)
-    public Contact getContact(@RequestParam(name = "id") int id) {
+    public Contact getContact(@RequestParam(name = "id") int id) throws Exception {
         return simpleService.getContact(id);
     }
 
     @RequestMapping(value = "/add-record", method = RequestMethod.POST)
     public void addRecord(@RequestParam("contact") String jsonRepresentation, @RequestPart("files") MultipartFile[] files,
-                          @RequestPart(value = "photo", required = false) MultipartFile photo) {
+                          @RequestPart(value = "photo", required = false) MultipartFile photo) throws Exception {
         Contact contact = parseToContact(jsonRepresentation);
         if (photo == null) {
             simpleService.addRecord(contact, getBytesAndExtOfFiles(files), null);
@@ -47,13 +48,13 @@ public class CustomRestController {
     }
 
     @RequestMapping(value = "/delete-record", method = RequestMethod.POST)
-    public void deleteRecord(@RequestBody int[] deleteContactsId) {
+    public void deleteRecord(@RequestBody int[] deleteContactsId) throws Exception {
         simpleService.deleteRecord(deleteContactsId);
     }
 
     @RequestMapping(value = "/update-record", method = RequestMethod.POST)
     public void updateRecord(@RequestParam("contact") String jsonRepresentation, @RequestPart("files") MultipartFile[] files,
-                             @RequestPart(value = "photo", required = false) MultipartFile photo) {
+                             @RequestPart(value = "photo", required = false) MultipartFile photo) throws Exception {
         Contact contact = parseToContact(jsonRepresentation);
         //simpleService.updateRecord(contact, getBytesAndExtOfFiles(files));
         if (photo == null) {
@@ -64,7 +65,7 @@ public class CustomRestController {
     }
 
     @RequestMapping(value = "/search-contact", method = RequestMethod.GET)
-    public Result searchContacts(@RequestParam(name = "from")  int from, @RequestParam(name = "range") int range, @RequestParam(name = "like") String like) {
+    public Result searchContacts(@RequestParam(name = "from")  int from, @RequestParam(name = "range") int range, @RequestParam(name = "like") String like) throws Exception {
         return simpleService.getContacts(from, range, like);
     }
 
@@ -74,7 +75,7 @@ public class CustomRestController {
     }
 
     @RequestMapping(value = "/attachment", method = RequestMethod.GET)
-    public void met(@RequestParam(name = "person_id") int personId, @RequestParam(name = "attach_id") int attachId, HttpServletResponse response) {
+    public void met(@RequestParam(name = "person_id") int personId, @RequestParam(name = "attach_id") int attachId, HttpServletResponse response) throws Exception {
 
         try {
             File file = fileManageService.getFile(personId, attachId);
@@ -98,7 +99,7 @@ public class CustomRestController {
     }
 
     @RequestMapping(value = "/photo", method = RequestMethod.GET)
-    public ResponseEntity getPhoto(@RequestParam(name = "id") int id) {
+    public ResponseEntity getPhoto(@RequestParam(name = "id") int id) throws CustomException {
         File photo = fileManageService.getPhoto(id);
         String encodedFile = "";
         if (photo != null) {
@@ -109,7 +110,7 @@ public class CustomRestController {
     }
 
     @RequestMapping(value = "/advanced-search", method = RequestMethod.POST)
-    public Result advancedSearh(@RequestBody Contact contact) {
+    public Result advancedSearh(@RequestBody Contact contact) throws Exception {
         return simpleService.advancedSearch(contact);
     }
 

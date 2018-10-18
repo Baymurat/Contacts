@@ -3,11 +3,11 @@ package com.itechart.contacts.core.dao;
 import com.itechart.contacts.core.entities.Attachment;
 import com.itechart.contacts.core.entities.Contact;
 import com.itechart.contacts.core.entities.Phone;
-import com.itechart.contacts.core.utils.CustomErrorHandler;
+import com.itechart.contacts.core.utils.error.CustomLogger;
 import com.itechart.contacts.core.utils.CustomUtils;
+import com.itechart.contacts.core.utils.error.CustomException;
 
 import java.sql.*;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +26,7 @@ public class JDBCContactDao implements DAO<Contact, Integer> {
     }
 
     @Override
-    public Contact getEntityById(Integer id) {
+    public Contact getEntityById(Integer id) throws CustomException {
         Contact contact = new Contact();
         try {
             preparedStatement = connection.prepareStatement("SELECT * FROM persons WHERE id = ?");
@@ -59,7 +59,8 @@ public class JDBCContactDao implements DAO<Contact, Integer> {
                 contact.setAttachments(attachments);
             }
         } catch (SQLException e) {
-            CustomErrorHandler.logger.error("Exception in ContactDAO getEntityById() method", e);
+            CustomLogger.logger.error("Exception in ContactDAO getEntityById() method", e);
+            throw new CustomException("", e);
         } finally {
             CustomUtils.closeResultSet(resultSetContacts);
             CustomUtils.closePreparedStatement(preparedStatement);
@@ -68,7 +69,7 @@ public class JDBCContactDao implements DAO<Contact, Integer> {
     }
 
     @Override
-    public boolean update(Contact contact) {
+    public boolean update(Contact contact) throws CustomException {
         try {
             preparedStatement = connection.prepareStatement("UPDATE persons SET name = ?, surname = ?, " +
                     "middlename = ?, citizenship = ?, familystatus = ?, website = ?, email = ?, currentjob = ?, " +
@@ -95,31 +96,31 @@ public class JDBCContactDao implements DAO<Contact, Integer> {
 
             return true;
         } catch (SQLException e) {
-            CustomErrorHandler.logger.error("Exception in ContactDAO update() method", e);
+            CustomLogger.logger.error("Exception in ContactDAO update() method", e);
+            throw new CustomException("", e);
         } finally {
             CustomUtils.closePreparedStatement(preparedStatement);
         }
-
-        return false;
     }
 
     @Override
-    public boolean delete(Integer id) {
+    public boolean delete(Integer id) throws CustomException {
         try {
             preparedStatement = connection.prepareStatement("DELETE FROM persons WHERE id = ?");
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
             return true;
         } catch (SQLException e) {
-            CustomErrorHandler.logger.error("Exception in ContactDAO delete() method", e);
+            CustomLogger.logger.error("Exception in ContactDAO delete() method", e);
+            throw new CustomException("", e);
+
         } finally {
             CustomUtils.closePreparedStatement(preparedStatement);
         }
-        return false;
     }
 
     @Override
-    public int insert(Contact contact) {
+    public int insert(Contact contact) throws CustomException {
         try {
             boolean existId = true;
 
@@ -156,12 +157,12 @@ public class JDBCContactDao implements DAO<Contact, Integer> {
             }
             return 0;
         } catch (SQLException e) {
-            CustomErrorHandler.logger.error("Exception in ContactDAO insert() method", e);
+            CustomLogger.logger.error("Exception in ContactDAO insert() method", e);
+            throw new CustomException("", e);
         } finally {
             CustomUtils.closeResultSet(resultSetContacts);
             CustomUtils.closePreparedStatement(preparedStatement);
         }
-        return -1;
     }
 
     @Override
@@ -169,7 +170,7 @@ public class JDBCContactDao implements DAO<Contact, Integer> {
         return null;
     }
 
-    public List<Contact> getContacts(int from, int range, String searchDescription) {
+    public List<Contact> getContacts(int from, int range, String searchDescription) throws CustomException {
         List<Contact> result = new ArrayList<>();
         try {
             if (searchDescription == null) {
@@ -229,7 +230,8 @@ public class JDBCContactDao implements DAO<Contact, Integer> {
                 result.add(contact);
             }
         } catch (SQLException e) {
-            CustomErrorHandler.logger.error("Exception in ContactDAO getRecords() method", e);
+            CustomLogger.logger.error("Exception in ContactDAO getRecords() method", e);
+            throw new CustomException("", e);
         } finally {
             CustomUtils.closeResultSet(resultSetContacts);
             CustomUtils.closePreparedStatement(preparedStatement);
@@ -237,7 +239,7 @@ public class JDBCContactDao implements DAO<Contact, Integer> {
         return result;
     }
 
-    public int getAllElementsCount() {
+    public int getAllElementsCount() throws CustomException {
         int allElementsCount = 0;
         try {
             preparedStatement = connection.prepareStatement("SELECT COUNT(id) AS counts FROM persons");
@@ -246,7 +248,8 @@ public class JDBCContactDao implements DAO<Contact, Integer> {
                 allElementsCount = resultSetContacts.getInt("counts");
             }
         } catch (SQLException e) {
-            CustomErrorHandler.logger.error("Exception in ContactDAO getAllElementsCount() method", e);
+            CustomLogger.logger.error("Exception in ContactDAO getAllElementsCount() method", e);
+            throw new CustomException("", e);
         } finally {
             CustomUtils.closeResultSet(resultSetContacts);
             CustomUtils.closePreparedStatement(preparedStatement);
@@ -255,7 +258,7 @@ public class JDBCContactDao implements DAO<Contact, Integer> {
         return allElementsCount;
     }
 
-    public List<Contact> getContactsByDateBirth(Date dateBirth) {
+    public List<Contact> getContactsByDateBirth(Date dateBirth) throws CustomException {
         List<Contact> contactList = new ArrayList<>();
 
         try {
@@ -273,7 +276,8 @@ public class JDBCContactDao implements DAO<Contact, Integer> {
                 contactList.add(contact);
             }
         } catch (SQLException e) {
-            CustomErrorHandler.logger.error("Exception in ContactDAO getAllElementsCount() method", e);
+            CustomLogger.logger.error("Exception in ContactDAO getAllElementsCount() method", e);
+            throw new CustomException("", e);
         }
 
         return contactList;
@@ -300,7 +304,7 @@ public class JDBCContactDao implements DAO<Contact, Integer> {
         }
     }
 
-    public List<Contact> getByAdvancedSearch(Contact contact) {
+    public List<Contact> getByAdvancedSearch(Contact contact) throws CustomException {
         List<Contact> result = new ArrayList<>();
         List<String> parameters = new ArrayList<String>();
         boolean isDateEmpty = true;
@@ -406,6 +410,7 @@ public class JDBCContactDao implements DAO<Contact, Integer> {
 
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new CustomException("", e);
         }
         return null;
     }

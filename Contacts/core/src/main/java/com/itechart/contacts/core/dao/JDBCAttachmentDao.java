@@ -1,9 +1,9 @@
 package com.itechart.contacts.core.dao;
 
 import com.itechart.contacts.core.entities.Attachment;
-import com.itechart.contacts.core.utils.CustomErrorHandler;
+import com.itechart.contacts.core.utils.error.CustomLogger;
 import com.itechart.contacts.core.utils.CustomUtils;
-import org.apache.log4j.Logger;
+import com.itechart.contacts.core.utils.error.CustomException;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ public class JDBCAttachmentDao implements DAO<Attachment, Integer> {
     }
 
     @Override
-    public Attachment getEntityById(Integer id) {
+    public Attachment getEntityById(Integer id) throws CustomException {
         Attachment attachment = new Attachment();
         try {
             preparedStatement = connection.prepareStatement("SELECT * FROM attachments WHERE id = ?");
@@ -38,14 +38,15 @@ public class JDBCAttachmentDao implements DAO<Attachment, Integer> {
                 attachment.setPersons_id(resultSetAttachments.getInt("persons_id"));
             }
         } catch (SQLException e) {
-            CustomErrorHandler.logger.error("Exception in AttachmentDAO getEntityById() method", e);
+            CustomLogger.logger.error("Exception in AttachmentDAO getEntityById() method", e);
+            throw new CustomException("", e);
         }
 
         return attachment;
     }
 
     @Override
-    public boolean update(Attachment attachment) {
+    public boolean update(Attachment attachment) throws CustomException {
         try {
             preparedStatement = connection.prepareStatement("UPDATE attachments SET filename = ?, comments = ?  WHERE id = ?;");
 
@@ -56,30 +57,30 @@ public class JDBCAttachmentDao implements DAO<Attachment, Integer> {
 
             return result == 1;
         } catch (SQLException e) {
-            CustomErrorHandler.logger.error("Exception in AttachmentDAO update() method", e);
+            CustomLogger.logger.error("Exception in AttachmentDAO update() method", e);
+            throw new CustomException("", e);
         } finally {
             CustomUtils.closePreparedStatement(preparedStatement);
         }
-        return false;
     }
 
     @Override
-    public boolean delete(Integer id) {
+    public boolean delete(Integer id) throws CustomException {
         try {
             preparedStatement = connection.prepareStatement("DELETE FROM attachments WHERE id = ?");
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
             return true;
         } catch (SQLException e) {
-            CustomErrorHandler.logger.error("Exception in AttachmentDAO delete() method", e);
+            CustomLogger.logger.error("Exception in AttachmentDAO delete() method", e);
+            throw new CustomException("", e);
         } finally {
             CustomUtils.closePreparedStatement(preparedStatement);
         }
-        return false;
     }
 
     @Override
-    public int insert(Attachment attachment) {
+    public int insert(Attachment attachment) throws CustomException {
         try {
             preparedStatement = connection.prepareStatement("INSERT INTO attachments VALUES (null, ?, ?, ?, ?);");
             preparedStatement.setInt(1, attachment.getPersons_id());
@@ -95,12 +96,12 @@ public class JDBCAttachmentDao implements DAO<Attachment, Integer> {
             }
             return 0;
         } catch (SQLException e) {
-            CustomErrorHandler.logger.error("Exception in AttachmentDAO insert() method", e);
+            CustomLogger.logger.error("Exception in AttachmentDAO insert() method", e);
+            throw new CustomException("", e);
         } finally {
             CustomUtils.closeResultSet(resultSetAttachments);
             CustomUtils.closePreparedStatement(preparedStatement);
         }
-        return -1;
     }
 
     @Override
@@ -108,7 +109,7 @@ public class JDBCAttachmentDao implements DAO<Attachment, Integer> {
         return null;
     }
 
-    public List<Attachment> getContactAttachment(int persons_id) {
+    public List<Attachment> getContactAttachment(int persons_id) throws CustomException {
         List<Attachment> result = new ArrayList<>();
         try {
             preparedStatement = connection.prepareStatement("SELECT * FROM attachments WHERE persons_id = ? ");
@@ -127,7 +128,8 @@ public class JDBCAttachmentDao implements DAO<Attachment, Integer> {
                 result.add(attachment);
             }
         } catch (SQLException e) {
-            CustomErrorHandler.logger.error("Exception in AttachmentDAO getRecords() method", e);
+            CustomLogger.logger.error("Exception in AttachmentDAO getRecords() method", e);
+            throw new CustomException("edsgfds", e);
         }
 
         return result;

@@ -14,7 +14,7 @@ import java.util.List;
 public class ScheduledTask {
 
     @Scheduled(fixedRate = 10000)
-    public void task() {
+    public void task() throws Exception {
         SimpleService simpleService = new SimpleService();
         Date date = new Date(System.currentTimeMillis());
 

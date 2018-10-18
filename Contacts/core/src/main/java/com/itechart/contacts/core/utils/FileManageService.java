@@ -1,5 +1,7 @@
 package com.itechart.contacts.core.utils;
 
+import com.itechart.contacts.core.utils.error.CustomLogger;
+
 import java.io.*;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -97,7 +99,7 @@ public class FileManageService {
             outputStream.flush();
             outputStream.close();
         } catch (IOException e) {
-            CustomErrorHandler.logger.error("Error during write into the file.", e);
+            CustomLogger.logger.error("Error during write into the file.", e);
         }
     }
 }

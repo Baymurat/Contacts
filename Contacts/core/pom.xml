@@ -46,6 +46,14 @@
             <version>2.9.7</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.antlr/stringtemplate -->
+        <dependency>
+            <groupId>org.antlr</groupId>
+            <artifactId>stringtemplate</artifactId>
+            <version>3.2</version>
+        </dependency>
+
+
     </dependencies>
 
     <build>

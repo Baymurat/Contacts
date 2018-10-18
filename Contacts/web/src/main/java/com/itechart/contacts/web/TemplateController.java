@@ -2,12 +2,19 @@ package com.itechart.contacts.web;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * Created by Admin on 11.09.201
  */
 @Controller
 public class TemplateController {
+
+    @ResponseBody
+    @GetMapping("/")
+    public String main() {
+        return "index";
+    }
 
     @GetMapping("/index")
     public String index() {

@@ -9,11 +9,12 @@ import com.itechart.contacts.core.entities.Phone;
 import com.itechart.contacts.core.utils.*;
 import com.itechart.contacts.core.utils.email.CustomMessageHolder;
 import com.itechart.contacts.core.utils.email.SendEmail;
+import com.itechart.contacts.core.utils.error.CustomException;
+import com.itechart.contacts.core.utils.error.CustomLogger;
 
 import javax.sql.DataSource;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
@@ -34,7 +35,7 @@ public class SimpleService {
     public SimpleService() {
     }
 
-    public void updateRecord(Contact contact, List<Object> bytesAndExtensOfFiles, List<Object> photo) {
+    public void updateRecord(Contact contact, List<Object> bytesAndExtensOfFiles, List<Object> photo) throws Exception {
         JDBCContactDao contactDao;
         JDBCPhonesDao phonesDao;
         JDBCAttachmentDao attachmentsDao;
@@ -105,19 +106,22 @@ public class SimpleService {
             }
 
             connection.commit();
-        } catch (Exception e) {
-            CustomErrorHandler.logger.error("Error in Service class, updateRecord() method", e);
+        } catch (SQLException e) {
             try {
                 connection.rollback();
             } catch (SQLException e1) {
-                CustomErrorHandler.logger.error("Error in rollback connection. Service class, updateRecord() method", e);
+                CustomLogger.logger.error("Error in rollback connection. Service class, updateRecord() method", e);
+                throw new CustomException("", e);
             } finally {
                 CustomUtils.closeConnection(connection);
             }
+
+            CustomLogger.logger.error("Error in Service class, updateRecord() method", e);
+            throw new CustomException("", e);
         }
     }
 
-    public void deleteRecord(int[] deleteContactsId) {
+    public void deleteRecord(int[] deleteContactsId) throws Exception {
 
         JDBCContactDao contactDao;
 
@@ -137,19 +141,22 @@ public class SimpleService {
             connection.commit();
 
             fileManageService.deleteUsers(deleteContactsId);
-        } catch (Exception e) {
-            CustomErrorHandler.logger.error("Error in Service class, deleteRecord() method", e);
+        } catch (SQLException e) {
             try {
                 connection.rollback(savepoint);
             } catch (SQLException e1) {
-                CustomErrorHandler.logger.error("Error rollback connection, in Service class, deleteRecord() method", e);
+                CustomLogger.logger.error("Error rollback connection, in Service class, deleteRecord() method", e);
+                throw new CustomException("", e);
             } finally {
                 CustomUtils.closeConnection(connection);
             }
+
+            CustomLogger.logger.error("Error in Service class, deleteRecord() method", e);
+            throw new CustomException("", e);
         }
     }
 
-    public void addRecord(Contact contact, List<Object> bytesAndExtensOfFiles, List<Object> photo) {
+    public void addRecord(Contact contact, List<Object> bytesAndExtensOfFiles, List<Object> photo) throws Exception {
         JDBCContactDao contactDao;
         JDBCPhonesDao phonesDao;
         JDBCAttachmentDao attachmentsDao;
@@ -195,19 +202,22 @@ public class SimpleService {
             }
 
             connection.commit();
-        } catch (Exception e) {
-            CustomErrorHandler.logger.error("Error in Service class, addRecord() method", e);
+        } catch (SQLException e) {
             try {
                 connection.rollback();
             } catch (SQLException e1) {
-                CustomErrorHandler.logger.error("Error rollback connection, in Service class, deleteRecord() method", e);
+                CustomLogger.logger.error("Error rollback connection, in Service class, deleteRecord() method", e);
+                throw new CustomException("", e);
+            } finally {
+                CustomUtils.closeConnection(connection);
             }
-        } finally {
-            CustomUtils.closeConnection(connection);
+
+            CustomLogger.logger.error("Error in Service class, addRecord() method", e);
+            throw new CustomException("", e);
         }
     }
 
-    public Result getContacts(int from, int range, String searchDescription) {
+    public Result getContacts(int from, int range, String searchDescription) throws Exception {
         Result result = new Result();
 
         JDBCContactDao contactDao;
@@ -240,8 +250,9 @@ public class SimpleService {
 
             result.setContactList(contactList);
             result.setAllElementsCount(allElementsCount);
-        } catch (Exception e) {
-            CustomErrorHandler.logger.error("Error in Service class, getContacts() method", e);
+        } catch (SQLException e) {
+            CustomLogger.logger.error("Error in Service class, getContacts() method", e);
+            throw new CustomException("", e);
         } finally {
             CustomUtils.closeConnection(connection);
         }
@@ -249,7 +260,7 @@ public class SimpleService {
         return result;
     }
 
-    public Contact getContact(int id) {
+    public Contact getContact(int id) throws Exception {
         Contact result = null;
 
         JDBCContactDao contactDao;
@@ -272,17 +283,17 @@ public class SimpleService {
             result = contactDao.getEntityById(id);
             result.setAttachments(attachmentList);
             result.setPhones(phoneList);
-        } catch (Exception e) {
-            CustomErrorHandler.logger.error("Error in Service class, getContact() method", e);
-        } finally
-        {
+        } catch (SQLException e) {
+            CustomLogger.logger.error("Error in Service class, getContact() method", e);
+            throw new CustomException("", e);
+        } finally {
             CustomUtils.closeConnection(connection);
         }
 
         return result;
     }
 
-    public Attachment getAttachment(int id) {
+    public Attachment getAttachment(int id) throws Exception {
         JDBCAttachmentDao attachmentDao;
         ConnectionPool connectionPool = new ConnectionPool();
 
@@ -292,11 +303,12 @@ public class SimpleService {
 
             attachmentDao = new JDBCAttachmentDao(connection);
             return attachmentDao.getEntityById(id);
-        } catch (Exception e) {
-            CustomErrorHandler.logger.error("Error in Service class, getAttachment() method", e);
+        } catch (SQLException e) {
+            CustomLogger.logger.error("Error in Service class, getAttachment() method", e);
+            throw new CustomException("", e);
+        } finally {
+            CustomUtils.closeConnection(connection);
         }
-
-        return null;
     }
 
     public void sendEmail(CustomMessageHolder messageHolder) {
@@ -316,7 +328,7 @@ public class SimpleService {
         }
     }
 
-    public List<Contact> getContactsByDateBirth(Date dateBirth) {
+    public List<Contact> getContactsByDateBirth(Date dateBirth) throws Exception {
         JDBCContactDao contactDao;
         ConnectionPool connectionPool = new ConnectionPool();
         List<Contact> contacts = new ArrayList<>();
@@ -327,14 +339,17 @@ public class SimpleService {
             contactDao = new JDBCContactDao(connection);
 
             contacts = contactDao.getContactsByDateBirth(dateBirth);
-        } catch (Exception e) {
-            CustomErrorHandler.logger.error("Error in Service class, getContactsByDateBirth() method", e);
+        } catch (SQLException e) {
+            CustomLogger.logger.error("Error in Service class, getContactsByDateBirth() method", e);
+            throw new CustomException("", e);
+        } finally {
+            CustomUtils.closeConnection(connection);
         }
 
         return contacts;
     }
 
-    public String encodeFileToBase64Binary(File file){
+    public String encodeFileToBase64Binary(File file) throws CustomException {
         String encodedfile = null;
         try {
             FileInputStream fileInputStreamReader = new FileInputStream(file);
@@ -342,13 +357,14 @@ public class SimpleService {
             fileInputStreamReader.read(bytes);
             encodedfile = new String(Base64.getEncoder().encode(bytes), StandardCharsets.UTF_8);
         } catch (IOException e) {
-            CustomErrorHandler.logger.error("Error in Service class, encodeFileToBase64Binary() method", e);
+            CustomLogger.logger.error("Error in Service class, encodeFileToBase64Binary() method", e);
+            throw new CustomException("", e);
         }
 
         return encodedfile;
     }
 
-    public Result advancedSearch(Contact contact) {
+    public Result advancedSearch(Contact contact) throws Exception {
         Result result = new Result();
         List<Contact> contactList = null;
 
@@ -382,10 +398,10 @@ public class SimpleService {
 
             result.setContactList(contactList);
             result.setAllElementsCount(allElementsCount);
-        } catch (Exception e) {
-            CustomErrorHandler.logger.error("Error in Service class, getContact() method", e);
-        } finally
-        {
+        } catch (SQLException e) {
+            CustomLogger.logger.error("Error in Service class, getContact() method", e);
+            throw new CustomException("", e);
+        } finally {
             CustomUtils.closeConnection(connection);
         }
 

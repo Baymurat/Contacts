@@ -1,5 +1,7 @@
 package com.itechart.contacts.core.utils;
 
+import com.itechart.contacts.core.utils.error.CustomLogger;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,7 +16,7 @@ public class CustomUtils {
             try {
                 resultSet.close();
             } catch (SQLException e) {
-                CustomErrorHandler.logger.error("Unable close resultSet", e);
+                CustomLogger.logger.error("Unable close resultSet", e);
             }
         }
     }
@@ -24,7 +26,7 @@ public class CustomUtils {
             try {
                 preparedStatement.close();
             } catch (SQLException e) {
-                CustomErrorHandler.logger.error("Unable close preparedStatement", e);
+                CustomLogger.logger.error("Unable close preparedStatement", e);
             }
         }
     }
@@ -34,7 +36,7 @@ public class CustomUtils {
             try {
                 connection.close();
             } catch (SQLException e) {
-                CustomErrorHandler.logger.error("Unable close connection", e);
+                CustomLogger.logger.error("Unable close connection", e);
             }
         }
     }

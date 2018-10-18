@@ -1,9 +1,9 @@
 package com.itechart.contacts.core.dao;
 
 import com.itechart.contacts.core.entities.Phone;
-import com.itechart.contacts.core.utils.CustomErrorHandler;
+import com.itechart.contacts.core.utils.error.CustomLogger;
 import com.itechart.contacts.core.utils.CustomUtils;
-import org.apache.log4j.Logger;
+import com.itechart.contacts.core.utils.error.CustomException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -32,7 +32,7 @@ public class JDBCPhonesDao implements DAO<Phone, Integer> {
     }
 
     @Override
-    public boolean update(Phone phone) {
+    public boolean update(Phone phone) throws CustomException {
         try {
             preparedStatement = connection.prepareStatement("UPDATE phones SET countrycode = ?, operatorcode = ?, " +
                     "phonebumber = ?, type = ?, comments = ? WHERE id = ?;");
@@ -46,11 +46,11 @@ public class JDBCPhonesDao implements DAO<Phone, Integer> {
 
             return result == 1;
         } catch (SQLException e) {
-            CustomErrorHandler.logger.error("Exception in ContactDAO getEntityById() method", e);
+            CustomLogger.logger.error("Exception in ContactDAO getEntityById() method", e);
+            throw new CustomException("", e);
         } finally {
             CustomUtils.closePreparedStatement(preparedStatement);
         }
-        return false;
     }
 
     @Override
@@ -61,7 +61,7 @@ public class JDBCPhonesDao implements DAO<Phone, Integer> {
             preparedStatement.executeUpdate();
             return true;
         } catch (SQLException e) {
-            CustomErrorHandler.logger.error("Exception in ContactDAO delete() method", e);
+            CustomLogger.logger.error("Exception in ContactDAO delete() method", e);
         } finally {
             CustomUtils.closePreparedStatement(preparedStatement);
         }
@@ -69,7 +69,7 @@ public class JDBCPhonesDao implements DAO<Phone, Integer> {
     }
 
     @Override
-    public int insert(Phone phone) {
+    public int insert(Phone phone) throws CustomException {
         try {
             preparedStatement = connection.prepareStatement("INSERT INTO phones VALUES (null, ?, ?, ?, ?, ?, ?);");
             preparedStatement.setInt(1, phone.getPersons_id());
@@ -88,12 +88,12 @@ public class JDBCPhonesDao implements DAO<Phone, Integer> {
 
             return 0;
         } catch (SQLException e) {
-            CustomErrorHandler.logger.error("Exception in ContactDAO insert() method", e);
+            CustomLogger.logger.error("Exception in ContactDAO insert() method", e);
+            throw new CustomException("", e);
         } finally {
             CustomUtils.closeResultSet(resultSetPhones);
             CustomUtils.closePreparedStatement(preparedStatement);
         }
-        return -1;
     }
 
     @Override
@@ -101,7 +101,7 @@ public class JDBCPhonesDao implements DAO<Phone, Integer> {
         return null;
     }
 
-    public List<Phone> getContactPhones(int persons_id) {
+    public List<Phone> getContactPhones(int persons_id) throws CustomException {
         List<Phone> resultList = new ArrayList<>();
         try {
             preparedStatement = connection.prepareStatement("SELECT * FROM phones WHERE persons_id = ?");
@@ -120,7 +120,8 @@ public class JDBCPhonesDao implements DAO<Phone, Integer> {
                 resultList.add(phone);
             }
         } catch (SQLException e) {
-            CustomErrorHandler.logger.error("Exception in ContactDAO getRecords() method", e);
+            CustomLogger.logger.error("Exception in ContactDAO getRecords() method", e);
+            throw new CustomException("", e);
         }
 
         return resultList;

@@ -13,7 +13,7 @@ function changeFunction() {
 selectElement.addEventListener('change', changeFunction);
 
 var patterns = {
-    1 : "Happy New year",
-    2 : "Happy birthday",
-    3 : "One more pattern"
+    1 : "Happy New year, $name$",
+    2 : "Happy birthday, $name$",
+    3 : "One more pattern, $name$"
 }
