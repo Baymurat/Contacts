@@ -8,13 +8,13 @@ var checkBoxesButton = document.querySelector('#check-boxes-button');
 var myTable = document.getElementById('myTable');
 
 function addFunction() {
-    window.location.replace('/add');
+    window.location.replace('add');
 }
 
 function editFunction() {
     var selectedRow = document.querySelector('.selected');
     if (selectedRow.id) {
-        var url = '/edit?id=' + selectedRow.id;
+        var url = 'edit?id=' + selectedRow.id;
         window.location.replace(url);
     }
 }
@@ -30,7 +30,7 @@ function deleteFunction() {
 
 
         var xmlhhtp = new XMLHttpRequest();
-        xmlhhtp.open('POST', '/delete-record', true);
+        xmlhhtp.open('POST', 'delete-record', true);
         xmlhhtp.setRequestHeader('Content-Type', 'application/json');
         xmlhhtp.send(JSON.stringify(deleteContactsId));
         xmlhhtp.onreadystatechange = function (ev) {
@@ -42,7 +42,7 @@ function deleteFunction() {
 }
 
 function searchFunction() {
-    window.location.replace('/search');
+    window.location.replace('search');
 }
 
 function sendFunction() {
@@ -53,13 +53,13 @@ function sendFunction() {
         params += 'to' + '=' + selectedRows[i].cells[2].innerHTML + '&';
     }
 
-    window.location.href = '/email' + params;
+    window.location.href = 'email' + params;
 }
 
 function aboutFunction() {
     var selectedRow = document.querySelector('.selected');
     if (selectedRow.id) {
-        var url = '/about?id=' + selectedRow.id;
+        var url = 'about?id=' + selectedRow.id;
         window.location.replace(url);
     }
 }

@@ -2,7 +2,7 @@ var param = document.getElementById('user_id').value;
 
 var xmlhttp = new XMLHttpRequest();
 
-xmlhttp.open("GET", "/photo?id=" + param, true);
+xmlhttp.open("GET", "photo?id=" + param, true);
 xmlhttp.send();
 
 xmlhttp.onreadystatechange = function() {

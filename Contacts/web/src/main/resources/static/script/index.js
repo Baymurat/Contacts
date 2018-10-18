@@ -1,5 +1,5 @@
 function makeRequest(from, range, currentPage) {
-    var requestString = "/get-contacts?from=" + from + "&range=" + range;
+    var requestString = "get-contacts?from=" + from + "&range=" + range;
 
     var xmlhttp = new XMLHttpRequest();
 

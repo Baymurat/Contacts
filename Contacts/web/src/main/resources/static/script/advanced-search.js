@@ -37,7 +37,7 @@ function search() {
         }
     };
 
-    xmlhttp.open("POST", '/advanced-search', true);
+    xmlhttp.open("POST", 'search-contact-advanced', true);
     xmlhttp.setRequestHeader('Content-Type', 'application/json');
     xmlhttp.send(objectSend);
 }
@@ -47,5 +47,5 @@ searchButton.addEventListener('click', search);
 
 var backToIndex = document.getElementById('back-to-index');
 backToIndex.addEventListener('click', function (ev) {
-    window.location.href = '/index';
+    window.location.href = 'index';
 });

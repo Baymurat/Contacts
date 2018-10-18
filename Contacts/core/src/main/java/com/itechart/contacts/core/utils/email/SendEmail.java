@@ -43,12 +43,13 @@ public class SendEmail {
         }
     }
 
-    public boolean sendMessage(final String text) {
+    public boolean sendMessage(String text) {
         boolean result = false;
         try {
             Multipart mmp = new MimeMultipart();
             MimeBodyPart bodyPart = new MimeBodyPart();
-            bodyPart.setContent(text, "text/plain; charset=utf-8");
+            //bodyPart.setContent(text, "text/plain; charset=utf-8");
+            bodyPart.setContent(text, "text/html; charset=utf-8");
             mmp.addBodyPart(bodyPart);
 
             message.setContent(mmp);

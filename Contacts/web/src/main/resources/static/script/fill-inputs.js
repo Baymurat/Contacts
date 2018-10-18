@@ -73,7 +73,7 @@ function fillAttachmentsTable(list, person_id) {
             var loadDate = document.createElement('td');
             var comments = document.createElement('td');
             var fileLink = document.createElement('a');
-            var fileHref = '/attachment/?person_id=' + person_id + '&attach_id=' + currentElement.id;
+            var fileHref = 'attachment/?person_id=' + person_id + '&attach_id=' + currentElement.id;
             /*
             var idHolder = document.createElement('td');
             idHolder.style.display = 'none';
@@ -99,14 +99,14 @@ function fillAttachmentsTable(list, person_id) {
 
 var cancelButton = document.getElementById('back-to-index');
 cancelButton.addEventListener('click', function () {
-    window.location.href = '/index';
+    window.location.href = 'index';
 });
 
 var url = new URL(window.location.href);
 var id = url.searchParams.get("id");
 
 var xmlhttp = new XMLHttpRequest();
-xmlhttp.open("GET", '/get-contact?id=' + id, true);
+xmlhttp.open("GET", 'get-contact?id=' + id, true);
 xmlhttp.send();
 
 xmlhttp.onreadystatechange = function (ev) {
@@ -119,14 +119,16 @@ xmlhttp.onreadystatechange = function (ev) {
 function getPhoto(param) {
     var xmlhttp2 = new XMLHttpRequest();
 
-    xmlhttp2.open("GET", "/photo?id=" + param, true);
+    xmlhttp2.open("GET", "photo?id=" + param, true);
     xmlhttp2.send();
 
     xmlhttp2.onreadystatechange = function(ev) {
         if (xmlhttp2.readyState === 4 && xmlhttp2.status === 200) {
-            var img = document.getElementById("image");
-            var srcValue = 'data:image/png;base64,' + xmlhttp2.responseText;
-            img.setAttribute('src', srcValue);
+            if (xmlhttp2.responseText) {
+                var img = document.getElementById("image");
+                var srcValue = 'data:image/png;base64,' + xmlhttp2.responseText;
+                img.setAttribute('src', srcValue);
+            }
         }
     }
 }

@@ -14,13 +14,13 @@ function sendMail() {
     message.messageTheme = messageTheme;
 
     var xmlhttp = new XMLHttpRequest();
-    xmlhttp.open('POST', '/send-email', true);
+    xmlhttp.open('POST', 'send-email', true);
     xmlhttp.setRequestHeader('Content-Type', 'application/json')
     xmlhttp.send(JSON.stringify(message));
 
     xmlhttp.onreadystatechange = function() {
         if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-            window.location.replace('/index');
+            window.location.href = 'index';
         }
     }
 }

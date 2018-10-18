@@ -11,6 +11,7 @@ import com.itechart.contacts.core.utils.email.CustomMessageHolder;
 import com.itechart.contacts.core.utils.email.SendEmail;
 import com.itechart.contacts.core.utils.error.CustomException;
 import com.itechart.contacts.core.utils.error.CustomLogger;
+import org.antlr.stringtemplate.StringTemplate;
 
 import javax.sql.DataSource;
 import java.io.File;
@@ -314,6 +315,8 @@ public class SimpleService {
     public void sendEmail(CustomMessageHolder messageHolder) {
         ResourceBundle resourceBundle = ResourceBundle.getBundle("email");
 
+        //cont = getCOnEmail();
+
         SendEmail.SMTP_SERVER = resourceBundle.getString("server");
         SendEmail.SMTP_Port = resourceBundle.getString("port");
         SendEmail.EMAIL_FROM = resourceBundle.getString("from");
@@ -322,8 +325,12 @@ public class SimpleService {
 
         for (String emailTo : messageHolder.getReceivers()) {
             if (!emailTo.isEmpty()) {
-                SendEmail se = new SendEmail(emailTo, messageHolder.getMessageTheme());
-                se.sendMessage(messageHolder.getMessageText());
+                StringTemplate template = new StringTemplate();
+                Contact contact = new Contact();
+                template.setAttribute("$name$", contact);
+                //String string = temp.met("$name$", inst);
+                //SendEmail se = new SendEmail(emailTo, templ);
+                //se.sendMessage(messageHolder.getMessageText());
             }
         }
     }

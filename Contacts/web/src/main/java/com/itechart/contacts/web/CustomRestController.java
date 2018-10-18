@@ -109,8 +109,8 @@ public class CustomRestController {
         return ResponseEntity.status(HttpStatus.OK).header("Content-Type", "application/json").body(encodedFile);
     }
 
-    @RequestMapping(value = "/advanced-search", method = RequestMethod.POST)
-    public Result advancedSearh(@RequestBody Contact contact) throws Exception {
+    @RequestMapping(value = "/search-contact-advanced", method = RequestMethod.POST)
+    public Result advancedSearch(@RequestBody Contact contact) throws Exception {
         return simpleService.advancedSearch(contact);
     }
 
