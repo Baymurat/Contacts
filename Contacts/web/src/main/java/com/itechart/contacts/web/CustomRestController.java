@@ -36,6 +36,16 @@ public class CustomRestController {
         return simpleService.getContact(id);
     }
 
+    @RequestMapping(value = "/get-receivers", method = RequestMethod.POST)
+    public List<Contact> getReceivers(@RequestBody int[] receivers) throws Exception {
+        List<Contact> contacts = new ArrayList<>();
+        for (int i : receivers) {
+            contacts.add(simpleService.getContact(i));
+        }
+
+        return contacts;
+    }
+
     @RequestMapping(value = "/add-record", method = RequestMethod.POST)
     public void addRecord(@RequestParam("contact") String jsonRepresentation, @RequestPart("files") MultipartFile[] files,
                           @RequestPart(value = "photo", required = false) MultipartFile photo) throws Exception {
@@ -65,12 +75,13 @@ public class CustomRestController {
     }
 
     @RequestMapping(value = "/search-contact", method = RequestMethod.GET)
-    public Result searchContacts(@RequestParam(name = "from")  int from, @RequestParam(name = "range") int range, @RequestParam(name = "like") String like) throws Exception {
+    public Result searchContacts(@RequestParam(name = "from")  int from, @RequestParam(name = "range") int range,
+                                 @RequestParam(name = "like") String like) throws Exception {
         return simpleService.getContacts(from, range, like);
     }
 
     @RequestMapping(value = "/send-email", method = RequestMethod.POST)
-    public void sendEmail(@RequestBody CustomMessageHolder message) {
+    public void sendEmail(@RequestBody CustomMessageHolder message) throws Exception {
         simpleService.sendEmail(message);
     }
 

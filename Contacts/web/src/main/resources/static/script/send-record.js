@@ -2,9 +2,9 @@ window.sendRecord = function (url) {
 
     var contact = {};
 
-    contact.name = document.getElementById('name').value;
-    contact.surName = document.getElementById('surname').value;
-    contact.middleName = document.getElementById('middlename').value;
+    contact.name = document.getElementById('name').value.trim();
+    contact.surName = document.getElementById('surname').value.trim();
+    contact.middleName = document.getElementById('middlename').value.trim();
 
     var elementG = document.getElementById('gender');
     contact.gender = elementG.options[elementG.selectedIndex].text;
@@ -31,7 +31,25 @@ window.sendRecord = function (url) {
     }
 
 
-    if (contact.name && contact.surName && contact.middleName) {
+    var flag = true;
+    var message = "";
+
+    if (!contact.name) {
+        message = "Populate name field.";
+        flag = false;
+    }
+
+    if (!contact.surName) {
+        message = "Populate surname field.";
+        flag = false;
+    }
+
+    if (!contact.middleName) {
+        message = "Populate middle name field.";
+        flag = false;
+    }
+
+    if (flag) {
         var formData = new FormData();
         var objectSend = JSON.stringify(contact);
 
@@ -51,7 +69,7 @@ window.sendRecord = function (url) {
             }
         }
     } else {
-        alert("Populate required fields");
+        alert(message);
     }
 };
 

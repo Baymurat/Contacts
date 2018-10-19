@@ -26,9 +26,9 @@ function search() {
 
     xmlhttp.onreadystatechange = function (ev) {
         if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-            document.querySelector('#myTable>tbody').remove();
+            document.querySelector('.table>tbody').remove();
             var tbody = document.createElement('tbody');
-            document.getElementById('myTable').appendChild(tbody);
+            document.querySelector('.table').appendChild(tbody);
 
             var result = JSON.parse(xmlhttp.responseText);
             window.fillTable(result);

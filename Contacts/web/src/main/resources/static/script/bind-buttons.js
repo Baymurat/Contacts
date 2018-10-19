@@ -5,7 +5,7 @@ var searchButton = document.getElementById('go-over-search-button');
 var sendButton = document.getElementById('send-button');
 var aboutButton = document.getElementById('about-button');
 var checkBoxesButton = document.querySelector('#check-boxes-button');
-var myTable = document.getElementById('myTable');
+var myTable = document.querySelector('.table');
 
 function addFunction() {
     window.location.replace('add');
@@ -28,7 +28,6 @@ function deleteFunction() {
             deleteContactsId.push(selectedRows[i].id);
         }
 
-
         var xmlhhtp = new XMLHttpRequest();
         xmlhhtp.open('POST', 'delete-record', true);
         xmlhhtp.setRequestHeader('Content-Type', 'application/json');
@@ -50,7 +49,7 @@ function sendFunction() {
     var params = '?';
 
     for (var i = 0; i < selectedRows.length; i++) {
-        params += 'to' + '=' + selectedRows[i].cells[2].innerHTML + '&';
+        params += 'to' + '=' + selectedRows[i].id + '&';
     }
 
     window.location.href = 'email' + params;
@@ -148,10 +147,5 @@ deleteButton.addEventListener('click', deleteFunction);
 sendButton.addEventListener('click', sendFunction);
 aboutButton.addEventListener('click', aboutFunction);
 checkBoxesButton.addEventListener('click', toggleCheckBoxes);
-
-/*var cancelButton = document.getElementById('back-to-index');
-cancelButton.addEventListener('click', function () {
-    window.location.replace('/index');
-});*/
 
 toggleCheckBoxes();

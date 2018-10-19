@@ -34,7 +34,7 @@ window.fillTable = function fillIndex(result, currentPage) {
             new_body.appendChild(tableRow);
         }
 
-        var old_body = document.querySelector('#myTable tbody');
+        var old_body = document.querySelector('.table tbody');
         old_body.parentNode.replaceChild(new_body, old_body);
 
         var range = 10;

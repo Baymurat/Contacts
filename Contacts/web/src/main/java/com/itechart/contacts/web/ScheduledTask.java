@@ -33,7 +33,7 @@ public class ScheduledTask {
             CustomMessageHolder messageHolder = new CustomMessageHolder();
             messageHolder.setMessageTheme("Birthday");
             messageHolder.setMessageText(receivers.toString());
-            messageHolder.setReceivers(admin);
+            messageHolder.setEmailOfReceivers(admin);
 
             simpleService.sendEmail(messageHolder);
         }

@@ -2,14 +2,16 @@ var sendEmailButton = document.getElementById('send-email-button');
 
 function sendMail() {
     console.log('send email');
-    var receivers = [];
-    receivers = document.getElementById('receivers').value.split(' ');
+
+    var url = new URL(window.location.href);
+    var params = url.searchParams.getAll("to");
+
     var messageTheme = document.getElementById('theme').value;
     var messageContent = document.getElementById('content').value;
 
     var message = {};
 
-    message.receivers = receivers;
+    message.receivers = params;
     message.messageText = messageContent;
     message.messageTheme = messageTheme;
 

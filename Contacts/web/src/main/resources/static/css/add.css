@@ -71,3 +71,7 @@ tbody>tr:hover {
     height: 300px;
     border: black solid 1px;
 }
+
+#person-image {
+    display: none;
+}

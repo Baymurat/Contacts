@@ -312,7 +312,7 @@ public class SimpleService {
         }
     }
 
-    public void sendEmail(CustomMessageHolder messageHolder) {
+    public void sendEmail(CustomMessageHolder messageHolder) throws Exception {
         ResourceBundle resourceBundle = ResourceBundle.getBundle("email");
 
         //cont = getCOnEmail();
@@ -323,16 +323,28 @@ public class SimpleService {
         SendEmail.SMTP_AUTH_USER = resourceBundle.getString("user");
         SendEmail.SMTP_AUTH_PWD = resourceBundle.getString("pass");
 
-        for (String emailTo : messageHolder.getReceivers()) {
-            if (!emailTo.isEmpty()) {
-                StringTemplate template = new StringTemplate();
-                Contact contact = new Contact();
-                template.setAttribute("$name$", contact);
-                //String string = temp.met("$name$", inst);
-                //SendEmail se = new SendEmail(emailTo, templ);
-                //se.sendMessage(messageHolder.getMessageText());
+        if (messageHolder.getReceivers() != null) {
+            for (Integer i : messageHolder.getReceivers()) {
+                Contact currentContact = getContact(i);
+                if (currentContact != null) {
+                    String emailTo = currentContact.getEmail();
+                    StringTemplate template = new StringTemplate(messageHolder.getMessageText());
+                    template.setAttribute("name", currentContact.getName());
+                    SendEmail se = new SendEmail(emailTo, messageHolder.getMessageTheme());
+                    se.sendMessage(template.toString());
+                }
             }
         }
+
+        if (messageHolder.getEmailOfReceivers() != null) {
+            for (String emailTo : messageHolder.getEmailOfReceivers()) {
+                if (!emailTo.isEmpty()) {
+                    SendEmail se = new SendEmail(emailTo, messageHolder.getMessageTheme());
+                    se.sendMessage(messageHolder.getMessageText());
+                }
+            }
+        }
+
     }
 
     public List<Contact> getContactsByDateBirth(Date dateBirth) throws Exception {

@@ -8,9 +8,9 @@ searchButton.addEventListener('click', function (ev) {
        xmlhttp.send();
        xmlhttp.onreadystatechange = function (ev1) {
            if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-               document.querySelector('#myTable>tbody').remove();
+               document.querySelector('.table>tbody').remove();
                var tbody = document.createElement('tbody');
-               document.getElementById('myTable').appendChild(tbody);
+               document.querySelector('.table').appendChild(tbody);
 
                var result = JSON.parse(xmlhttp.responseText);
                window.fillTable(result);
