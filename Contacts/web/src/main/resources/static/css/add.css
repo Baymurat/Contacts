@@ -36,15 +36,15 @@ button {
     padding: inherit;
 } */
 
-table, th, td {
+/*table, th, td {
     border: 1px solid black;
-}
+}*/
 
-tbody>tr:hover {
+/*tbody>tr:hover {
     background: dodgerblue;
     opacity: 0.3;
     cursor: pointer;
-}
+}*/
 
 .selected {
     background: aquamarine;

@@ -19,10 +19,10 @@
     <header></header>
     <main>
         <div>
-            <button id="search-button">Search</button>
-            <input id="search-field" type="text">
+            <button id="search-button" type="button" class="btn btn-primary">Search</button>
+            <input id="search-field" type="text" class="form-control" placeholder="" aria-label="" aria-describedby="basic-addon1" >
         </div>
-        <table class="table">
+        <table class="table table-hover">
             <thead>
                 <tr>
                     <th id="boxes"></th>
@@ -38,21 +38,21 @@
         </table>
 
         <div id="page-buttons">
-            <button id="previous">Previous</button>
-            <button id="next">Next</button>
+            <button id="previous" type="button" class="btn btn-primary">Previous</button>
+            <button id="next" type="button" class="btn btn-primary">Next</button>
         </div>
     </main>
     <footer>
-        <button id="edit-button">Edit</button>
-        <button id="delete-button">Delete</button>
-        <button id="send-button">Send</button>
-        <button id="about-button">About</button>
-        <button id="check-boxes-button"></button>
-        <button id="advanced-search">Advanced Search</button>
+        <button id="edit-button" type="button" class="btn btn-primary">Edit</button>
+        <button id="delete-button" type="button" class="btn btn-primary">Delete</button>
+        <button id="send-button" type="button" class="btn btn-primary">Send</button>
+        <button id="about-button" type="button" class="btn btn-primary">About</button>
+        <button id="check-boxes-button" type="button" class="btn btn-primary"></button>
+        <button id="advanced-search" type="button" class="btn btn-primary">Advanced Search</button>
     </footer>
 
     <div>
-        <button id="back-to-index">Back</button>
+        <button id="back-to-index" type="button" class="btn btn-primary">Back</button>
     </div>
 
     <script src="./script/search.js"></script>

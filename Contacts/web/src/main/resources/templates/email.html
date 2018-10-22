@@ -18,24 +18,24 @@
     <main>
         <form>
             <label for="">Receivers</label>
-            <input type="text" disabled="true" id="receivers">
+            <input type="text" class="form-control" placeholder="" aria-label="" aria-describedby="basic-addon1"  disabled="true" id="receivers">
 
             <label for="patterns">Patterns</label>
-            <select id="patterns">
+            <select class="custom-select" id="patterns">
                 <option value="">New Year congrats.</option>
                 <option value="">Birthday congrats</option>
                 <option value="">One more pattern</option>
             </select>
 
             <label for="theme">Theme</label>
-            <input type="text" id="theme">
+            <input type="text" class="form-control" placeholder="" aria-label="" aria-describedby="basic-addon1"  id="theme">
 
             <label for="content">Message Content</label>
             <textarea id="content" cols="50" rows="10"></textarea>
 
             <div id="buttons">
-                <button id="send-email-button">Send email</button>
-                <button id="back-to-index">Back</button>
+                <button id="send-email-button" type="button" class="btn btn-primary">Send email</button>
+                <button id="back-to-index" type="button" class="btn btn-primary">Back</button>
             </div>
         </form>
     </main>
