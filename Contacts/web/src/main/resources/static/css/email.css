@@ -1,11 +1,11 @@
 form {
     margin: auto;
-    width: 100px;
+    width: 845px;
     height: 300px;
 }
 
 label {
-    display: inline-block;
+    display: block;
     margin-top: 20px;
 }
 

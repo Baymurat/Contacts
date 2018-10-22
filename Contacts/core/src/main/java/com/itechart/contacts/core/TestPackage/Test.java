@@ -2,6 +2,8 @@ package com.itechart.contacts.core.TestPackage;
 
 import com.itechart.contacts.core.entities.Contact;
 import org.antlr.stringtemplate.StringTemplate;
+import org.antlr.stringtemplate.StringTemplateGroup;
+import org.antlr.stringtemplate.language.DefaultTemplateLexer;
 
 public class Test {
     public static void main(String[] args) {
@@ -12,11 +14,15 @@ public class Test {
 
         Contact contact = new Contact();
         contact.setName("SIMPLE CONTACT");
-        String text = "text of $contact.name$ somthng else";
+        contact.setSurName("SURNAME");
+        contact.setMiddleName("MIDDLENAME");
 
-        StringTemplate template = new StringTemplate(text);
-        template.setAttribute("name", contact);
+        StringTemplateGroup group = new StringTemplateGroup("myGroup", "C:\\Users\\Student\\IdeaProjects\\Shared\\" +
+                "Contacts\\core\\src\\main\\java\\com\\itechart\\contacts\\core\\templates", DefaultTemplateLexer.class);
+
+        StringTemplate template = group.getInstanceOf("demotemplate");
+        template.setAttribute("contact", contact);
+
         System.out.println(template.toString());
-        System.out.println(contact.getName());
     }
 }

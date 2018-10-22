@@ -1,4 +1,7 @@
 var selectElement = document.getElementById('patterns');
+selectElement.addEventListener('change', changeFunction);
+
+var patterns = {};
 
 function changeFunction() {
     var selectedIndex = selectElement.selectedIndex;
@@ -7,13 +10,34 @@ function changeFunction() {
     var textArea = document.getElementById('content');
 
     themeElement.value = selectElement.options[selectedIndex].text;
-    textArea.value = patterns[selectedIndex + 1];
+    textArea.value = patterns[themeElement.value];
 }
 
-selectElement.addEventListener('change', changeFunction);
-
-var patterns = {
-    1 : "Happy New year, $name$",
-    2 : "Happy birthday, $name$",
-    3 : "One more pattern, $name$"
+function addOption(text) {
+    var option = document.createElement("option");
+    option.text = text;
+    selectElement.add(option);
 }
+
+
+
+var xmlhttp = new XMLHttpRequest();
+
+xmlhttp.onreadystatechange = function (ev) {
+    if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+        var result = JSON.parse(xmlhttp.responseText);
+
+        console.log("ANSWERED");
+        console.log(result);
+
+        if (result) {
+            for (var i = 0; i < result.length; i++) {
+                patterns[result[i].theme] = result[i].content;
+                addOption(result[i].theme);
+            }
+        }
+    }
+};
+
+xmlhttp.open("GET", "/message-patterns", true);
+xmlhttp.send();

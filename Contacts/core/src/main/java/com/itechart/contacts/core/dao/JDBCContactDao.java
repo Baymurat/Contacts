@@ -47,7 +47,7 @@ public class JDBCContactDao implements DAO<Contact, Integer> {
                 contact.setCountry(resultSetContacts.getString("country"));
                 contact.setCity(resultSetContacts.getString("city"));
                 contact.setStreetHouseApart(resultSetContacts.getString("street_house_apart"));
-                contact.setIndex(resultSetContacts.getInt("p_index"));
+                contact.setIndex(resultSetContacts.getString("p_index"));
 
                 Date date = resultSetContacts.getDate("datebirth");
                 contact.setBirthDate(parseToString(date));
@@ -87,7 +87,7 @@ public class JDBCContactDao implements DAO<Contact, Integer> {
             preparedStatement.setString(11, contact.getCountry());
             preparedStatement.setString(12, contact.getCity());
             preparedStatement.setString(13, contact.getStreetHouseApart());
-            preparedStatement.setInt(14, contact.getIndex());
+            preparedStatement.setString(14, contact.getIndex());
             preparedStatement.setInt(15, contact.getId());
 
             Date date = parseToDate(contact.getBirthDate());
@@ -143,7 +143,7 @@ public class JDBCContactDao implements DAO<Contact, Integer> {
             preparedStatement.setString(12, contact.getCountry());
             preparedStatement.setString(13, contact.getCitizenship());
             preparedStatement.setString(14, contact.getStreetHouseApart());
-            preparedStatement.setInt(15, contact.getIndex());
+            preparedStatement.setString(15, contact.getIndex());
 
             Date date = parseToDate(contact.getBirthDate());
             preparedStatement.setDate(11, date);
@@ -216,7 +216,7 @@ public class JDBCContactDao implements DAO<Contact, Integer> {
                 contact.setCountry(resultSetContacts.getString("country"));
                 contact.setCity(resultSetContacts.getString("city"));
                 contact.setStreetHouseApart(resultSetContacts.getString("street_house_apart"));
-                contact.setIndex(resultSetContacts.getInt("p_index"));
+                contact.setIndex(resultSetContacts.getString("p_index"));
 
                 Date date = resultSetContacts.getDate("datebirth");
                 contact.setBirthDate(parseToString(date));
@@ -362,7 +362,7 @@ public class JDBCContactDao implements DAO<Contact, Integer> {
                 secondPart.append(" AND street_house_apart LIKE ?");
                 parameters.add("%" + contact.getStreetHouseApart() + "%");
             }
-            if (contact.getIndex() > 0) {
+            if (!contact.getIndex().isEmpty()) {
                 secondPart.append(" AND p_index LIKE ?");
                 parameters.add("%" + contact.getIndex() + "%");
             }

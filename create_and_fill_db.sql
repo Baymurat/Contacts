@@ -18,7 +18,7 @@ CREATE TABLE persons (
     country NVARCHAR(50),
     city NVARCHAR(50),
     street_house_apart NVARCHAR(50),
-    p_index INT(10)
+    p_index NVARCHAR(50)
 );
 
 CREATE TABLE phones (
@@ -78,7 +78,10 @@ SELECT * FROM attachments;
 SELECT COUNT(id) AS counts FROM persons;
 
 SELECT * FROM persons WHERE datebirth = '2013-12-20';
-SELECT * FROM persons WHERE name = 'Мурат'AND surname = 'null';
+
+SELECT * FROM persons WHERE name = 'Мурат' surname = '';
+SELECT * FROM persons WHERE name = 'Andr' AND familystatus = 'single' AND gender = 'male';
+SELECT * FROM persons WHERE name LIKE '%М%' AND familystatus LIKE '%%';
 /* Corrects id sequences after deleting >*/
 /*
 SET @persons_id_conut = 0;

@@ -1,8 +1,10 @@
 package com.itechart.contacts.core.utils;
 
+import com.itechart.contacts.core.entities.MessagePattern;
 import com.itechart.contacts.core.utils.error.CustomLogger;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -40,6 +42,36 @@ public class FileManageService {
             return file;
         }
         return null;
+    }
+
+    public List<MessagePattern> getPatterns(String path) throws IOException {
+        List<MessagePattern> messagePatternList = new ArrayList<>();
+        File directory = new File(path);
+
+        if (directory.exists() && directory.isDirectory()) {
+                File[] files = directory.listFiles();
+                if (files != null) {
+                    for (File file : files) {
+                        MessagePattern pattern = new MessagePattern();
+                        BufferedReader reader = new BufferedReader(new FileReader(file));
+
+                        String temp;
+                        if ((temp = reader.readLine()) != null) {
+                            pattern.setTheme(temp);
+                        }
+
+                        StringBuilder builder = new StringBuilder();
+                        while ((temp = reader.readLine()) != null) {
+                            builder.append(temp);
+                        }
+
+                        pattern.setContent(builder.toString());
+                        messagePatternList.add(pattern);
+                    }
+                }
+        }
+
+        return messagePatternList;
     }
 
     public void deleteFiles(int person_id, List<Integer> attaches_id) {

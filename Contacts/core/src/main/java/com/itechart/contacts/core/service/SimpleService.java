@@ -5,6 +5,7 @@ import com.itechart.contacts.core.dao.JDBCContactDao;
 import com.itechart.contacts.core.dao.JDBCPhonesDao;
 import com.itechart.contacts.core.entities.Attachment;
 import com.itechart.contacts.core.entities.Contact;
+import com.itechart.contacts.core.entities.MessagePattern;
 import com.itechart.contacts.core.entities.Phone;
 import com.itechart.contacts.core.utils.*;
 import com.itechart.contacts.core.utils.email.CustomMessageHolder;
@@ -329,7 +330,7 @@ public class SimpleService {
                 if (currentContact != null) {
                     String emailTo = currentContact.getEmail();
                     StringTemplate template = new StringTemplate(messageHolder.getMessageText());
-                    template.setAttribute("name", currentContact.getName());
+                    template.setAttribute("contact", currentContact);
                     SendEmail se = new SendEmail(emailTo, messageHolder.getMessageTheme());
                     se.sendMessage(template.toString());
                 }
@@ -425,5 +426,9 @@ public class SimpleService {
         }
 
         return result;
+    }
+
+    public List<MessagePattern> getPatterns(String path) throws IOException {
+        return fileManageService.getPatterns(path);
     }
 }

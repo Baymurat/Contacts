@@ -63,7 +63,7 @@ window.sendRecord = function (url) {
 
         xmlhttp.onreadystatechange = function (ev) {
             if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-                window.location.replace('/index');
+                window.location.href = 'index';
             } else {
                 //Handle errors.
             }

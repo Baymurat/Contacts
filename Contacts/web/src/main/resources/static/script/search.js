@@ -26,5 +26,5 @@ cancelButton.addEventListener('click', function () {
 
 var advancedSearch = document.getElementById('advanced-search');
 advancedSearch.addEventListener('click', function (ev) {
-    window.location.replace('advanced-search');
-})
+    window.location.href = 'advanced-search';
+});

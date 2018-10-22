@@ -251,7 +251,19 @@ imageDiv.addEventListener('click', function () {
 });
 
 imageInput.addEventListener('change', function () {
-    renderImage(imageInput.files[0]);
+    if (imageInput.files.length > 0) {
+        if (imageInput.files[0].size/1024/1024 < 200) {
+            var extension = imageInput.files[0].name.split('.')[1];
+            if (extension === 'jpg' || extension === 'jpeg' || extension === 'png' || extension === 'bmp') {
+                renderImage(imageInput.files[0]);
+            } else {
+                alert("Upload only image files");
+            }
+
+        } else {
+            alert("Upload files less than 200 mb size.")
+        }
+    }
 });
 
 function renderImage(file) {

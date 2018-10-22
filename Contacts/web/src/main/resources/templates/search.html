@@ -18,9 +18,12 @@
 <body>
     <header></header>
     <main>
-        <div>
+        <div style="margin: 20px">
             <button id="search-button" type="button" class="btn btn-primary">Search</button>
-            <input id="search-field" type="text" class="form-control" placeholder="" aria-label="" aria-describedby="basic-addon1" >
+            <div style="width: 200px; margin: 10px 0px">
+                <input id="search-field" type="text" class="form-control" placeholder="" aria-label="" aria-describedby="basic-addon1" >
+            </div>
+
         </div>
         <table class="table table-hover">
             <thead>
@@ -44,7 +47,7 @@
     </main>
     <footer>
         <button id="edit-button" type="button" class="btn btn-primary">Edit</button>
-        <button id="delete-button" type="button" class="btn btn-primary">Delete</button>
+        <button id="delete-button" type="button" class="btn btn-danger">Delete</button>
         <button id="send-button" type="button" class="btn btn-primary">Send</button>
         <button id="about-button" type="button" class="btn btn-primary">About</button>
         <button id="check-boxes-button" type="button" class="btn btn-primary"></button>

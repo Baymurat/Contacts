@@ -10,12 +10,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class TemplateController {
 
-    @ResponseBody
-    @GetMapping("/")
-    public String main() {
-        return "index";
-    }
-
     @GetMapping("/index")
     public String index() {
         return "index";

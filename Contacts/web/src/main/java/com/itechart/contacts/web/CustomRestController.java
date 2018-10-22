@@ -3,6 +3,7 @@ package com.itechart.contacts.web;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.itechart.contacts.core.entities.Attachment;
 import com.itechart.contacts.core.entities.Contact;
+import com.itechart.contacts.core.entities.MessagePattern;
 import com.itechart.contacts.core.service.SimpleService;
 import com.itechart.contacts.core.utils.Result;
 import com.itechart.contacts.core.utils.FileManageService;
@@ -20,6 +21,9 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *
+ */
 @RestController
 public class CustomRestController {
 
@@ -120,9 +124,28 @@ public class CustomRestController {
         return ResponseEntity.status(HttpStatus.OK).header("Content-Type", "application/json").body(encodedFile);
     }
 
+    /**
+     *
+     * @param contact
+     * @return
+     * @throws Exception
+     */
     @RequestMapping(value = "/search-contact-advanced", method = RequestMethod.POST)
     public Result advancedSearch(@RequestBody Contact contact) throws Exception {
         return simpleService.advancedSearch(contact);
+    }
+
+    /**
+     *
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping(value = "/message-patterns", method = RequestMethod.GET)
+    public List<MessagePattern> getPatterns() throws IOException {
+        String path = "C:\\Users\\Student\\IdeaProjects\\Shared\\" +
+                "Contacts\\core\\src\\main\\java\\com\\itechart\\contacts\\core\\templates";
+        System.out.println("CALLED");
+        return simpleService.getPatterns(path);
     }
 
     private Contact parseToContact(String jsonRepresentation) {
