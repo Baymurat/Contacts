@@ -216,7 +216,7 @@ function phoneInputsFill(element, selectedRow) {
 function attachmentInputsFill(element, selectedRow) {
     var cells = selectedRow.cells;
 
-    element.querySelector('#file-name').value = cells.item(0).innerHTML;
+    element.querySelector('#file-name').value = cells.item(0).children[0].innerHTML;
     element.querySelector('#attachment-comment').value = cells.item(2).innerHTML;
 }
 

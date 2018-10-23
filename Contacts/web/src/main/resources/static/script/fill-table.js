@@ -19,10 +19,18 @@ window.fillTable = function fillIndex(result, currentPage) {
             checkBox.type = 'checkbox';
             checkBox.classList.add('disable');
 
-            userName.innerHTML = currentElement.name;
+            //new rows
+            var link = document.createElement('a');
+            link.href = "edit?id=" + currentElement.id;
+
+            //new row
+            link.innerHTML = currentElement.name;
             userSurname.innerHTML = currentElement.surName;
             userEmail.innerHTML = currentElement.email;
             dataAttachment.innerHTML = currentElement.webSite;
+
+            //new row
+            userName.appendChild(link);
 
             tableRow.id = currentElement.id;
             tableRow.appendChild(checkBox);

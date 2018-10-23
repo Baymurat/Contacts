@@ -15,7 +15,7 @@ function editFunction() {
     var selectedRow = document.querySelector('.selected');
     if (selectedRow.id) {
         var url = 'edit?id=' + selectedRow.id;
-        window.location.replace(url);
+        window.location.href = url;
     }
 }
 
