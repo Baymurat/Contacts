@@ -1,0 +1,60 @@
+footer {
+    text-align: center;
+    padding: 10px;
+}
+
+.test {
+    width: 300px;
+    height: 300px;
+    background: orange;
+    margin: 0 auto;
+}
+
+/*table, th, td {
+    border: 1px solid black;
+}*/
+
+table {
+    margin: 20px 10px;
+}
+
+tbody>tr:hover {
+    background: dodgerblue;
+    opacity: 0.3;
+    cursor: pointer;
+}
+
+.selected {
+    background: aquamarine;
+}
+
+.disable, #input-for-current-page {
+    display: none;
+}
+
+#page-buttons {
+    margin: auto;
+    text-align: center;
+}
+
+a:hover {
+    cursor: pointer;
+}
+
+a {
+    display: inline-block;
+    margin: 2px;
+    color: coral;
+}
+
+a.disabled {
+    cursor: default;
+    background-image: none;
+    opacity: 0.65;
+    filter: alpha(opacity=65);
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    color: #333;
+    background-color: #E6E6E6;
+}

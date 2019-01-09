@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Advanced Search</title>
+    <link rel="stylesheet" href="./css/add.css">
+    <link rel="stylesheet" href="./css/stylesheet.css" type="text/css">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+</head>
+<body>
+<div id="container">
+    <div id="person">
+        <div class="part-one">
+            <input type="text" id="user_id">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" placeholder="Name" aria-label="" aria-describedby="basic-addon1" id="name">
+
+            <label for="surname">Surname</label>
+            <input type="text" class="form-control" placeholder="Surname" aria-label="" aria-describedby="basic-addon1" id="surname">
+
+            <label for="middlename">Middlename</label>
+            <input type="text" class="form-control" placeholder="Middlename" aria-label="" aria-describedby="basic-addon1" id="middlename">
+
+            <label for="datebirth">Datebirth</label>
+            <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1"   id="datebirth" placeholder="__/__/____">
+
+            <label for="gender">Gender</label>
+            <select  class="custom-select form-control" id="gender">
+                <option value="">male</option>
+                <option value="">female</option>
+                <option value="" selected></option>
+            </select>
+
+            <label for="citizenship">Citizenship</label>
+            <input type="text" class="form-control" placeholder="Citizenship" aria-label="" aria-describedby="basic-addon1"   id="citizenship">
+
+            <label for="family-status">Family status</label>
+            <select class="custom-select form-control" id="family-status">
+                <option value="">single</option>
+                <option value="">married</option>
+                <option value="" selected></option>
+            </select>
+        </div>
+
+        <div class="part-two">
+            <label for="web-site">Website</label>
+            <input type="text" class="form-control" placeholder="Website" aria-label="" aria-describedby="basic-addon1" id="web-site">
+
+            <label for="email">Email</label>
+            <input type="email" class="form-control" placeholder="Email" aria-label="" aria-describedby="basic-addon1" id="email">
+
+            <label for="currentjob">Currentjob</label>
+            <input type="text" class="form-control" placeholder="Current Job" aria-label="" aria-describedby="basic-addon1"   id="currentjob">
+
+            <label for="country">Country</label>
+            <input type="text" class="form-control" placeholder="Country" aria-label="" aria-describedby="basic-addon1"   id="country">
+
+            <label for="city">City</label>
+            <input type="text" class="form-control" placeholder="City" aria-label="" aria-describedby="basic-addon1" id="city">
+
+            <label for="street-house-apart">Street/House/Apart</label>
+            <input type="text" class="form-control" placeholder="Street/House/Apart" aria-label="" aria-describedby="basic-addon1"   id="street-house-apart">
+
+            <label for="index">Index</label>
+            <input type="text" class="form-control" placeholder="City" aria-label="" aria-describedby="basic-addon1" id="index">
+        </div>
+    </div>
+
+    <div>
+        <button id="search-button" type="button" class="btn btn-primary">Search</button>
+    </div>
+</div>
+
+<table class="table table-hover">
+    <thead>
+    <tr>
+        <th id="boxes"></th>
+        <th>Name</th>
+        <th>Date</th>
+        <th>Address</th>
+        <th>Company</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+</table>
+
+<div id="page-buttons">
+    <button id="previous" type="button" class="btn btn-primary">Previous</button>
+    <button id="next" type="button" class="btn btn-primary">Next</button>
+</div>
+
+<footer>
+    <button id="edit-button" type="button" class="btn btn-primary">Edit</button>
+    <button id="delete-button" type="button" class="btn btn-danger">Delete</button>
+    <button id="send-button" type="button" class="btn btn-primary">Send</button>
+    <button id="about-button" type="button" class="btn btn-primary">About</button>
+    <button id="check-boxes-button" type="button" class="btn btn-primary"></button>
+</footer>
+
+<div>
+    <button id="back-to-index" type="button" class="btn btn-primary">Back</button>
+</div>
+
+    <script src="./script/advanced-search.js"></script>
+    <script src="./script/fill-table.js"></script>
+    <script src="./script/bind-buttons.js"></script>
+</body>
+</html>

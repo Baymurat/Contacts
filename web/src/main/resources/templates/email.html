@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Email</title>
+    <link rel="stylesheet" href="./css/email.css">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+</head>
+
+<body>
+    <header></header>
+    <main>
+        <form>
+            <label for="">Receivers</label>
+            <input type="text" class="form-control" placeholder="" aria-label="" aria-describedby="basic-addon1"  disabled="true" id="receivers">
+
+            <label for="patterns">Patterns</label>
+            <select class="custom-select" id="patterns">
+                <!--<option value="">New Year congrats.</option>
+                <option value="">Birthday congrats</option>
+                <option value="">One more pattern</option>-->
+            </select>
+
+            <label for="theme" style="display: block";>Theme</label>
+            <input type="text" class="form-control" placeholder="" aria-label="" aria-describedby="basic-addon1"  id="theme">
+
+            <label for="content">Message Content</label>
+            <textarea id="content" cols="110" rows="10"></textarea>
+
+            <div id="buttons">
+                <button id="send-email-button" type="button" class="btn btn-primary">Send email</button>
+                <button id="back-to-index" type="button" class="btn btn-primary">Back</button>
+            </div>
+        </form>
+    </main>
+    <footer></footer>
+
+    <script src="./script/message-patterns.js"></script>
+    <script src="./script/send-email.js"></script>
+    <script src="./script/fill-receivers.js"></script>
+</body>
+
+</html>

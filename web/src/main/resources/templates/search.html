@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="./css/stylesheet.css" type="text/css">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+</head>
+
+<body>
+    <header></header>
+    <main>
+        <div style="margin: 20px">
+            <button id="search-button" type="button" class="btn btn-primary">Search</button>
+            <div style="width: 200px; margin: 10px 0px">
+                <input id="search-field" type="text" class="form-control" placeholder="" aria-label="" aria-describedby="basic-addon1" >
+            </div>
+
+        </div>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th id="boxes"></th>
+                    <th>Name</th>
+                    <th>Date</th>
+                    <th>Address</th>
+                    <th>Company</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+
+        <div id="page-buttons">
+            <button id="previous" type="button" class="btn btn-primary">Previous</button>
+            <button id="next" type="button" class="btn btn-primary">Next</button>
+        </div>
+    </main>
+    <footer>
+        <button id="edit-button" type="button" class="btn btn-primary">Edit</button>
+        <button id="delete-button" type="button" class="btn btn-danger">Delete</button>
+        <button id="send-button" type="button" class="btn btn-primary">Send</button>
+        <button id="about-button" type="button" class="btn btn-primary">About</button>
+        <button id="check-boxes-button" type="button" class="btn btn-primary"></button>
+        <button id="advanced-search" type="button" class="btn btn-primary">Advanced Search</button>
+    </footer>
+
+    <div>
+        <button id="back-to-index" type="button" class="btn btn-primary">Back</button>
+    </div>
+
+    <script src="./script/search.js"></script>
+    <script src="./script/fill-table.js"></script>
+    <script src="./script/bind-buttons.js"></script>
+</body>
+
+</html>
