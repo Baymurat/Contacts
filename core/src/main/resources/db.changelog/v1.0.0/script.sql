@@ -1,6 +1,3 @@
-create database contacts_db
-  with owner postgres;
-
 create table persons
 (
   id                 serial      not null
@@ -19,7 +16,7 @@ create table persons
   country            varchar(50),
   city               varchar(50),
   street_house_apart varchar(50),
-  p_index            integer
+  p_index            varchar(50)
 );
 
 alter table persons

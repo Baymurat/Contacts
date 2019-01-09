@@ -71,7 +71,8 @@ public class JDBCPhonesDao implements DAO<Phone, Integer> {
     @Override
     public int insert(Phone phone) throws CustomException {
         try {
-            preparedStatement = connection.prepareStatement("INSERT INTO phones VALUES (null, ?, ?, ?, ?, ?, ?);");
+            String params = "(persons_id, countrycode, operatorcode, phonebumber, type, comments)";
+            preparedStatement = connection.prepareStatement("INSERT INTO phones " + params + " VALUES (?, ?, ?, ?, ?, ?);");
             preparedStatement.setInt(1, phone.getPersons_id());
             preparedStatement.setInt(2, phone.getCodeOfCountry());
             preparedStatement.setInt(3, phone.getCodeOfOperator());
@@ -80,10 +81,11 @@ public class JDBCPhonesDao implements DAO<Phone, Integer> {
             preparedStatement.setString(6, phone.getComments());
             preparedStatement.executeUpdate();
 
-            resultSetPhones = preparedStatement.executeQuery("select last_insert_id() as last_id from phones");
+            preparedStatement = connection.prepareStatement("SELECT currval('phones_id_seq');");
+            resultSetPhones = preparedStatement.executeQuery();
 
             if (resultSetPhones.next()) {
-                phone.setId(resultSetPhones.getInt("last_id"));
+                phone.setId(resultSetPhones.getInt("currval"));
             }
 
             return 0;

@@ -82,17 +82,19 @@ public class JDBCAttachmentDao implements DAO<Attachment, Integer> {
     @Override
     public int insert(Attachment attachment) throws CustomException {
         try {
-            preparedStatement = connection.prepareStatement("INSERT INTO attachments VALUES (null, ?, ?, ?, ?);");
+            String params = "(persons_id, filename, comments, loaddate)";
+            preparedStatement = connection.prepareStatement("INSERT INTO attachments " + params + " VALUES (?, ?, ?, ?);");
             preparedStatement.setInt(1, attachment.getPersons_id());
             preparedStatement.setString(2, attachment.getFileName());
             preparedStatement.setString(3, attachment.getComments());
             preparedStatement.setDate(4, attachment.getLoadDate());
             preparedStatement.executeUpdate();
 
-            resultSetAttachments = preparedStatement.executeQuery("select last_insert_id() as last_id from attachments");
+            preparedStatement = connection.prepareStatement("SELECT currval('attachments_id_seq');");
+            resultSetAttachments = preparedStatement.executeQuery();
 
             if (resultSetAttachments.next()) {
-                attachment.setId(resultSetAttachments.getInt("last_id"));
+                attachment.setId(resultSetAttachments.getInt("currval"));
             }
             return 0;
         } catch (SQLException e) {
