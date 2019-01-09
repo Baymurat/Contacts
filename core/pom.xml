@@ -16,17 +16,6 @@
     <packaging>jar</packaging>
 
     <dependencies>
-        <!--<dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.6</version>
-        </dependency>
-
-        <dependency>
-            <groupId>commons-dbcp</groupId>
-            <artifactId>commons-dbcp</artifactId>
-            <version>1.4</version>
-        </dependency>-->
 
         <dependency>
             <groupId>javax.mail</groupId>
@@ -53,7 +42,6 @@
             <version>9.1-901-1.jdbc4</version>
         </dependency>
 
-
         <!-- https://mvnrepository.com/artifact/org.antlr/stringtemplate -->
         <dependency>
             <groupId>org.antlr</groupId>
@@ -61,11 +49,15 @@
             <version>3.2</version>
         </dependency>
 
-
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
             <version>3.6.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>5.0.8.RELEASE</version>
         </dependency>
 
     </dependencies>
@@ -80,29 +72,6 @@
                     <source>1.8</source>
                     <target>1.8</target>
                 </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.liquibase</groupId>
-                <artifactId>liquibase-maven-plugin</artifactId>
-                <version>3.0.5</version>
-                <configuration>
-                    <driver>org.postgresql.Driver</driver>
-                    <url>jdbc:postgresql://localhost:5432/contacts_db</url>
-                    <username>postgres</username>
-                    <password>root</password>
-                </configuration>
-                <!--<configuration>
-                    <propertyFile>liquibase.properties</propertyFile>
-                </configuration>-->
-                <!--<executions>
-                    <execution>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>update</goal>
-                        </goals>
-                    </execution>
-                </executions>-->
             </plugin>
         </plugins>
     </build>

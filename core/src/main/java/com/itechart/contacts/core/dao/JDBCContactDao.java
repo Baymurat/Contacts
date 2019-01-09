@@ -124,35 +124,37 @@ public class JDBCContactDao implements DAO<Contact, Integer> {
         try {
             boolean existId = true;
 
-            preparedStatement = connection.prepareStatement("INSERT INTO persons VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+            String params = "(name, surname, middlename, citizenship, familystatus, website, email, currentjob, gender, datebirth, country, city, street_house_apart, p_index)";
+            preparedStatement = connection.prepareStatement("INSERT INTO persons " + params + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
             if (contact.getId() == 0) {
-                preparedStatement.setString(1, null);
+                //preparedStatement.setString(1, "DEFAULT");
                 existId = false;
             } else {
-                preparedStatement.setInt(1, contact.getId());
+                //preparedStatement.setInt(1, contact.getId());
             }
-            preparedStatement.setString(2, contact.getName());
-            preparedStatement.setString(3, contact.getSurName());
-            preparedStatement.setString(4, contact.getMiddleName());
-            preparedStatement.setString(5, contact.getCitizenship());
-            preparedStatement.setString(6, contact.getFamilyStatus());
-            preparedStatement.setString(7, contact.getWebSite());
-            preparedStatement.setString(8, contact.getEmail());
-            preparedStatement.setString(9, contact.getCurrentJob());
-            preparedStatement.setString(10, contact.getGender());
-            preparedStatement.setString(12, contact.getCountry());
-            preparedStatement.setString(13, contact.getCitizenship());
-            preparedStatement.setString(14, contact.getStreetHouseApart());
-            preparedStatement.setString(15, contact.getIndex());
+            preparedStatement.setString(1, contact.getName());
+            preparedStatement.setString(2, contact.getSurName());
+            preparedStatement.setString(3, contact.getMiddleName());
+            preparedStatement.setString(4, contact.getCitizenship());
+            preparedStatement.setString(5, contact.getFamilyStatus());
+            preparedStatement.setString(6, contact.getWebSite());
+            preparedStatement.setString(7, contact.getEmail());
+            preparedStatement.setString(8, contact.getCurrentJob());
+            preparedStatement.setString(9, contact.getGender());
+            preparedStatement.setString(11, contact.getCountry());
+            preparedStatement.setString(12, contact.getCitizenship());
+            preparedStatement.setString(13, contact.getStreetHouseApart());
+            preparedStatement.setString(14, contact.getIndex());
 
             Date date = parseToDate(contact.getBirthDate());
-            preparedStatement.setDate(11, date);
+            preparedStatement.setDate(10, date);
             preparedStatement.executeUpdate();
 
             if (!existId) {
-                resultSetContacts = preparedStatement.executeQuery("select last_insert_id() as last_id from persons");
+                preparedStatement = connection.prepareStatement("SELECT currval('persons_id_seq');");
+                resultSetContacts = preparedStatement.executeQuery();
                 if (resultSetContacts.next()) {
-                    contact.setId(resultSetContacts.getInt("last_id"));
+                    contact.setId(resultSetContacts.getInt("currval"));
                 }
             }
             return 0;
@@ -174,14 +176,14 @@ public class JDBCContactDao implements DAO<Contact, Integer> {
         List<Contact> result = new ArrayList<>();
         try {
             if (searchDescription == null) {
-                preparedStatement = connection.prepareStatement("SELECT * FROM persons ORDER BY name LIMIT ?, ?");
-                preparedStatement.setInt(1, from);
-                preparedStatement.setInt(2, range);
+                preparedStatement = connection.prepareStatement("SELECT * FROM persons ORDER BY name LIMIT ? OFFSET ?");
+                preparedStatement.setInt(1, range);
+                preparedStatement.setInt(2, from);
             } else {
                 String like = "%" + searchDescription + "%";
                 preparedStatement = connection.prepareStatement("SELECT * FROM persons WHERE name LIKE ? OR surname LIKE ? OR " +
                         "middlename LIKE ? OR citizenship LIKE ? OR familystatus LIKE ? OR website LIKE ? OR email LIKE ? OR  currentjob LIKE ? OR " +
-                        "gender LIKE ? OR country LIKE ? OR city LIKE ? OR street_house_apart LIKE ? OR p_index LIKE ? ORDER BY name LIMIT ?, ?");
+                        "gender LIKE ? OR country LIKE ? OR city LIKE ? OR street_house_apart LIKE ? OR p_index LIKE ? ORDER BY name LIMIT ?, OFFSET ?");
                 preparedStatement.setString(1, like);
                 preparedStatement.setString(2, like);
                 preparedStatement.setString(3, like);
@@ -195,8 +197,8 @@ public class JDBCContactDao implements DAO<Contact, Integer> {
                 preparedStatement.setString(11, like);
                 preparedStatement.setString(12, like);
                 preparedStatement.setString(13, like);
-                preparedStatement.setInt(14, from);
-                preparedStatement.setInt(15, range);
+                preparedStatement.setInt(14, range);
+                preparedStatement.setInt(15, from);
             }
 
             resultSetContacts = preparedStatement.executeQuery();

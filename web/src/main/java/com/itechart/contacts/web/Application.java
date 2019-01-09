@@ -1,5 +1,6 @@
 package com.itechart.contacts.web;
 
+import org.apache.catalina.core.ApplicationContext;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -12,5 +13,6 @@ import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConf
 public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class);
+
     }
 }
