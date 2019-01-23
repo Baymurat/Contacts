@@ -1,5 +1,5 @@
 window.fillTable = function fillIndex(result, currentPage) {
-    var contacts = result.contactList;
+    var contacts = result.content;
 
     if (contacts) {
         var new_body = document.createElement('tbody');

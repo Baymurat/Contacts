@@ -54,7 +54,7 @@ window.sendRecord = function (url) {
         var objectSend = JSON.stringify(contact);
 
         getFiles(formData);
-        formData.append("contact", objectSend);
+        formData.append("person", objectSend);
 
         var xmlhttp = new XMLHttpRequest();
 

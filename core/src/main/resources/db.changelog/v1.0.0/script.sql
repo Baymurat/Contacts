@@ -32,7 +32,7 @@ create table phones
       references persons,
   countrycode  smallint not null,
   operatorcode smallint not null,
-  phonebumber  integer  not null,
+  phonenumber  integer  not null,
   type         varchar(50),
   comments     varchar(50)
 );

@@ -37,7 +37,7 @@ function search() {
         }
     };
 
-    xmlhttp.open("POST", 'search-contact-advanced', true);
+    xmlhttp.open("POST", 'search-person-advanced', true);
     xmlhttp.setRequestHeader('Content-Type', 'application/json');
     xmlhttp.send(objectSend);
 }

@@ -6,7 +6,7 @@ function fillInputs(contact) {
     document.getElementById('datebirth').value = contact.birthDate;
     document.getElementById('citizenship').value = contact.citizenship;
     document.getElementById('web-site').value = contact.webSite;
-    document.getElementById('email').value = contact.email;
+    document.getElementById('email2').value = contact.email;
     document.getElementById('currentjob').value = contact.currentJob;
     document.getElementById('country').value = contact.country;
     document.getElementById('city').value = contact.city;
@@ -106,7 +106,7 @@ var url = new URL(window.location.href);
 var id = url.searchParams.get("id");
 
 var xmlhttp = new XMLHttpRequest();
-xmlhttp.open("GET", 'get-contact?id=' + id, true);
+xmlhttp.open("GET", 'contact?id=' + id, true);
 xmlhttp.send();
 
 xmlhttp.onreadystatechange = function (ev) {

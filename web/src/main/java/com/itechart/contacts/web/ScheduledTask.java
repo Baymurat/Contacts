@@ -1,28 +1,35 @@
 package com.itechart.contacts.web;
 
-import com.itechart.contacts.core.entities.Contact;
-import com.itechart.contacts.core.service.SimpleService;
-import com.itechart.contacts.core.utils.email.CustomMessageHolder;
+import com.itechart.contacts.core.email.service.EmailService;
+import com.itechart.contacts.core.person.entity.Person;
+import com.itechart.contacts.core.email.dto.MessageDto;
+import com.itechart.contacts.core.person.service.PersonService;
 import org.apache.tomcat.util.digester.ArrayStack;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 
 @Component
 public class ScheduledTask {
 
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private PersonService personService;
+
     @Scheduled(fixedRate = 10000)
     public void task() throws Exception {
-        SimpleService simpleService = new SimpleService();
         Date date = new Date(System.currentTimeMillis());
 
-        List<Contact> contacts = simpleService.getContactsByDateBirth(date);
-        if (contacts != null && contacts.size() > 0) {
+        List<Person> people = personService.findByBirthDate(date);
+        if (people != null && people.size() > 0) {
             StringBuilder receivers = new StringBuilder();
 
-            for (Contact c : contacts) {
+            for (Person c : people) {
                 receivers.append(c.getEmail());
                 receivers.append("  ");
             }
@@ -30,12 +37,12 @@ public class ScheduledTask {
             List<String> admin = new ArrayStack<>();
             admin.add("ADMIN_EMAIL");
 
-            CustomMessageHolder messageHolder = new CustomMessageHolder();
-            messageHolder.setMessageTheme("Birthday");
+            MessageDto messageHolder = new MessageDto();
+            messageHolder.setMessageSubject("Birthday");
             messageHolder.setMessageText(receivers.toString());
             messageHolder.setEmailOfReceivers(admin);
 
-            simpleService.sendEmail(messageHolder);
+            emailService.sendMessage(messageHolder);
         }
     }
 }

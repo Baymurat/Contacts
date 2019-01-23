@@ -4,7 +4,7 @@ searchButton.addEventListener('click', function (ev) {
    if (searchField.value) {
        var xmlhttp = new XMLHttpRequest();
        var params = '?from=0&range=10&like=' + searchField.value;
-       xmlhttp.open('GET', 'search-contact' + params, true);
+       xmlhttp.open('GET', 'search-person' + params, true);
        xmlhttp.send();
        xmlhttp.onreadystatechange = function (ev1) {
            if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {

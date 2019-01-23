@@ -1,4 +1,4 @@
-var sendEmailButton = document.getElementById('send-email-button');
+var sendEmailButton = document.getElementById('send-email2-button');
 
 function sendMail() {
     console.log('send email');
