@@ -23,8 +23,8 @@ window.sendRecord = function (url) {
     contact.phones = getPhones();
     contact.attachments = getAttachments();
 
-    contact.deletePhonesList = window.deletePhonesList;
-    contact.deleteAttachmentsList = window.deleteAttachmentsList;
+    /*contact.deletePhonesList = window.deletePhonesList;
+    contact.deleteAttachmentsList = window.deleteAttachmentsList;*/
 
     if (document.getElementById('user_id')) {
         contact.id = document.getElementById('user_id').value;
@@ -75,7 +75,7 @@ window.sendRecord = function (url) {
 
 function getPhones() {
     var phones = [];
-    
+
 
     var table = document.getElementById('phone-table');
     var rowLength = table.rows.length;
@@ -84,7 +84,7 @@ function getPhones() {
         var phone = {};
         var cells = table.rows.item(i).cells;
 
-        phone.id =  table.rows.item(i).phoneId;
+        phone.id = table.rows.item(i).phoneId;
         var fullPhone = cells.item(0).innerHTML.split(' ');
         phone.codeOfCountry = fullPhone[0];
         phone.codeOfOperator = fullPhone[1];
@@ -99,7 +99,7 @@ function getPhones() {
 
 function getAttachments() {
     var attachments = [];
-    
+
     var table = document.getElementById('attachment-table');
     var rowLength = table.rows.length;
 
@@ -107,7 +107,7 @@ function getAttachments() {
         var attachment = {};
         var cells = table.rows.item(i).cells;
         attachment.id = table.rows.item(i).attachId;
-        
+
         if (cells.item(0).children.length === 0) {
             attachment.fileName = cells.item(0).innerHTML;
         } else {

@@ -33,7 +33,7 @@ public class EmailServiceImpl implements EmailService{
                     SimpleMailMessage mailMessage = new SimpleMailMessage();
                     mailMessage.setTo(currentPerson.getEmail());
                     mailMessage.setSubject(messageDto.getMessageSubject());
-                    mailMessage.setText(messageDto.getMessageText());
+                    mailMessage.setText(template.toString());
                     emailSender.send(mailMessage);
                 }
             }

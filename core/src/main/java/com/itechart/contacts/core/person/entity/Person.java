@@ -7,6 +7,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Date;
+
 import java.util.List;
 
 /**
@@ -19,7 +21,7 @@ import java.util.List;
 public class Person implements Serializable{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "familystatus")
@@ -35,7 +37,7 @@ public class Person implements Serializable{
     private String index;
 
     @Column(name = "datebirth")
-    private String birthDate;
+    private Date birthDate;
 
     @Column(name = "surname")
     private String surName;
@@ -53,11 +55,19 @@ public class Person implements Serializable{
     private String country;
     private String city;
 
-    @OneToMany(targetEntity = Phone.class, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "person", fetch = FetchType.LAZY)
     private List<Phone> phones;
 
-    @OneToMany(targetEntity = Attachment.class, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "person", fetch = FetchType.LAZY/*, cascade = CascadeType.ALL, orphanRemoval = true*/)
     private List<Attachment> attachments;
 
     public Person() {}
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "surName='" + surName + '\'' +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

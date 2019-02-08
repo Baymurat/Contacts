@@ -1,6 +1,5 @@
 package com.itechart.contacts.core.attachment.dto;
 
-import com.itechart.contacts.core.person.dto.PersonDto;
 import lombok.Data;
 
 import java.sql.Date;
@@ -12,7 +11,7 @@ public class AttachmentDto {
     private String fileName;
     private String comments;
     private Date loadDate;
-    private PersonDto contact;
+    private Long personId;
 
     public AttachmentDto() {}
 }

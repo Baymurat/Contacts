@@ -7,7 +7,6 @@ import com.itechart.contacts.core.attachment.entity.Attachment;
 import com.itechart.contacts.core.attachment.service.AttachmentService;
 import com.itechart.contacts.core.email.service.EmailService;
 import com.itechart.contacts.core.person.dto.PersonDto;
-import com.itechart.contacts.core.person.dto.PersonPreviewDto;
 import com.itechart.contacts.core.person.dto.SavePersonDto;
 import com.itechart.contacts.core.person.entity.Person;
 import com.itechart.contacts.core.person.service.PersonService;
@@ -20,7 +19,6 @@ import com.itechart.contacts.core.email.dto.MessageDto;
 import com.itechart.contacts.core.utils.ObjectMapperUtils;
 import com.itechart.contacts.core.utils.error.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,15 +52,15 @@ public class CommonController {
     @Autowired
     private EmailService emailService;
 
-    private int pageSize = 10;
+    private int pageSize = 3;
 
     @RequestMapping(value = "/contacts", method = RequestMethod.GET)
-    public Object getContacts(@RequestParam(name = "page")  int pageId) {
+    public Object getContacts(@RequestParam(name = "page") int pageId) {
         return personService.getContacts(PageRequest.of(pageId, pageSize));
     }
 
-    @RequestMapping(value = "/contact", method = RequestMethod.GET)
-    public PersonDto getContact(@RequestParam(name = "id") long id) throws Exception {
+    @RequestMapping(value = "/contact/{id}", method = RequestMethod.GET)
+    public PersonDto getContact(@PathVariable(name = "id") long id) throws Exception {
         return personService.getContact(id);
     }
 
@@ -76,111 +74,106 @@ public class CommonController {
         return people;
     }
 
-    @RequestMapping(value = "/add-record", method = RequestMethod.POST)
+    @RequestMapping(value = "/addRecord", method = RequestMethod.POST)
     public void addRecord(@RequestParam("person") String jsonRepresentation,
-                          @RequestPart("files") MultipartFile[] files,
+                          @RequestPart(value = "files", required = false) MultipartFile[] files,
                           @RequestPart(value = "photo", required = false) MultipartFile photo) throws Exception {
-        Person person = parseToContact(jsonRepresentation);
-        SavePersonDto savePersonDto = ObjectMapperUtils.map(person, SavePersonDto.class);
-        PersonDto personDto = personService.create(savePersonDto);
+        SavePersonDto savePersonDto = parseToContact(jsonRepresentation);
+        PersonDto personDto = personService.create(savePersonDto, files);
 
-        List<Attachment> attachments = person.getAttachments();
-        List<Phone> phones = person.getPhones();
-
-        long id = personDto.getId();
-        int i = 0;
-
-        for (Attachment attachment : attachments) {
-            attachment.setPerson(person);
-            SaveAttachmentDto saveAttachmentDto = ObjectMapperUtils.map(attachment, SaveAttachmentDto.class);
-            attachmentService.create(saveAttachmentDto);
-            fileManageService.uploadFile(id, attachment.getId(), files[i++]);
+        if (photo != null) {
+            fileManageService.savePhoto(personDto.getId(), photo);
         }
 
-        for (Phone phone : phones) {
-            phone.setPerson(person);
-            SavePhoneDto savePhoneDto = ObjectMapperUtils.map(phone, SavePhoneDto.class);
-            phoneService.create(savePhoneDto);
-        }
-
-        fileManageService.savePhoto(id, photo);
     }
 
-    @RequestMapping(value = "/delete-record", method = RequestMethod.POST)
+    @RequestMapping(value = "/deleteContacts", method = RequestMethod.POST)
     public void deleteRecord(@RequestBody long[] deleteContactsId) throws Exception {
         for (long i : deleteContactsId) {
             attachmentService.deleteByContactId(i);
             phoneService.deleteByContactId(i);
             personService.delete(i);
         }
+
+        fileManageService.deleteUsers(deleteContactsId);
     }
 
-    @RequestMapping(value = "/update-record", method = RequestMethod.POST)
-    public void updateRecord(@RequestParam("person") String jsonRepresentation,
-                             @RequestParam long[] deleteAttachments,
-                             @RequestParam long[] deletePhones,
-                             @RequestPart("files") MultipartFile[] files,
+
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
+    public void deleteRecord(@PathVariable(name = "id") long id) {
+        attachmentService.deleteByContactId(id);
+        phoneService.deleteByContactId(id);
+        personService.delete(id);
+        fileManageService.deleteUsers(new long[]{id});
+    }
+
+    @RequestMapping(value = "/updateRecord/{id}", method = RequestMethod.POST)
+    public void updateRecord(@PathVariable(name = "id") long id,
+                             @RequestParam("person") String jsonRepresentation,
+                             @RequestPart(value = "files", required = false) MultipartFile[] files,
                              @RequestPart(value = "photo", required = false) MultipartFile photo) throws Exception {
-        Person person = parseToContact(jsonRepresentation);
-        SavePersonDto personDto = ObjectMapperUtils.map(person, SavePersonDto.class);
+        SavePersonDto savePersonDto = parseToContact(jsonRepresentation);
+        savePersonDto.setId(id);
 
-        List<Attachment> attachments = person.getAttachments();
-        List<Phone> phones = person.getPhones();
+        List<Long> deleteAttachments = savePersonDto.getDeleteAttaches();
+        List<Long> deletePhones = savePersonDto.getDeletePhones();
 
-        personService.update(person.getId(), personDto);
+        personService.update(id, savePersonDto, files);
 
-        Long personId = person.getId();
-        int i = 0;
-
-        for (Attachment attachment : attachments) {
-            SaveAttachmentDto saveAttachmentDto = ObjectMapperUtils.map(attachment, SaveAttachmentDto.class);
-            attachmentService.update(attachment.getId(), saveAttachmentDto);
-            fileManageService.uploadFile(personId, attachment.getId(), files[i++]);
+        if (deleteAttachments.size() > 0) {
+            for (long attachmentId : deleteAttachments) {
+                attachmentService.delete(attachmentId);
+                fileManageService.deleteFiles((int)savePersonDto.getId(), attachmentId);
+            }
         }
 
-        for (Phone phone : phones) {
-            SavePhoneDto savePhoneDto = ObjectMapperUtils.map(phone, SavePhoneDto.class);
-            phoneService.update(phone.getId(), savePhoneDto);
+        if (deletePhones.size() > 0) {
+            for (long phoneId : deletePhones) {
+                phoneService.delete(phoneId);
+            }
         }
 
-        for (long attachmentId : deleteAttachments) {
-            attachmentService.delete(attachmentId);
-            fileManageService.deleteFiles(personId.intValue(), attachmentId);
+        if (photo != null) {
+            fileManageService.savePhoto(savePersonDto.getId(), photo);
         }
-
-        for (long phoneId : deletePhones) {
-            phoneService.delete(phoneId);
-        }
-
-        fileManageService.savePhoto(person.getId(), photo);
     }
 
-    /*@RequestMapping(value = "/search-contact", method = RequestMethod.GET)
-    public Object searchContacts(@RequestParam(name = "page") int pageId, @RequestParam(name = "like") String like) throws Exception {
-        Page<Person> contacts = personService.searchContact(like, PageRequest.of(pageId - 1, pageSize));
-        return contacts.map(PersonDto::new);
-    }*/
+    @RequestMapping(value = "/getRecipientsEmail", method = RequestMethod.POST)
+    public List<String> getRecipientsEmail(@RequestBody long[] recipientsId) {
+        List<String> recipientsEmail = new ArrayList<>();
 
-    @RequestMapping(value = "/send-email", method = RequestMethod.POST)
+        if (recipientsId.length > 0) {
+            for (long id : recipientsId) {
+                PersonDto personDto = personService.getContact(id);
+                recipientsEmail.add(personDto.getEmail());
+            }
+        }
+
+        return recipientsEmail;
+    }
+
+    @RequestMapping(value = "/sendEmail", method = RequestMethod.POST)
     public void sendEmail(@RequestBody MessageDto messageDto) throws Exception {
         emailService.sendMessage(messageDto);
     }
 
-    @RequestMapping(value = "/attachment", method = RequestMethod.GET)
-    public void met(@RequestParam(name = "person_id") int personId, @RequestParam(name = "attach_id") int attachId, HttpServletResponse response) throws Exception {
+    @RequestMapping(value = "/attachment/{pId}/{attId}", method = RequestMethod.GET)
+    public void met(@PathVariable(name = "pId") int personId,
+                    @PathVariable(name = "attId") int attachId,
+                    HttpServletResponse response) throws Exception {
 
         try {
             File file = fileManageService.getFile(personId, attachId);
             if (file != null) {
-                AttachmentDto attachment = attachmentService.getAttachment((long)attachId);
+                AttachmentDto attachment = attachmentService.getAttachment((long) attachId);
 
                 String mimeType = URLConnection.guessContentTypeFromName(file.getName());
                 String fileExtension = file.getName().split("\\.")[1];
                 String fileName = attachment.getFileName() + "." + fileExtension;
 
                 response.setContentType(mimeType);
-                response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName +"\"");
-                response.setContentLength((int)file.length());
+                response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
+                response.setContentLength((int) file.length());
                 InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
                 FileCopyUtils.copy(inputStream, response.getOutputStream());
                 response.flushBuffer();
@@ -190,8 +183,14 @@ public class CommonController {
         }
     }
 
-    @RequestMapping(value = "/photo", method = RequestMethod.GET)
-    public ResponseEntity getPhoto(@RequestParam(name = "id") int id) throws CustomException {
+    @RequestMapping(value = "/searchContact", method = RequestMethod.GET)
+    public Object searchContacts(@RequestParam(name = "page") int pageId,
+                                 @RequestParam(name = "text") String text) throws Exception {
+        return personService.searchContact(text, PageRequest.of(pageId, pageSize));
+    }
+
+    @RequestMapping(value = "/photo/{id}", method = RequestMethod.GET)
+    public ResponseEntity getPhoto(@PathVariable(name = "id") int id) throws CustomException {
         String encodedFile = fileManageService.getPhoto(id);
         return ResponseEntity.status(HttpStatus.OK).header("Content-Type", "application/json").body(encodedFile);
     }
@@ -203,21 +202,20 @@ public class CommonController {
     }*/
 
 
-    @RequestMapping(value = "/message-patterns", method = RequestMethod.GET)
+    @RequestMapping(value = "/messagePatterns", method = RequestMethod.GET)
     public List<MessageEntity> getPatterns() throws IOException {
         String path = "D:\\templates";
-        System.out.println("CALLED");
         return fileManageService.getPatterns(path);
     }
 
-    private Person parseToContact(String jsonRepresentation) {
+    private SavePersonDto parseToContact(String jsonRepresentation) {
         ObjectMapper mapper = new ObjectMapper();
-        Person person = null;
+        SavePersonDto savePersonDto = null;
         try {
-            person = mapper.readValue(jsonRepresentation, Person.class);
+            savePersonDto = mapper.readValue(jsonRepresentation, SavePersonDto.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return person;
+        return savePersonDto;
     }
 }

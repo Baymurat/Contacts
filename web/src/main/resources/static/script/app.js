@@ -253,7 +253,7 @@ imageDiv.addEventListener('click', function () {
 imageInput.addEventListener('change', function () {
     if (imageInput.files.length > 0) {
         if (imageInput.files[0].size/1024/1024 < 200) {
-            var extension = imageInput.files[0].name.split('.')[1];
+            var extension = imageInput.files[0].name.split('.')[1].toLowerCase();
             if (extension === 'jpg' || extension === 'jpeg' || extension === 'png' || extension === 'bmp') {
                 renderImage(imageInput.files[0]);
             } else {

@@ -1,5 +1,6 @@
 package com.itechart.contacts.core.phone.service;
 
+import com.itechart.contacts.core.person.repository.PersonRepository;
 import com.itechart.contacts.core.phone.dto.PhoneDto;
 import com.itechart.contacts.core.phone.dto.SavePhoneDto;
 import com.itechart.contacts.core.phone.entity.Phone;
@@ -14,14 +15,17 @@ import javax.transaction.Transactional;
 public class PhoneServiceImpl implements PhoneService {
 
     private PhoneRepository phoneRepository;
+    private PersonRepository personRepository;
 
     @Autowired
-    public PhoneServiceImpl(PhoneRepository phoneRepository) {
+    public PhoneServiceImpl(PhoneRepository phoneRepository, PersonRepository personRepository) {
         this.phoneRepository = phoneRepository;
+        this.personRepository = personRepository;
     }
 
     public PhoneDto create(SavePhoneDto savePhoneDto) {
         Phone phone = ObjectMapperUtils.map(savePhoneDto, Phone.class);
+        phone.setPerson(personRepository.getOne(savePhoneDto.getPersonId()));
         phone = phoneRepository.save(phone);
         return ObjectMapperUtils.map(phone, PhoneDto.class);
     }
@@ -35,6 +39,7 @@ public class PhoneServiceImpl implements PhoneService {
         phoneRepository.deleteById(id);
     }
 
+    @Transactional
     public void deleteByContactId(Long id) {
         phoneRepository.deleteAllByPersonId(id);
     }

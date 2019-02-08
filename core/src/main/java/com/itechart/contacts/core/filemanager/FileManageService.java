@@ -20,5 +20,5 @@ public interface FileManageService {
 
     void deleteFiles(int personId, long attachId);
 
-    void deleteUsers(int[] persons);
+    void deleteUsers(long[] persons);
 }

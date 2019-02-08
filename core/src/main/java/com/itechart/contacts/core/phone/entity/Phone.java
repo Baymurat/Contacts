@@ -1,5 +1,6 @@
 package com.itechart.contacts.core.phone.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.itechart.contacts.core.person.entity.Person;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,8 +18,8 @@ import java.io.Serializable;
 public class Phone implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
     @ManyToOne(targetEntity = Person.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "persons_id")

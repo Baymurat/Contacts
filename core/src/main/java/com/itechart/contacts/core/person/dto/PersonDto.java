@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 public class PersonDto {
 
-    private Long id;
+    private long id;
     private String familyStatus;
     private String currentJob;
     private String streetHouseApart;

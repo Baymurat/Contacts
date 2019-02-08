@@ -1,6 +1,7 @@
 package com.itechart.contacts.core.attachment.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.itechart.contacts.core.person.entity.Person;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,7 +20,7 @@ import java.sql.Date;
 public class Attachment implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(name = "filename")

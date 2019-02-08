@@ -1,7 +1,7 @@
 package com.itechart.contacts.core.person.dto;
 
-import com.itechart.contacts.core.attachment.dto.AttachmentDto;
-import com.itechart.contacts.core.phone.dto.PhoneDto;
+import com.itechart.contacts.core.attachment.dto.SaveAttachmentDto;
+import com.itechart.contacts.core.phone.dto.SavePhoneDto;
 import lombok.Data;
 
 import java.util.List;
@@ -9,6 +9,7 @@ import java.util.List;
 @Data
 public class SavePersonDto {
 
+    private long id;
     private String familyStatus;
     private String currentJob;
     private String streetHouseApart;
@@ -24,8 +25,10 @@ public class SavePersonDto {
     private String country;
     private String city;
 
-    private List<PhoneDto> phones;
-    private List<AttachmentDto> attachments;
+    List<SavePhoneDto> phones;
+    List<SaveAttachmentDto> attachments;
 
+    List<Long> deletePhones;
+    List<Long> deleteAttaches;
     public SavePersonDto() {}
 }
