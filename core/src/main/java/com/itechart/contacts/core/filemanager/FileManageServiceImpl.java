@@ -5,17 +5,9 @@ import com.itechart.contacts.core.utils.error.CustomLogger;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.Base64;
-import java.util.List;
-import java.util.Objects;
-import java.util.ResourceBundle;
-import java.util.ArrayList;
+import java.util.*;
 
 @Service
 public class FileManageServiceImpl implements FileManageService{
@@ -38,13 +30,16 @@ public class FileManageServiceImpl implements FileManageService{
     }
 
     public String getPhoto(int personId) {
+        String encodedfile = null;
         String path = rootPath + personId + uploadFolder + "photo";
         File directory = new File(path);
         if (directory.exists() && directory.list()[0].contains("photo")) {
-            File file = directory.listFiles()[0];
-            try (FileInputStream fileInputStreamReader = new FileInputStream(file)){
+            try {
+                File file = directory.listFiles()[0];
+                FileInputStream fileInputStreamReader = new FileInputStream(file);
                 byte[] bytes = new byte[(int)file.length()];
                 fileInputStreamReader.read(bytes);
+                fileInputStreamReader.close();
                 return new String(Base64.getEncoder().encode(bytes), StandardCharsets.UTF_8);
             } catch (IOException e) {
                 CustomLogger.logger.error("Exception occurs in FileManageService", e);

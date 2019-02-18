@@ -8,8 +8,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @Configuration
-@Import(com.itechart.contacts.core.common.config.Config.class)
-public class Config {
+@Import(com.itechart.contacts.core.common.config.RootConfig.class)
+public class WebConfig {
 
     @Bean
     public WebMvcConfigurer corsConfigurer() {

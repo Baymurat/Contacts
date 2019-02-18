@@ -10,5 +10,6 @@ public class PersonPreviewDto {
     private String email;
     private String webSite;
 
-    public PersonPreviewDto() {}
+    public PersonPreviewDto() {
+    }
 }

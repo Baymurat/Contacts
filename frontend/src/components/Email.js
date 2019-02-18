@@ -72,6 +72,7 @@ class Email extends React.Component {
         messageDto.messageSubject = this.state.messageTheme;
         messageDto.messageText = this.state.messageText;
 
+
         fetch("/sendEmail", {
             method: "POST",
             body: JSON.stringify(messageDto),

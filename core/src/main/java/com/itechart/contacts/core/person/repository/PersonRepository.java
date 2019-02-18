@@ -1,7 +1,9 @@
 package com.itechart.contacts.core.person.repository;
 
+import com.itechart.contacts.core.person.dto.PersonPreviewDto;
 import com.itechart.contacts.core.person.entity.Person;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;

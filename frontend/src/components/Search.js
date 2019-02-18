@@ -44,7 +44,7 @@ class Search extends React.Component {
         let text = this.state.fixedSearchQuery;
 
         console.log(text);
-        return fetch("/searchContact?page=" + page + "&text=" + text)
+        return fetch("/searchContact?page=" + page + "&size=" + 4 + "&text=" + text)
             .then(function (response) {
                 return response.json();
             }).then(function (result) {
@@ -94,6 +94,12 @@ class Search extends React.Component {
                 <button disabled={this.state.isFirst} className="btn btn-primary" onClick={this.previousPage}>Previous
                 </button>
                 <button disabled={this.state.isLast} className="btn btn-primary" onClick={this.nextPage}>Next</button>
+                <select className="btn btn-primary">
+                    <option selected={true}>5</option>
+                    <option>10</option>
+                    <option>15</option>
+                    <option>20</option>
+                </select>
             </div>
         </div>
     }

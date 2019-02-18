@@ -94,8 +94,8 @@ class Add extends React.Component {
 
         attachments = attachments.map((element) => {
             formData.append("files", element.selectedFile);
-            delete  element.selectedFile;
-            delete  element.isNew;
+            delete element.selectedFile;
+            delete element.isNew;
             return element;
         });
 
@@ -103,6 +103,7 @@ class Add extends React.Component {
 
         formData.append("person", JSON.stringify(contact));
         formData.append("photo", this.state.userData.photoFile);
+
 
         fetch("/addRecord",
             {

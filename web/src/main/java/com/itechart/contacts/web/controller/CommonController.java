@@ -2,24 +2,19 @@ package com.itechart.contacts.web.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.itechart.contacts.core.attachment.dto.AttachmentDto;
-import com.itechart.contacts.core.attachment.dto.SaveAttachmentDto;
-import com.itechart.contacts.core.attachment.entity.Attachment;
 import com.itechart.contacts.core.attachment.service.AttachmentService;
 import com.itechart.contacts.core.email.service.EmailService;
 import com.itechart.contacts.core.person.dto.PersonDto;
 import com.itechart.contacts.core.person.dto.SavePersonDto;
-import com.itechart.contacts.core.person.entity.Person;
 import com.itechart.contacts.core.person.service.PersonService;
 import com.itechart.contacts.core.email.entity.MessageEntity;
-import com.itechart.contacts.core.phone.dto.SavePhoneDto;
-import com.itechart.contacts.core.phone.entity.Phone;
 import com.itechart.contacts.core.phone.service.PhoneService;
 import com.itechart.contacts.core.filemanager.FileManageServiceImpl;
 import com.itechart.contacts.core.email.dto.MessageDto;
-import com.itechart.contacts.core.utils.ObjectMapperUtils;
 import com.itechart.contacts.core.utils.error.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.FileCopyUtils;
@@ -52,11 +47,9 @@ public class CommonController {
     @Autowired
     private EmailService emailService;
 
-    private int pageSize = 3;
-
     @RequestMapping(value = "/contacts", method = RequestMethod.GET)
-    public Object getContacts(@RequestParam(name = "page") int pageId) {
-        return personService.getContacts(PageRequest.of(pageId, pageSize));
+    public Object getContacts(Pageable pageable) {
+        return personService.getContacts(pageable);
     }
 
     @RequestMapping(value = "/contact/{id}", method = RequestMethod.GET)
@@ -78,6 +71,7 @@ public class CommonController {
     public void addRecord(@RequestParam("person") String jsonRepresentation,
                           @RequestPart(value = "files", required = false) MultipartFile[] files,
                           @RequestPart(value = "photo", required = false) MultipartFile photo) throws Exception {
+
         SavePersonDto savePersonDto = parseToContact(jsonRepresentation);
         PersonDto personDto = personService.create(savePersonDto, files);
 
@@ -98,7 +92,6 @@ public class CommonController {
         fileManageService.deleteUsers(deleteContactsId);
     }
 
-
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
     public void deleteRecord(@PathVariable(name = "id") long id) {
         attachmentService.deleteByContactId(id);
@@ -110,6 +103,7 @@ public class CommonController {
     @RequestMapping(value = "/updateRecord/{id}", method = RequestMethod.POST)
     public void updateRecord(@PathVariable(name = "id") long id,
                              @RequestParam("person") String jsonRepresentation,
+
                              @RequestPart(value = "files", required = false) MultipartFile[] files,
                              @RequestPart(value = "photo", required = false) MultipartFile photo) throws Exception {
         SavePersonDto savePersonDto = parseToContact(jsonRepresentation);
@@ -123,7 +117,7 @@ public class CommonController {
         if (deleteAttachments.size() > 0) {
             for (long attachmentId : deleteAttachments) {
                 attachmentService.delete(attachmentId);
-                fileManageService.deleteFiles((int)savePersonDto.getId(), attachmentId);
+                fileManageService.deleteFiles((int) savePersonDto.getId(), attachmentId);
             }
         }
 
@@ -134,6 +128,7 @@ public class CommonController {
         }
 
         if (photo != null) {
+
             fileManageService.savePhoto(savePersonDto.getId(), photo);
         }
     }
@@ -184,9 +179,9 @@ public class CommonController {
     }
 
     @RequestMapping(value = "/searchContact", method = RequestMethod.GET)
-    public Object searchContacts(@RequestParam(name = "page") int pageId,
-                                 @RequestParam(name = "text") String text) throws Exception {
-        return personService.searchContact(text, PageRequest.of(pageId, pageSize));
+    public Object searchContacts(@RequestParam(name = "text") String text,
+                                 Pageable pageable) throws Exception {
+        return personService.searchContact(text, pageable);
     }
 
     @RequestMapping(value = "/photo/{id}", method = RequestMethod.GET)
@@ -207,6 +202,7 @@ public class CommonController {
         String path = "D:\\templates";
         return fileManageService.getPatterns(path);
     }
+
 
     private SavePersonDto parseToContact(String jsonRepresentation) {
         ObjectMapper mapper = new ObjectMapper();

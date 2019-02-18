@@ -13,5 +13,6 @@ public class PhoneDto {
     private String comments;
     private long personId;
 
-    public PhoneDto() {}
+    public PhoneDto() {
+    }
 }

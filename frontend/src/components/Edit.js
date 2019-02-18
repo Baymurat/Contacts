@@ -55,6 +55,7 @@ class Edit extends Component {
         let link = window.location.href.split("/");
         let id = link[link.length - 1];
 
+
         return fetch("/contact/" + id, {method: 'GET'}).then(response => {
             return response.json();
         }).then(result => {
@@ -67,6 +68,7 @@ class Edit extends Component {
     getUserPhoto() {
         let link = window.location.href.split("/");
         let id = link[link.length - 1];
+
 
         return fetch("/photo/" + id, {
             method: 'GET',
@@ -101,14 +103,13 @@ class Edit extends Component {
         contact.deleteAttaches = this.state.deleteAttaches.slice();
         contact.deletePhones = this.state.deleteNumbers.slice();
 
-
         let formData = new FormData();
         let attachments = this.state.attachments.slice();
 
         attachments = attachments.map(element => {
             formData.append("files", element.selectedFile);
-            delete  element.selectedFile;
-            delete  element.isNew;
+            delete element.selectedFile;
+            delete element.isNew;
             return element;
         });
 

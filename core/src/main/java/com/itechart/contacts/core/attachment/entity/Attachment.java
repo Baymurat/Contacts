@@ -1,18 +1,20 @@
 package com.itechart.contacts.core.attachment.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.itechart.contacts.core.person.entity.Person;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.sql.Date;
 
 /**
  * Created by Admin on 12.09.2018
  */
+
 @Entity
 @Getter
 @Setter
@@ -23,6 +25,7 @@ public class Attachment implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Size(min = 3, max = 60)
     @Column(name = "filename")
     private String fileName;
 
@@ -35,5 +38,36 @@ public class Attachment implements Serializable {
     @JoinColumn(name = "persons_id")
     private Person person;
 
-    public Attachment() {}
+
+    public Attachment() {
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+
+        if (!(o instanceof Attachment)) {
+            return false;
+        }
+
+        Attachment a = (Attachment) o;
+
+        return a.getComments().equals(this.comments) &&
+                a.getFileName().equals(this.fileName)
+                //a.getId() ==  this.id &&
+                //a.getPerson() == this.person &&
+                //a.getLoadDate().equals(this.getLoadDate());
+        ;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + fileName.hashCode();
+        result = 31 * result + loadDate.hashCode();
+        result = 31 * result + comments.hashCode();
+        return result;
+    }
 }

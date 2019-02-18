@@ -1,5 +1,6 @@
 import React from "react";
 import RenderContacts from "./RenderContacts";
+import PagesCount from "./PagesCount";
 
 class Index extends React.Component {
     constructor(props) {
@@ -18,6 +19,9 @@ class Index extends React.Component {
             selectedIndex: -1,
             showCheckbox: false,
             isSelected: false,
+            pageSize: 5,
+            totalPages: 0,
+            selectedPage: 0,
         };
 
         document.title = "Список контактов";
@@ -26,6 +30,18 @@ class Index extends React.Component {
     componentDidMount() {
         this.getContactList(0);
     }
+
+    handleSelectedPageChange = (newSelectedPage) => {
+        this.getContactList(newSelectedPage);
+    };
+
+    inputPageSizeChange = (e) => {
+        this.setState({
+            pageSize: e.target.value,
+        });
+
+        this.getContactList(this.state.offSet)
+    };
 
     nextPage() {
         let page = this.state.offSet + 1;
@@ -40,12 +56,13 @@ class Index extends React.Component {
     getContactList(page) {
         let refThis = this;
 
-        return fetch("/contacts?page=" + page)
+        return fetch("/contacts?page=" + page + "&size=" + this.state.pageSize)
             .then(function (response) {
                 return response.json();
             }).then(function (result) {
                 return result;
             }).then(function (data) {
+                console.log(data);
                 refThis.setState({
                     contacts: data.content,
                     offSet: data.number,
@@ -54,6 +71,7 @@ class Index extends React.Component {
                     selectedIndex: -1,
                     showCheckbox: false,
                     selectedContacts: [],
+                    totalPages: data.totalPages,
                 })
             })
     }
@@ -64,7 +82,16 @@ class Index extends React.Component {
             <div className="offset-lg-2 col-lg-8 superuserform_companylist animated fadeIn">
                 <button disabled={this.state.isFirst} className="btn btn-primary" onClick={this.previousPage}>Previous
                 </button>
+                <PagesCount totalPages={this.state.totalPages} handleSelectedPageChange={this.handleSelectedPageChange}/>
                 <button disabled={this.state.isLast} className="btn btn-primary" onClick={this.nextPage}>Next</button>
+                <select className="btn btn-primary"
+                defaultValue={5}
+                onChange={this.inputPageSizeChange}>
+                    <option value={5}>5</option>
+                    <option value={10}>10</option>
+                    <option value={15}>15</option>
+                    <option value={20}>20</option>
+                </select>
             </div>
         </div>
     }

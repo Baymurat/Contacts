@@ -1,33 +1,15 @@
 package com.itechart.contacts.core.common.config;
 
-import liquibase.integration.spring.SpringLiquibase;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
-import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
-@EnableJpaRepositories(value = "com.itechart.contacts.core")
-@EntityScan("com.itechart")
-@ComponentScan(value = "com.itechart.contacts")
-public class Config {
-
-
-    @Bean
-    public SpringLiquibase liquibase(DataSource dataSource) throws Exception {
-        SpringLiquibase liquibase = new SpringLiquibase();
-        liquibase.setChangeLog("classpath*:db.changelog/master.xml");
-        liquibase.setDataSource(dataSource);
-        return liquibase;
-    }
-
+public class EmailConfig {
 
     @Bean
     public JavaMailSender getJavaMailSender(Environment environment) {

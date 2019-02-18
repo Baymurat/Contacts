@@ -8,8 +8,9 @@ import com.itechart.contacts.core.phone.repository.PhoneRepository;
 import com.itechart.contacts.core.utils.ObjectMapperUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
+import javax.validation.Valid;
 
 @Service
 public class PhoneServiceImpl implements PhoneService {
@@ -23,29 +24,37 @@ public class PhoneServiceImpl implements PhoneService {
         this.personRepository = personRepository;
     }
 
-    public PhoneDto create(SavePhoneDto savePhoneDto) {
+    @Transactional
+    @Override
+    public PhoneDto create(@Valid SavePhoneDto savePhoneDto) {
         Phone phone = ObjectMapperUtils.map(savePhoneDto, Phone.class);
         phone.setPerson(personRepository.getOne(savePhoneDto.getPersonId()));
         phone = phoneRepository.save(phone);
         return ObjectMapperUtils.map(phone, PhoneDto.class);
     }
 
+    @Transactional(readOnly = true)
+    @Override
     public PhoneDto getPhone(Long id) {
         Phone phone = phoneRepository.findById(id).orElseThrow(IllegalStateException::new);
         return ObjectMapperUtils.map(phone, PhoneDto.class);
     }
 
+    @Transactional
+    @Override
     public void delete(Long id) {
         phoneRepository.deleteById(id);
     }
 
     @Transactional
+    @Override
     public void deleteByContactId(Long id) {
         phoneRepository.deleteAllByPersonId(id);
     }
 
     @Transactional
-    public PhoneDto update(long id, SavePhoneDto savePhone) {
+    @Override
+    public PhoneDto update(long id, @Valid SavePhoneDto savePhone) {
         Phone phone =  phoneRepository.findById(id).orElseThrow(IllegalArgumentException::new);
         ObjectMapperUtils.map(savePhone, phone);
         return ObjectMapperUtils.map(phone, PhoneDto.class);

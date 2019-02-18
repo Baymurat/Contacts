@@ -29,6 +29,6 @@ public class PersonDto {
     private List<PhoneDto> phones;
     private List<AttachmentDto> attachments;
 
-    public PersonDto() {}
-
+    public PersonDto() {
+    }
 }
