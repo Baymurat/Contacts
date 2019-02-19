@@ -1,6 +1,7 @@
 package com.itechart.contacts.core.utils.testutil;
 
 import com.itechart.contacts.core.attachment.entity.Attachment;
+import com.itechart.contacts.core.person.dto.PersonFilter;
 import com.itechart.contacts.core.person.entity.Person;
 import com.itechart.contacts.core.phone.entity.Phone;
 import org.springframework.mock.web.MockMultipartFile;
@@ -57,5 +58,14 @@ public class TestUtil {
     public static MultipartFile[] initMultiFiles() throws IOException {
         return new MultipartFile[]{new MockMultipartFile("FileName", "testFile.jpg",
                 "image/jpg", Files.readAllBytes(new File("D:\\testFile.jpg").toPath()))};
+    }
+
+    public static PersonFilter initPersonFilter(String firstLastName, String currentJob, long phoneNum) {
+        PersonFilter personFilter = new PersonFilter();
+        personFilter.setFirstAndLastName(firstLastName);
+        personFilter.setCurrentJob(currentJob);
+        personFilter.setPhoneNumber(phoneNum);
+
+        return personFilter;
     }
 }

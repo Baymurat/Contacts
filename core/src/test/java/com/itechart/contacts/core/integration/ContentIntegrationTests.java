@@ -1,4 +1,6 @@
 package com.itechart.contacts.core.integration;
+import com.itechart.contacts.core.person.dto.PersonFilter;
+import com.itechart.contacts.core.person.dto.PersonPreviewDto;
 import com.itechart.contacts.core.utils.testutil.TestUtil;
 import com.itechart.contacts.core.attachment.entity.Attachment;
 import com.itechart.contacts.core.attachment.service.AttachmentService;
@@ -13,6 +15,8 @@ import com.itechart.contacts.core.utils.ObjectMapperUtils;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
@@ -24,6 +28,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -190,5 +195,77 @@ public class ContentIntegrationTests extends AbstractTransactionalJUnit4SpringCo
     @Test(expected = EmptyResultDataAccessException.class)
     public void deletePersonRecordNegativeTest() {
         personService.delete(999L);
+    }
+
+    @Test
+    public void searchFunctionTestByName() throws IOException {
+        Person expected = TestUtil.initPerson("Dima");
+
+        personService.create(ObjectMapperUtils.map(expected, SavePersonDto.class), null);
+        flushAndClear();
+
+        PersonFilter filter = TestUtil.initPersonFilter("Dima", "", 0);
+
+        Page<PersonPreviewDto> page = personService.searchContact(filter, PageRequest.of(0, 5));
+        List<PersonPreviewDto> personPreviewDtoList = page.getContent();
+
+        assertEquals(1, personPreviewDtoList.size());
+
+        PersonPreviewDto actual = personPreviewDtoList.get(0);
+
+        assertEquals("Dima", actual.getName());
+    }
+
+    @Test
+    public void searchFunctionTestBySurname() throws IOException {
+        Person expected = TestUtil.initPerson("Petrov");
+
+        personService.create(ObjectMapperUtils.map(expected, SavePersonDto.class), null);
+        flushAndClear();
+
+        PersonFilter filter = TestUtil.initPersonFilter("Petrov", "", 0);
+
+        Page<PersonPreviewDto> page = personService.searchContact(filter, PageRequest.of(0, 5));
+        List<PersonPreviewDto> personPreviewDtoList = page.getContent();
+
+        assertEquals(1, personPreviewDtoList.size());
+
+        PersonPreviewDto actual = personPreviewDtoList.get(0);
+
+        assertEquals("Petrov", actual.getSurName());
+    }
+
+    @Test
+    public void searchFunctionTestByJob() throws IOException {
+        Person expected = TestUtil.initPerson("driver");
+        expected.setName("Vasya");
+
+        personService.create(ObjectMapperUtils.map(expected, SavePersonDto.class), null);
+        flushAndClear();
+
+        PersonFilter filter = TestUtil.initPersonFilter("", "driver", 0);
+
+        Page<PersonPreviewDto> page = personService.searchContact(filter, PageRequest.of(0, 5));
+        List<PersonPreviewDto> personPreviewDtoList = page.getContent();
+
+        assertEquals(1, personPreviewDtoList.size());
+        assertEquals("Vasya", personPreviewDtoList.get(0).getName());
+    }
+
+    @Test
+    public void searchFunctionTestByPhoneNum() throws IOException {
+        Person expectedPerson = TestUtil.initPerson("Ivan");
+        Phone expectedPhone = TestUtil.initPhone("mobile", 999);
+        expectedPerson.setPhones(Collections.singletonList(expectedPhone));
+
+        personService.create(ObjectMapperUtils.map(expectedPerson, SavePersonDto.class), null);
+        flushAndClear();
+        PersonFilter filter = TestUtil.initPersonFilter("", "", 999);
+
+        Page<PersonPreviewDto> page = personService.searchContact(filter, PageRequest.of(0, 5));
+        List<PersonPreviewDto> personPreviewDtoList = page.getContent();
+
+        assertEquals(1, personPreviewDtoList.size());
+        assertEquals("Ivan", personPreviewDtoList.get(0).getName());
     }
 }

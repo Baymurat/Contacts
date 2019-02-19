@@ -5,8 +5,8 @@ import com.itechart.contacts.core.attachment.dto.AttachmentDto;
 import com.itechart.contacts.core.attachment.dto.SaveAttachmentDto;
 import com.itechart.contacts.core.attachment.service.AttachmentService;
 import com.itechart.contacts.core.filemanager.FileManageService;
-import com.itechart.contacts.core.person.config.PersonSpecification;
 import com.itechart.contacts.core.person.dto.PersonDto;
+import com.itechart.contacts.core.person.dto.PersonFilter;
 import com.itechart.contacts.core.person.dto.PersonPreviewDto;
 import com.itechart.contacts.core.person.dto.SavePersonDto;
 import com.itechart.contacts.core.person.entity.Person;
@@ -16,9 +16,7 @@ import com.itechart.contacts.core.phone.service.PhoneService;
 import com.itechart.contacts.core.utils.ObjectMapperUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -51,10 +49,17 @@ public class PersonServiceImpl implements PersonService {
         return ObjectMapperUtils.map(person, PersonDto.class);
     }
 
-    @Transactional(readOnly = true)
+    /*@Transactional(readOnly = true)
     @Override
     public Page<PersonPreviewDto> searchContact(String text, Pageable pageable) {
         return personRepository.findAll(Specification.where(PersonSpecification.textInAllColumns(text)), pageable)
+                .map(person -> ObjectMapperUtils.map(person, PersonPreviewDto.class));
+    }*/
+
+    @Transactional(readOnly = true)
+    @Override
+    public Page<PersonPreviewDto> searchContact(PersonFilter personFilter, Pageable pageable) {
+        return personRepository.search(personFilter, pageable)
                 .map(person -> ObjectMapperUtils.map(person, PersonPreviewDto.class));
     }
 

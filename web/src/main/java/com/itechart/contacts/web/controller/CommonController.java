@@ -5,6 +5,7 @@ import com.itechart.contacts.core.attachment.dto.AttachmentDto;
 import com.itechart.contacts.core.attachment.service.AttachmentService;
 import com.itechart.contacts.core.email.service.EmailService;
 import com.itechart.contacts.core.person.dto.PersonDto;
+import com.itechart.contacts.core.person.dto.PersonFilter;
 import com.itechart.contacts.core.person.dto.SavePersonDto;
 import com.itechart.contacts.core.person.service.PersonService;
 import com.itechart.contacts.core.email.entity.MessageEntity;
@@ -13,7 +14,6 @@ import com.itechart.contacts.core.filemanager.FileManageServiceImpl;
 import com.itechart.contacts.core.email.dto.MessageDto;
 import com.itechart.contacts.core.utils.error.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -179,9 +179,21 @@ public class CommonController {
     }
 
     @RequestMapping(value = "/searchContact", method = RequestMethod.GET)
-    public Object searchContacts(@RequestParam(name = "text") String text,
+    public Object searchContacts(@RequestParam(name = "firstAndLastName", required = false) String firstAndLastName,
+                                 @RequestParam(name = "currentJob", required = false) String currentJob,
+                                 @RequestParam(name = "phoneNumber", required = false) Long phoneNumber,
                                  Pageable pageable) throws Exception {
-        return personService.searchContact(text, pageable);
+        PersonFilter personFilter = new PersonFilter();
+        if (firstAndLastName != null && !firstAndLastName.isEmpty()) {
+            personFilter.setFirstAndLastName(firstAndLastName);
+        }
+        if ( currentJob != null && ! currentJob.isEmpty()) {
+            personFilter.setCurrentJob(currentJob);
+        }
+        if ( phoneNumber != null) {
+            personFilter.setPhoneNumber(phoneNumber);
+        }
+        return personService.searchContact(personFilter, pageable);
     }
 
     @RequestMapping(value = "/photo/{id}", method = RequestMethod.GET)
@@ -189,13 +201,6 @@ public class CommonController {
         String encodedFile = fileManageService.getPhoto(id);
         return ResponseEntity.status(HttpStatus.OK).header("Content-Type", "application/json").body(encodedFile);
     }
-
-
-    /*@RequestMapping(value = "/search-person-advanced", method = RequestMethod.POST)
-    public Result advancedSearch(@RequestBody Person person) throws Exception {
-        return simpleService.advancedSearch(person);
-    }*/
-
 
     @RequestMapping(value = "/messagePatterns", method = RequestMethod.GET)
     public List<MessageEntity> getPatterns() throws IOException {

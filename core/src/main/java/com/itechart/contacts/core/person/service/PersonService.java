@@ -1,6 +1,7 @@
 package com.itechart.contacts.core.person.service;
 
 import com.itechart.contacts.core.person.dto.PersonDto;
+import com.itechart.contacts.core.person.dto.PersonFilter;
 import com.itechart.contacts.core.person.dto.PersonPreviewDto;
 import com.itechart.contacts.core.person.dto.SavePersonDto;
 import com.itechart.contacts.core.person.entity.Person;
@@ -21,7 +22,7 @@ public interface PersonService {
 
     PersonDto getContact(Long id);
 
-    Page<PersonPreviewDto> searchContact(String text, Pageable pageable);
+    Page<PersonPreviewDto> searchContact(PersonFilter personFilter, Pageable pageable);
 
     Page<PersonPreviewDto> getContacts(Pageable pageable);
 
