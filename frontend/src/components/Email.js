@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "react-router-dom/es/Link";
+import {FormattedMessage} from "react-intl";
 
 class Email extends React.Component {
 
@@ -110,10 +111,14 @@ class Email extends React.Component {
 
     render() {
         return <div className="offset-lg-4 col-lg-4 superuserform_companylist animated fadeIn">
-            <label>Recipients </label>
+            <label>
+                <FormattedMessage id={"detail.labels.recipients"}/>
+            </label>
             <input type="text" className="form-control" value={this.state.recipientsEmail} disabled={true}/>
 
-            <label>Patterns</label>
+            <label>
+                <FormattedMessage id={"detail.labels.patterns"}/>
+            </label>
             <select className="custom-select" onChange={(e) => this.handleInputPatternsChange(e)}>
                 {
                     Object.keys(this.state.messagePatterns).map((option, index) => {
@@ -122,11 +127,15 @@ class Email extends React.Component {
                 }
             </select>
 
-            <label>Theme</label>
+            <label>
+                <FormattedMessage id={"detail.labels.theme"}/>
+            </label>
             <input type="text" className="form-control" onChange={(e) => this.handleInputThemeChange(e)}
                    value={this.state.messageTheme}/>
 
-            <label>Message Content</label>
+            <label>
+                <FormattedMessage id={"detail.labels.messageContent"}/>
+            </label>
             <textarea cols={90} rows={10} onChange={(e) => this.handleMessageTextChange(e)}
                       value={this.state.messageText}/>
 
@@ -134,12 +143,15 @@ class Email extends React.Component {
                 <Link to={"/index"}>
                     <button id="send-email-button" type="button" className="btn btn-primary" onClick={() => {
                         this.sendEmail()
-                    }}>Send email
+                    }}>
+                        <FormattedMessage id={"detail.buttons.sendEmail"}/>
                     </button>
                 </Link>
 
                 <Link to={"/index"}>
-                    <button id="back-to-index" type="button" className="btn btn-primary">Back</button>
+                    <button id="back-to-index" type="button" className="btn btn-primary">
+                        <FormattedMessage id={"detail.buttons.back"}/>
+                    </button>
                 </Link>
 
             </div>

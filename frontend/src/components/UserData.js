@@ -1,4 +1,5 @@
 import React from "react";
+import {FormattedMessage} from "react-intl";
 
 class UserData extends React.Component {
 
@@ -136,31 +137,41 @@ class UserData extends React.Component {
                          src={"/favicon.ico"}/>
                 </div>
                 <div className="col-md-auto">
-                    <label htmlFor="name">*Name</label>
+                    <label htmlFor="name">
+                        <FormattedMessage id={"detail.labels.name"}/>
+                    </label>
                     <input type="text" className="form-control" placeholder="Username"
                            defaultValue={this.props.userData.name}
                            onChange={(e) => this.inputName(e)}
                            disabled={!this.props.addMode}/>
 
-                    <label htmlFor="surname">*Surname</label>
+                    <label htmlFor="surname">*
+                        <FormattedMessage id={"detail.labels.surname"}/>
+                    </label>
                     <input type="text" className="form-control" placeholder="Surname"
                            defaultValue={this.props.userData.surName}
                            onChange={(e) => this.inputSurname(e)}
                            disabled={!this.props.addMode}/>
 
-                    <label htmlFor="middlename">*Middlename</label>
+                    <label htmlFor="middlename">*
+                        <FormattedMessage id={"detail.labels.middleName"}/>
+                    </label>
                     <input type="text" className="form-control" placeholder="Middlename"
                            defaultValue={this.props.userData.middleName}
                            onChange={(e) => this.inputMiddlename(e)}
                            disabled={!this.props.addMode}/>
 
-                    <label htmlFor="datebirth">Datebirth</label>
+                    <label htmlFor="datebirth">
+                        <FormattedMessage id={"detail.labels.dateBirth"}/>
+                    </label>
                     <input type="text" className="form-control" placeholder="__/__/____"
                            defaultValue={this.props.userData.dateBirth}
                            onChange={(e) => this.inputDateBirth(e)}
                            disabled={!this.props.addMode}/>
 
-                    <label htmlFor="gender">Gender</label>
+                    <label htmlFor="gender">
+                        <FormattedMessage id={"detail.labels.gender"}/>
+                    </label>
                     <select className="custom-select form-control"
                             defaultValue={this.props.userData.gender}
                             disabled={!this.props.addMode} onChange={(e) => this.inputGender(e)}>
@@ -168,13 +179,19 @@ class UserData extends React.Component {
                         <option value="female">female</option>
                     </select>
 
-                    <label htmlFor="citizenship">Citizenship</label>
+                    <label htmlFor="citizenship">
+                        <FormattedMessage id={"detail.labels.citizenship"}/>
+
+                    </label>
                     <input type="text" className="form-control" placeholder="Citizenship"
                            defaultValue={this.props.userData.citizenship}
                            onChange={(e) => this.inputCitizenship(e)}
                            disabled={!this.props.addMode}/>
 
-                    <label htmlFor="family-status">Family status</label>
+                    <label htmlFor="family-status">
+                        <FormattedMessage id={"detail.labels.familyStatus"}/>
+
+                    </label>
                     <select className="custom-select form-control"
                             defaultValue={this.props.userData.familyStatus}
                             disabled={!this.props.addMode} onChange={(e) => this.inputFamilyStatus(e)}>
@@ -184,43 +201,57 @@ class UserData extends React.Component {
                 </div>
 
                 <div className="col-md-auto">
-                    <label htmlFor="web-site">Website</label>
+                    <label htmlFor="web-site">
+                        <FormattedMessage id={"detail.labels.webSite"}/>
+                    </label>
                     <input type="text" className="form-control" placeholder="Web Site"
                            defaultValue={this.props.userData.webSite}
                            onChange={(e) => this.inputWebSite(e)}
                            disabled={!this.props.addMode}/>
 
-                    <label htmlFor="email">Email</label>
+                    <label htmlFor="email">
+                        <FormattedMessage id={"detail.labels.email"}/>
+                    </label>
                     <input type="email" className="form-control" placeholder="Email"
                            defaultValue={this.props.userData.email}
                            onChange={(e) => this.inputEmail(e)}
                            disabled={!this.props.addMode}/>
 
-                    <label htmlFor="currentjob">Currentjob</label>
+                    <label htmlFor="currentjob">
+                        <FormattedMessage id={"detail.labels.currentJob"}/>
+                    </label>
                     <input type="text" className="form-control" placeholder="Current Job"
                            defaultValue={this.props.userData.currentJob}
                            onChange={(e) => this.inputCurrentJob(e)}
                            disabled={!this.props.addMode}/>
 
-                    <label htmlFor="country">Country</label>
+                    <label htmlFor="country">
+                        <FormattedMessage id={"detail.labels.country"}/>
+                    </label>
                     <input type="text" className="form-control" placeholder="Country"
                            defaultValue={this.props.userData.country}
                            onChange={(e) => this.inputCountry(e)}
                            disabled={!this.props.addMode}/>
 
-                    <label htmlFor="city">City</label>
+                    <label htmlFor="city">
+                        <FormattedMessage id={"detail.labels.city"}/>
+                    </label>
                     <input type="text" className="form-control" placeholder="City"
                            defaultValue={this.props.userData.city}
                            onChange={(e) => this.inputCity(e)}
                            disabled={!this.props.addMode}/>
 
-                    <label htmlFor="street-house-apart">Street/House/Apart</label>
+                    <label htmlFor="street-house-apart">
+                        <FormattedMessage id={"detail.labels.streetHouseApart"}/>
+                    </label>
                     <input type="text" className="form-control" placeholder="Street/House/Apart"
                            defaultValue={this.props.userData.streetHouseApart}
                            onChange={(e) => this.inputAddress(e)}
                            disabled={!this.props.addMode}/>
 
-                    <label>Index</label>
+                    <label>
+                        <FormattedMessage id={"detail.labels.index"}/>
+                    </label>
                     <input type="text" className="form-control" placeholder="Index"
                            defaultValue={this.props.userData.index}
                            onChange={(e) => this.inputIndex(e)}

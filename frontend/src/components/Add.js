@@ -3,6 +3,7 @@ import Phone from "./Phone";
 import Attachment from "./Attachment";
 import UserData from "./UserData";
 import Link from "react-router-dom/es/Link";
+import {FormattedMessage} from "react-intl";
 
 class Add extends React.Component {
 
@@ -29,11 +30,14 @@ class Add extends React.Component {
             <Link to={"/index"}>
                 <button type="button" className="btn btn-primary" onClick={() => {
                     this.sendData()
-                }}>Accept
+                }}>
+                    <FormattedMessage id={"detail.buttons.accept"}/>
                 </button>
             </Link>
             <Link to={"/index"}>
-                <button id="back-to-index" type="button" className="btn btn-primary">Back</button>
+                <button id="back-to-index" type="button" className="btn btn-primary">
+                    <FormattedMessage id={"detail.buttons.back"}/>
+                </button>
             </Link>
         </div>
     }

@@ -1,5 +1,6 @@
 import * as React from "react";
 import RenderContacts from "./RenderContacts";
+import {FormattedMessage} from "react-intl";
 
 class Search extends React.Component {
 
@@ -94,19 +95,27 @@ class Search extends React.Component {
         return <div className="row">
             <div className="offset-lg-4 col-lg-16 superuserform_companylist animated fadeIn">
                 <div className={"d-inline-block"}>
-                    <label>Name or Surname</label>
+                    <label>
+                        <FormattedMessage id={"detail.labels.name"}/>
+                    </label>
                     <input type="text" className="form-control" onChange={(e) => {this.handleSearchInputChange(e)}}/>
                 </div>
                 <div className={"d-inline-block"}>
-                    <label>Current Job</label>
+                    <label>
+                        <FormattedMessage id={"detail.labels.currentJob"}/>
+                    </label>
                     <input type="text" className="form-control" onChange={(e) => {this.handleCurrJobSearchInputChange(e)}}/>
                 </div>
                 <div className={"d-inline-block"}>
-                    <label>Phone number</label>
+                    <label>
+                        <FormattedMessage id={"detail.labels.phoneNumber"}/>
+                    </label>
                     <input type="number" className="form-control" onChange={(e) => {this.handlePhoneNumSearchInputChange(e)}}/>
                 </div>
                 <div>
-                    <button type="button" className="btn btn-primary" onClick={() => {this.handleSearchButtonClick()}}>Search</button>
+                    <button type="button" className="btn btn-primary" onClick={() => {this.handleSearchButtonClick()}}>
+                        <FormattedMessage id={"detail.buttons.search"}/>
+                    </button>
                 </div>
             </div>
 

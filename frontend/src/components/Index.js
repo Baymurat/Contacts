@@ -1,6 +1,7 @@
 import React from "react";
 import RenderContacts from "./RenderContacts";
 import PagesCount from "./PagesCount";
+import {FormattedMessage} from "react-intl";
 
 class Index extends React.Component {
     constructor(props) {
@@ -80,10 +81,13 @@ class Index extends React.Component {
         return <div className="row">
             <RenderContacts contacts={this.state.contacts}/>
             <div className="offset-lg-2 col-lg-8 superuserform_companylist animated fadeIn">
-                <button disabled={this.state.isFirst} className="btn btn-primary" onClick={this.previousPage}>Previous
+                <button disabled={this.state.isFirst} className="btn btn-primary" onClick={this.previousPage}>
+                    <FormattedMessage id={"detail.buttons.prev"}/>
                 </button>
                 <PagesCount totalPages={this.state.totalPages} handleSelectedPageChange={this.handleSelectedPageChange}/>
-                <button disabled={this.state.isLast} className="btn btn-primary" onClick={this.nextPage}>Next</button>
+                <button disabled={this.state.isLast} className="btn btn-primary" onClick={this.nextPage}>
+                    <FormattedMessage id={"detail.buttons.next"}/>
+                </button>
                 <select className="btn btn-primary"
                 defaultValue={5}
                 onChange={this.inputPageSizeChange}>

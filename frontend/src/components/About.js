@@ -3,6 +3,7 @@ import UserData from "./UserData";
 import Phone from "./Phone";
 import Attachment from "./Attachment";
 import Link from "react-router-dom/es/Link";
+import {FormattedMessage} from "react-intl";
 
 class About extends React.Component {
     constructor(props) {
@@ -20,7 +21,9 @@ class About extends React.Component {
     renderButtons() {
         return <div className="offset-lg-4 col-lg-4 superuserform_companylist">
             <Link to={"/index"}>
-                <button type="button" className="btn btn-primary">Home</button>
+                <button type="button" className="btn btn-primary">
+                    <FormattedMessage id={"detail.buttons.back"}/>
+                </button>
             </Link>
         </div>
     }

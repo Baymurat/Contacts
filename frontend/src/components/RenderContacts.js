@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "react-router-dom/es/Link";
+import {FormattedMessage} from "react-intl";
 
 class RenderContacts extends React.Component {
     constructor(props) {
@@ -117,19 +118,27 @@ class RenderContacts extends React.Component {
     renderButtons() {
         return <div className="offset-lg-2 col-lg-8 superuserform_companylist animated fadeIn">
             <Link to={"/add"}>
-                <button id="add-button" className="btn btn-primary">Add</button>
+                <button id="add-button" className="btn btn-primary">
+                    <FormattedMessage id={"detail.buttons.add"}/>
+                </button>
             </Link>
 
             <Link to={"/edit/" + this.state.selectedContactId}>
-                <button id="edit-button" className="btn btn-primary">Edit</button>
+                <button id="edit-button" className="btn btn-primary">
+                    <FormattedMessage id={"detail.buttons.edit"}/>
+                </button>
             </Link>
 
             <Link to={"/about/" + this.state.selectedContactId}>
-                <button id="delete-button" className="btn btn-primary">About</button>
+                <button id="delete-button" className="btn btn-primary">
+                    <FormattedMessage id={"detail.buttons.about"}/>
+                </button>
             </Link>
 
             <Link to={"/search"}>
-                <button id="about-button" className="btn btn-primary">Search</button>
+                <button id="about-button" className="btn btn-primary">
+                    <FormattedMessage id={"detail.buttons.search"}/>
+                </button>
             </Link>
 
             <Link to={{
@@ -146,16 +155,20 @@ class RenderContacts extends React.Component {
                     })()
                 }
             }}>
-                <button id="send-button" className="btn btn-primary">Email</button>
+                <button id="send-button" className="btn btn-primary">
+                    <FormattedMessage id={"detail.buttons.email"}/>
+                </button>
             </Link>
 
             <Link to={'/index'}>
                 <button id="go-over-search-button" className="btn btn-danger"
-                        onClick={() => this.handleDeleteButtonClick()}>Delete
+                        onClick={() => this.handleDeleteButtonClick()}>
+                    <FormattedMessage id={"detail.buttons.delete"}/>
                 </button>
             </Link>
             <button id="check-boxes-button" className="btn btn-primary"
-                    onClick={() => this.toggleCheckBoxesState()}>Enable multi select
+                    onClick={() => this.toggleCheckBoxesState()}>
+                <FormattedMessage id={"detail.buttons.multiSelect"}/>
             </button>
         </div>
     }
@@ -164,10 +177,18 @@ class RenderContacts extends React.Component {
         return <div className="row">
             <div className="offset-lg-2 col-lg-8 superuserform_companylist animated fadeIn">
                 <div className="row table_header">
-                    <div className="col-md-3">Name</div>
-                    <div className="col-md-3">Surname</div>
-                    <div className="col-md-3">Email</div>
-                    <div className="col-md-3">Website</div>
+                    <div className="col-md-3">
+                        <FormattedMessage id={"detail.table.header.name"}/>
+                    </div>
+                    <div className="col-md-3">
+                        <FormattedMessage id={"detail.table.header.surname"}/>
+                    </div>
+                    <div className="col-md-3">
+                        <FormattedMessage id={"detail.table.header.email"}/>
+                    </div>
+                    <div className="col-md-3">
+                        <FormattedMessage id={"detail.table.header.site"}/>
+                    </div>
                 </div>
                 {
                     this.props.contacts.map((element, index) => {

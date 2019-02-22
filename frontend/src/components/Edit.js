@@ -4,6 +4,7 @@ import React from "react";
 import Attachment from "./Attachment";
 import Phone from "./Phone";
 import Link from "react-router-dom/es/Link";
+import {FormattedMessage} from "react-intl";
 
 class Edit extends Component {
 
@@ -137,11 +138,13 @@ class Edit extends Component {
                 <button type="button" className="btn btn-primary" onClick={() => {
                     this.sendUserData()
                 }}>
-                    Update
+                    <FormattedMessage id={"detail.buttons.update"}/>
                 </button>
             </Link>
             <Link to={"/index"}>
-                <button type="button" className="btn btn-primary">Cancel</button>
+                <button type="button" className="btn btn-primary">
+                    <FormattedMessage id={"detail.buttons.cancel"}/>
+                </button>
             </Link>
         </div>
     }
