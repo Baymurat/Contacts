@@ -8,4 +8,5 @@ public class PersonFilter {
     private String firstAndLastName;
     private String currentJob;
     private long phoneNumber;
+    private long userId;
 }

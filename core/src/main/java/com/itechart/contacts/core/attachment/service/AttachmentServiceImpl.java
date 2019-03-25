@@ -39,6 +39,7 @@ public class AttachmentServiceImpl implements AttachmentService {
         attachmentRepository.deleteById(id);
     }
 
+    @Transactional
     @Override
     public void deleteByContactId(Long id) {
         attachmentRepository.deleteAllByPersonId(id);

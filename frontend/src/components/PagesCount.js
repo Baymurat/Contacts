@@ -1,9 +1,6 @@
 import React from "react";
 
 class PagesCount extends React.Component {
-    constructor(props) {
-        super(props);
-    }
 
     render() {
         let totalPages = this.props.totalPages;

@@ -13,10 +13,12 @@ import com.itechart.contacts.core.person.entity.Person;
 import com.itechart.contacts.core.person.repository.PersonRepository;
 import com.itechart.contacts.core.phone.dto.SavePhoneDto;
 import com.itechart.contacts.core.phone.service.PhoneService;
+import com.itechart.contacts.core.user.repository.UserRepository;
 import com.itechart.contacts.core.utils.ObjectMapperUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,32 +35,32 @@ public class PersonServiceImpl implements PersonService {
     private AttachmentService attachmentService;
     private PhoneService phoneService;
     private FileManageService fileManageService;
+    private UserRepository userRepository;
 
     @Autowired
-    public PersonServiceImpl(PersonRepository personRepository, AttachmentService attachmentService, PhoneService phoneService, FileManageService fileManageService) {
+    public PersonServiceImpl(PersonRepository personRepository, AttachmentService attachmentService, PhoneService phoneService, FileManageService fileManageService, UserRepository userRepository) {
         this.personRepository = personRepository;
         this.attachmentService = attachmentService;
         this.phoneService = phoneService;
         this.fileManageService = fileManageService;
+        this.userRepository = userRepository;
     }
 
     @Transactional(readOnly = true)
     @Override
     public PersonDto getContact(Long id) {
-        Person person = personRepository.findById(id).orElseThrow(IllegalStateException::new);
+        Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getDetails();
+
+        Person person = personRepository.findByIdAndUserId(id, userId);
         return ObjectMapperUtils.map(person, PersonDto.class);
     }
-
-    /*@Transactional(readOnly = true)
-    @Override
-    public Page<PersonPreviewDto> searchContact(String text, Pageable pageable) {
-        return personRepository.findAll(Specification.where(PersonSpecification.textInAllColumns(text)), pageable)
-                .map(person -> ObjectMapperUtils.map(person, PersonPreviewDto.class));
-    }*/
 
     @Transactional(readOnly = true)
     @Override
     public Page<PersonPreviewDto> searchContact(PersonFilter personFilter, Pageable pageable) {
+        Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getDetails();
+
+        personFilter.setUserId(userId);
         return personRepository.search(personFilter, pageable)
                 .map(person -> ObjectMapperUtils.map(person, PersonPreviewDto.class));
     }
@@ -66,7 +68,8 @@ public class PersonServiceImpl implements PersonService {
     @Transactional(readOnly = true)
     @Override
     public Page<PersonPreviewDto> getContacts(Pageable pageable) {
-        return personRepository.findAll(pageable)
+        Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getDetails();
+        return personRepository.findAllByUserId(userId, pageable)
                 .map(person -> ObjectMapperUtils.map(person, PersonPreviewDto.class));
     }
 
@@ -79,6 +82,10 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public PersonDto create(@Valid SavePersonDto savePersonDto, MultipartFile[] files) throws IOException {
         Person person = ObjectMapperUtils.map(savePersonDto, Person.class);
+
+        Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getDetails();
+
+        person.setUser(userRepository.getOne(userId));
         person = personRepository.save(person);
 
         List<SaveAttachmentDto> attachments = savePersonDto.getAttachments();
@@ -108,7 +115,10 @@ public class PersonServiceImpl implements PersonService {
     @Transactional
     @Override
     public PersonDto update(long id, @Valid SavePersonDto savePersonDto, MultipartFile[] files) throws IOException {
-        Person person = personRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+
+        Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getDetails();
+
+        Person person = personRepository.findByIdAndUserId(id,userId);
         ObjectMapperUtils.map(savePersonDto, person);
 
         List<SaveAttachmentDto> attachments = savePersonDto.getAttachments();

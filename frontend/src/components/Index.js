@@ -2,6 +2,7 @@ import React from "react";
 import RenderContacts from "./RenderContacts";
 import PagesCount from "./PagesCount";
 import {FormattedMessage} from "react-intl";
+import {request} from "./Utils";
 
 class Index extends React.Component {
     constructor(props) {
@@ -57,24 +58,22 @@ class Index extends React.Component {
     getContactList(page) {
         let refThis = this;
 
-        return fetch("/contacts?page=" + page + "&size=" + this.state.pageSize)
-            .then(function (response) {
-                return response.json();
-            }).then(function (result) {
-                return result;
-            }).then(function (data) {
-                console.log(data);
-                refThis.setState({
-                    contacts: data.content,
-                    offSet: data.number,
-                    isFirst: data.first,
-                    isLast: data.last,
-                    selectedIndex: -1,
-                    showCheckbox: false,
-                    selectedContacts: [],
-                    totalPages: data.totalPages,
-                })
+        request({
+            url: "/api/contacts?page=" + page + "&size=" + this.state.pageSize,
+            method: "GET",
+        }).then(function (data) {
+            console.log(data);
+            refThis.setState({
+                contacts: data.content,
+                offSet: data.number,
+                isFirst: data.first,
+                isLast: data.last,
+                selectedIndex: -1,
+                showCheckbox: false,
+                selectedContacts: [],
+                totalPages: data.totalPages,
             })
+        })
     }
 
     render() {
@@ -84,13 +83,14 @@ class Index extends React.Component {
                 <button disabled={this.state.isFirst} className="btn btn-primary" onClick={this.previousPage}>
                     <FormattedMessage id={"detail.buttons.prev"}/>
                 </button>
-                <PagesCount totalPages={this.state.totalPages} handleSelectedPageChange={this.handleSelectedPageChange}/>
+                <PagesCount totalPages={this.state.totalPages}
+                            handleSelectedPageChange={this.handleSelectedPageChange}/>
                 <button disabled={this.state.isLast} className="btn btn-primary" onClick={this.nextPage}>
                     <FormattedMessage id={"detail.buttons.next"}/>
                 </button>
                 <select className="btn btn-primary"
-                defaultValue={5}
-                onChange={this.inputPageSizeChange}>
+                        defaultValue={5}
+                        onChange={this.inputPageSizeChange}>
                     <option value={5}>5</option>
                     <option value={10}>10</option>
                     <option value={15}>15</option>

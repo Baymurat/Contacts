@@ -1,6 +1,7 @@
 import * as React from "react";
 import RenderContacts from "./RenderContacts";
 import {FormattedMessage} from "react-intl";
+import {request} from "./Utils";
 
 class Search extends React.Component {
 
@@ -48,26 +49,28 @@ class Search extends React.Component {
         let phoneNumber = this.state.phoneNumSearchText;
 
         console.log(text);
-        return fetch("/searchContact?page=" + page + "&size=" + 4 + "&firstAndLastName=" + text +
-            "&currentJob=" + currentJob + "&phoneNumber=" + phoneNumber)
-            .then(function (response) {
-                return response.json();
-            }).then(function (result) {
-                return result;
-            }).then(function (data) {
-                console.log(data);
-                refThis.setState({
-                    contacts: data.content,
-                    offSet: data.number,
-                    isFirst: data.first,
-                    isLast: data.last,
-                    selectedIndex: -1,
-                    showCheckbox: false,
-                    selectedContacts: [],
-                })
-            }).catch(err => {
-                console.log(err.messageText);
-            });
+
+        let url = "/api/searchContact?page=" + page + "&size=" + 4 + "&firstAndLastName=" + text +
+            "&currentJob=" + currentJob + "&phoneNumber=" + phoneNumber;
+        request({
+            url: url,
+
+        }).then(function (result) {
+            return result;
+        }).then(function (data) {
+            console.log(data);
+            refThis.setState({
+                contacts: data.content,
+                offSet: data.number,
+                isFirst: data.first,
+                isLast: data.last,
+                selectedIndex: -1,
+                showCheckbox: false,
+                selectedContacts: [],
+            })
+        }).catch(err => {
+            console.log(err.messageText);
+        });
     }
 
     handleSearchButtonClick() {

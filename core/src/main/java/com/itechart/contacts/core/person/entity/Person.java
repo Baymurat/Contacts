@@ -2,11 +2,11 @@ package com.itechart.contacts.core.person.entity;
 
 import com.itechart.contacts.core.attachment.entity.Attachment;
 import com.itechart.contacts.core.phone.entity.Phone;
+import com.itechart.contacts.core.user.entity.User;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.sql.Date;
 
@@ -55,6 +55,10 @@ public class Person implements Serializable {
     private String email;
     private String country;
     private String city;
+
+    @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @OneToMany(mappedBy = "person", fetch = FetchType.LAZY)
     private List<Phone> phones;

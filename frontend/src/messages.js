@@ -16,6 +16,10 @@ export default {
                 back: "Back",
                 update: "Update",
                 sendEmail: "Send Email",
+                login: "Login",
+                logout: "Logout",
+                signup: "Sign Up",
+                changePassword: "Change Password",
             },
             table: {
                 header: {
@@ -38,9 +42,9 @@ export default {
                 typeHome: "home",
                 fileName: "File name",
                 loadDate: "Load date",
-                name: "*Name",
-                surname: "*Surname",
-                middleName: "*Middlename",
+                name: "Name",
+                surname: "Surname",
+                middleName: "Middlename",
                 dateBirth: "Date birth",
                 gender: "Gender",
                 citizenship: "Citizenship",
@@ -56,6 +60,9 @@ export default {
                 patterns: "Patterns",
                 theme: "Theme",
                 messageContent: "Message content",
+                password: "Password",
+                oldPassword: "Old Password",
+                newPassword: "New Password",
             }
         }
     },
@@ -76,6 +83,10 @@ export default {
                 back: "Назад",
                 update: "Обновить",
                 sendEmail: "Отправить письмо",
+                login: "Войти",
+                logout: "Выйти",
+                signup: "Зарегестрироваться",
+                changePassword: "Поменять пароль",
             },
             table: {
                 header: {
@@ -115,6 +126,9 @@ export default {
                 patterns: "Шаблоны",
                 theme: "Тема",
                 messageContent: "Содержание письма",
+                password: "Пароль",
+                oldPassword: "Старый пароль",
+                newPassword: "Новый пароль",
             }
         }
     }

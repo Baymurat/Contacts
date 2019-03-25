@@ -7,18 +7,6 @@ class Phone extends React.Component {
     constructor(props) {
         super(props);
 
-        this.handleClickAdd = this.handleClickAdd.bind(this);
-        this.handleClickEdit = this.handleClickEdit.bind(this);
-        this.handleClickDelete = this.handleClickDelete.bind(this);
-        this.handleClickModalAccept = this.handleClickModalAccept.bind(this);
-        this.handleClickModalCancel = this.handleClickModalCancel.bind(this);
-
-        this.handleInputCoCode = this.handleInputCoCode.bind(this);
-        this.handleInputOpCode = this.handleInputOpCode.bind(this);
-        this.handleInputPhNumber = this.handleInputPhNumber.bind(this);
-        this.handleInputComments = this.handleInputComments.bind(this);
-        this.handleInputType = this.handleInputType.bind(this);
-
         this.state = {
             selectedIndex: null,
             isSelected: false,
@@ -29,21 +17,6 @@ class Phone extends React.Component {
             comments: "",
             isModalOpen: false,
         }
-    }
-
-    renderButtons() {
-        return <div className="offset-lg-4 col-lg-4 superuserform_companylist animated"
-                    style={{display: this.props.addMode ? 'block' : 'none'}}>
-            <button onClick={this.handleClickAdd} className="btn btn-primary">
-                <FormattedMessage id={"detail.buttons.add"}/>
-            </button>
-            <button disabled={!this.state.isSelected} onClick={this.handleClickEdit} className="btn btn-primary">
-                <FormattedMessage id={"detail.buttons.edit"}/>
-            </button>
-            <button disabled={!this.state.isSelected} onClick={this.handleClickDelete} className="btn btn-danger">
-                <FormattedMessage id={"detail.buttons.delete"}/>
-            </button>
-        </div>
     }
 
     renderTable(number, index) {
@@ -64,14 +37,14 @@ class Phone extends React.Component {
         }));
     }
 
-    handleClickAdd() {
+    handleClickAdd = () => {
         this.setState({
             isModalOpen: true,
             isSelected: false,
         })
-    }
+    };
 
-    handleClickEdit() {
+    handleClickEdit = () => {
         let number = this.props.numbers[this.state.selectedIndex];
 
         this.setState(prevState => ({
@@ -82,9 +55,9 @@ class Phone extends React.Component {
             comments: number.comments,
             isModalOpen: true,
         }));
-    }
+    };
 
-    handleClickDelete() {
+    handleClickDelete = () => {
         let index = this.state.selectedIndex;
         let numbers = this.props.numbers.slice();
         let selectedNumber = numbers[index];
@@ -100,9 +73,9 @@ class Phone extends React.Component {
             isSelected: false,
         });
 
-    }
+    };
 
-    handleClickModalAccept() {
+    handleClickModalAccept = () => {
         let number = {
             codeOfCountry: this.state.countryCode,
             codeOfOperator: this.state.operatorCode,
@@ -123,9 +96,9 @@ class Phone extends React.Component {
         this.props.onNumbersChange(numbers);
 
         this.handleClickModalCancel();
-    }
+    };
 
-    handleClickModalCancel() {
+    handleClickModalCancel = () => {
         this.setState({
             isModalOpen: false,
             isSelected: false,
@@ -134,37 +107,37 @@ class Phone extends React.Component {
             phoneNumber: 0,
             comments: "",
         })
-    }
+    };
 
-    handleInputCoCode(e) {
+    handleInputCoCode = (e) => {
         this.setState({
             countryCode: e.target.value,
         })
-    }
+    };
 
-    handleInputOpCode(e) {
+    handleInputOpCode = (e) => {
         this.setState({
             operatorCode: e.target.value,
         })
-    }
+    };
 
-    handleInputPhNumber(e) {
+    handleInputPhNumber = (e) => {
         this.setState({
             phoneNumber: e.target.value,
         })
-    }
+    };
 
-    handleInputComments(e) {
+    handleInputComments = (e) => {
         this.setState({
             comments: e.target.value,
         })
-    }
+    };
 
-    handleInputType(e) {
+    handleInputType = (e) => {
         this.setState({
             type: e.target.value,
         })
-    }
+    };
 
     render() {
         return <div className="row">
@@ -249,7 +222,18 @@ class Phone extends React.Component {
 
             </div>
 
-            {this.renderButtons()}
+            <div className="offset-lg-4 col-lg-4 superuserform_companylist animated"
+                 style={{display: this.props.addMode ? 'block' : 'none'}}>
+                <button onClick={this.handleClickAdd} className="btn btn-primary">
+                    <FormattedMessage id={"detail.buttons.add"}/>
+                </button>
+                <button disabled={!this.state.isSelected} onClick={this.handleClickEdit} className="btn btn-primary">
+                    <FormattedMessage id={"detail.buttons.edit"}/>
+                </button>
+                <button disabled={!this.state.isSelected} onClick={this.handleClickDelete} className="btn btn-danger">
+                    <FormattedMessage id={"detail.buttons.delete"}/>
+                </button>
+            </div>
         </div>
     }
 }

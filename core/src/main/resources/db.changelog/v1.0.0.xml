@@ -7,10 +7,14 @@
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
     <changeSet id="1" author="murat">
-        <sqlFile path="v1.0.0/script.sql" relativeToChangelogFile="true"/>
+        <sqlFile path="v1.0.0/create_users_table.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
     <changeSet id="2" author="murat">
+        <sqlFile path="v1.0.0/script.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <!--<changeSet id="2" author="murat">
         <sqlFile path="v1.0.0/contacts_db_public_persons.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
@@ -20,6 +24,6 @@
 
     <changeSet id="4" author="murat">
         <sqlFile path="v1.0.0/contacts_db_public_attachments.sql" relativeToChangelogFile="true" />
-    </changeSet>
+    </changeSet>-->
 
 </databaseChangeLog>

@@ -46,6 +46,8 @@ public class PersonCustomRepositoryImpl extends QuerydslRepositorySupport implem
                             .or(phone.phoneNumber.stringValue().contains(String.valueOf(personFilter.getPhoneNumber())))));
         }
 
+        where.and(person.user.id.eq(personFilter.getUserId()));
+
         JPQLQuery<Person> query = from(person)
                 .where(where)
                 .select(person)

@@ -7,14 +7,6 @@ class Attachment extends React.Component {
     constructor(props) {
         super(props);
 
-        this.handleClickAdd = this.handleClickAdd.bind(this);
-        this.handleClickEdit = this.handleClickEdit.bind(this);
-        this.handleClickDelete = this.handleClickDelete.bind(this);
-        this.handleClickModalAccept = this.handleClickModalAccept.bind(this);
-        this.handleClickModalCancel = this.handleClickModalCancel.bind(this);
-
-        this.handleInputComments = this.handleInputComments.bind(this);
-        this.handleInputAttachName = this.handleInputAttachName.bind(this);
         this.state = {
             isModalOpen: false,
             selectedIndex: null,
@@ -27,21 +19,21 @@ class Attachment extends React.Component {
         }
     }
 
-    handleSelectedFile(e) {
+    handleSelectedFile = (e) => {
         this.setState({
             selectedFile: e.target.files[0],
             loaded: 0,
         });
-    }
+    };
 
-    handleClickAdd() {
+    handleClickAdd = () => {
         this.setState({
             isModalOpen: true,
             isSelected: false,
         })
-    }
+    };
 
-    handleClickEdit() {
+    handleClickEdit = () => {
         let attachment = this.props.attachments[this.state.selectedIndex];
 
         this.setState(prevState => ({
@@ -50,9 +42,9 @@ class Attachment extends React.Component {
             loadDate: attachment.loadDate,
             isModalOpen: true,
         }));
-    }
+    };
 
-    handleClickDelete() {
+    handleClickDelete = () => {
         let index = this.state.selectedIndex;
         let attachments = this.props.attachments.slice();
         let selectedAttach = attachments[index];
@@ -67,9 +59,9 @@ class Attachment extends React.Component {
         this.setState({
             isSelected: false,
         })
-    }
+    };
 
-    handleClickModalAccept() {
+    handleClickModalAccept = () => {
         let attachment = {
             fileName: this.state.fileName,
             loadDate: new Date(),
@@ -89,9 +81,9 @@ class Attachment extends React.Component {
         this.props.onAttachmentsChange(attachments);
 
         this.handleClickModalCancel();
-    }
+    };
 
-    handleClickModalCancel() {
+    handleClickModalCancel = () => {
         this.setState({
             isModalOpen: false,
             isSelected: false,
@@ -100,19 +92,19 @@ class Attachment extends React.Component {
             comments: "",
             selectedFile: null,
         })
-    }
+    };
 
-    handleInputAttachName(e) {
+    handleInputAttachName = (e) => {
         this.setState({
             fileName: e.target.value,
         })
-    }
+    };
 
-    handleInputComments(e) {
+    handleInputComments = (e) => {
         this.setState({
             comments: e.target.value,
         })
-    }
+    };
 
     setSelected(index) {
         this.setState(prevState => ({
@@ -133,7 +125,7 @@ class Attachment extends React.Component {
             div = <div className="col-md-4">{attachment.fileName}</div>
         } else {
             div = <div className="col-md-4"><a
-                href={`http://localhost:8080/attachment/${pId}/${attId}`}>{attachment.fileName}</a></div>
+                href={`http://localhost:8080/api/attachment/${pId}/${attId}`}>{attachment.fileName}</a></div>
         }
 
         let loadDate;
@@ -149,22 +141,6 @@ class Attachment extends React.Component {
             {div}
             <div className="col-md-4">{attachment.comments}</div>
             <div className="col-md-4">{loadDate}</div>
-        </div>
-    }
-
-    renderButtons() {
-        return <div className="offset-lg-4 col-lg-4 superuserform_companylist animated"
-                    style={{display: this.props.addMode ? 'block' : 'none'}}>
-            <button onClick={this.handleClickAdd} className="btn btn-primary">
-                <FormattedMessage id={"detail.buttons.add"}/>
-            </button>
-            <button disabled={!this.state.isSelected} onClick={this.handleClickEdit} className="btn btn-primary">
-                <FormattedMessage id={"detail.buttons.edit"}/>
-            </button>
-            <button disabled={!this.state.isSelected} onClick={this.handleClickDelete}
-                    className="btn btn-danger">
-                <FormattedMessage id={"detail.buttons.delete"}/>
-            </button>
         </div>
     }
 
@@ -236,7 +212,19 @@ class Attachment extends React.Component {
 
             </div>
 
-            {this.renderButtons()}
+            <div className="offset-lg-4 col-lg-4 superuserform_companylist animated"
+                 style={{display: this.props.addMode ? 'block' : 'none'}}>
+                <button onClick={this.handleClickAdd} className="btn btn-primary">
+                    <FormattedMessage id={"detail.buttons.add"}/>
+                </button>
+                <button disabled={!this.state.isSelected} onClick={this.handleClickEdit} className="btn btn-primary">
+                    <FormattedMessage id={"detail.buttons.edit"}/>
+                </button>
+                <button disabled={!this.state.isSelected} onClick={this.handleClickDelete}
+                        className="btn btn-danger">
+                    <FormattedMessage id={"detail.buttons.delete"}/>
+                </button>
+            </div>
         </div>
     }
 }

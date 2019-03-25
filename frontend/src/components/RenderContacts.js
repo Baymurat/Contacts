@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "react-router-dom/es/Link";
 import {FormattedMessage} from "react-intl";
+import {request} from "./Utils";
 
 class RenderContacts extends React.Component {
     constructor(props) {
@@ -75,13 +76,10 @@ class RenderContacts extends React.Component {
     }
 
     requestDeleteContacts(data) {
-        fetch("/deleteContacts", {
+        request({
+            url: "/api/deleteContacts",
             method: "POST",
             body: data,
-            headers: {
-                "Content-Type": "application/json",
-                // "Content-Type": "application/x-www-form-urlencoded",
-            },
         }).then(response => {
             if (response.status === 200) {
                 window.location.reload();
@@ -90,18 +88,18 @@ class RenderContacts extends React.Component {
             }
         }).catch(err => {
             console.log(err);
-        })
+        });
     }
 
     requestDeleteOneContact(id) {
-        fetch("/delete/" + id, {
+        request({
+            url: "/api/delete/" + id,
             method: "GET",
-            mode: "no-cors",
-        }).then(response => {
+        }).then(() => {
             window.location.reload();
         }).catch(err => {
             console.log(err.message);
-        })
+        });
     }
 
     renderTable(contact, index) {

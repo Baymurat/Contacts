@@ -4,6 +4,7 @@ import Attachment from "./Attachment";
 import UserData from "./UserData";
 import Link from "react-router-dom/es/Link";
 import {FormattedMessage} from "react-intl";
+import {ACCESS_TOKEN} from "./constants";
 
 class Add extends React.Component {
 
@@ -22,24 +23,6 @@ class Add extends React.Component {
         this.userDataChanged = this.userDataChanged.bind(this);
 
         document.title = "Добавить контакт";
-    }
-
-
-    renderButtons() {
-        return <div className="offset-lg-4 col-lg-4 superuserform_companylist animated fadeIn">
-            <Link to={"/index"}>
-                <button type="button" className="btn btn-primary" onClick={() => {
-                    this.sendData()
-                }}>
-                    <FormattedMessage id={"detail.buttons.accept"}/>
-                </button>
-            </Link>
-            <Link to={"/index"}>
-                <button id="back-to-index" type="button" className="btn btn-primary">
-                    <FormattedMessage id={"detail.buttons.back"}/>
-                </button>
-            </Link>
-        </div>
     }
 
     numbersChanged(newNumbers) {
@@ -108,11 +91,11 @@ class Add extends React.Component {
         formData.append("person", JSON.stringify(contact));
         formData.append("photo", this.state.userData.photoFile);
 
-
-        fetch("/addRecord",
+        fetch("/api/addRecord",
             {
                 method: 'POST',
                 body: formData,
+                headers: {'Authorization': 'Bearer ' + localStorage.getItem(ACCESS_TOKEN)}
             }).then(res => {
             if (res.status === 200) {
 
@@ -128,7 +111,20 @@ class Add extends React.Component {
             <Phone numbers={this.state.numbers} addMode={true} onNumbersChange={this.numbersChanged}/>
             <Attachment attachments={this.state.attachments} addMode={true}
                         onAttachmentsChange={this.attachmentsChanged}/>
-            {this.renderButtons()}
+            <div className="offset-lg-4 col-lg-4 superuserform_companylist animated fadeIn">
+                <Link to={"/index"}>
+                    <button type="button" className="btn btn-primary" onClick={() => {
+                        this.sendData()
+                    }}>
+                        <FormattedMessage id={"detail.buttons.accept"}/>
+                    </button>
+                </Link>
+                <Link to={"/index"}>
+                    <button id="back-to-index" type="button" className="btn btn-primary">
+                        <FormattedMessage id={"detail.buttons.back"}/>
+                    </button>
+                </Link>
+            </div>
         </div>
     }
 }

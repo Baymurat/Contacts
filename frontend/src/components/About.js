@@ -4,6 +4,8 @@ import Phone from "./Phone";
 import Attachment from "./Attachment";
 import Link from "react-router-dom/es/Link";
 import {FormattedMessage} from "react-intl";
+import {request} from "./Utils";
+import {ACCESS_TOKEN} from "./constants";
 
 class About extends React.Component {
     constructor(props) {
@@ -18,18 +20,11 @@ class About extends React.Component {
         document.title = "Контакт";
     }
 
-    renderButtons() {
-        return <div className="offset-lg-4 col-lg-4 superuserform_companylist">
-            <Link to={"/index"}>
-                <button type="button" className="btn btn-primary">
-                    <FormattedMessage id={"detail.buttons.back"}/>
-                </button>
-            </Link>
-        </div>
-    }
-
     componentDidMount() {
-        this.getUserData().then(data => {
+        let link = window.location.href.split("/");
+        let id = link[link.length - 1];
+
+        this.getUserData(id).then(data => {
             if (data) {
                 this.setState({
                     numbers: data.phones,
@@ -39,7 +34,7 @@ class About extends React.Component {
             }
         });
 
-        this.getUserPhoto().then(data => {
+        this.getUserPhoto(id).then(data => {
             if (data !== undefined && data.length > 0) {
                 let newUserData = this.state.userData;
                 newUserData.photo = 'data:image/png;base64,' + data;
@@ -51,25 +46,21 @@ class About extends React.Component {
         });
     }
 
-    getUserData() {
-        let link = window.location.href.split("/");
-        let id = link[link.length - 1];
-
-        return fetch("/contact/" + id, {method: 'GET'}).then(response => {
-            return response.json();
+    getUserData(id) {
+        return request({
+            url: "/api/contact/" + id,
+            method: 'GET'
         }).then(result => {
             return result;
         }).catch(err => {
             console.log(err.message);
-        })
+        });
     }
 
-    getUserPhoto() {
-        let link = window.location.href.split("/");
-        let id = link[link.length - 1];
-
-        return fetch("/photo/" + id, {
+    getUserPhoto(id) {
+        return fetch("/api/photo/" + id, {
             method: 'GET',
+            headers: {'Authorization': 'Bearer ' + localStorage.getItem(ACCESS_TOKEN)}
         }).then(response => {
             return response.text();
         }).catch(err => {
@@ -82,7 +73,13 @@ class About extends React.Component {
             <UserData userData={this.state.userData} addMode={false}/>
             <Phone numbers={this.state.numbers} addMode={false}/>
             <Attachment attachments={this.state.attachments} addMode={false}/>
-            {this.renderButtons()}
+            <div className="offset-lg-4 col-lg-4 superuserform_companylist">
+                <Link to={"/index"}>
+                    <button type="button" className="btn btn-primary">
+                        <FormattedMessage id={"detail.buttons.back"}/>
+                    </button>
+                </Link>
+            </div>
         </div>
     }
 }

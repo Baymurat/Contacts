@@ -1,6 +1,8 @@
 import React from "react";
 import Link from "react-router-dom/es/Link";
 import {FormattedMessage} from "react-intl";
+import {request} from "./Utils";
+import {ACCESS_TOKEN} from "./constants";
 
 class Email extends React.Component {
 
@@ -43,42 +45,33 @@ class Email extends React.Component {
     }
 
     getMessagePatterns() {
-        return fetch("/messagePatterns", {method: "GET"}).then(response => {
-            return response.json();
-        }).then(result => {
-            return result;
+        return request({
+            url: "/api/messagePatterns",
+            method: "GET",
         });
     }
 
     getRecipientsEmail() {
-        return fetch("/getRecipientsEmail", {
+        return request({
+            url: "/api/getRecipientsEmail",
             method: "POST",
             body: JSON.stringify(this.state.selectedContacts),
-            //body: this.state.selectedContacts,
-            headers: {
-                "Content-Type": "application/json",
-            },
-        }).then(response => {
-            return response.json();
-        }).then(result => {
-            return result;
         });
     }
 
     sendEmail() {
         let messageDto = {};
 
-        //messageDto.emailOfReceivers = this.state.recipientsEmail.slice();
         messageDto.receivers = this.state.selectedContacts.slice();
         messageDto.messageSubject = this.state.messageTheme;
         messageDto.messageText = this.state.messageText;
 
-
-        fetch("/sendEmail", {
+        fetch("/api/sendEmail", {
             method: "POST",
             body: JSON.stringify(messageDto),
             headers: {
                 "Content-Type": "application/json",
+                'Authorization': 'Bearer ' + localStorage.getItem(ACCESS_TOKEN)
             },
         }).then(response => {
             if (response.status === 200) {
@@ -89,25 +82,25 @@ class Email extends React.Component {
         })
     }
 
-    handleMessageTextChange(e) {
+    handleMessageTextChange = (e) => {
         this.setState({
             messageText: e.target.value,
         });
-    }
+    };
 
-    handleInputPatternsChange(e) {
+    handleInputPatternsChange = (e) => {
         let value = e.target.value;
         this.setState(prevState => ({
             messageText: prevState.messagePatterns[value],
             messageTheme: value,
         }));
-    }
+    };
 
-    handleInputThemeChange(e) {
+    handleInputThemeChange = (e) => {
         this.setState({
             messageTheme: e.target.value,
         });
-    }
+    };
 
     render() {
         return <div className="offset-lg-4 col-lg-4 superuserform_companylist animated fadeIn">
@@ -119,7 +112,7 @@ class Email extends React.Component {
             <label>
                 <FormattedMessage id={"detail.labels.patterns"}/>
             </label>
-            <select className="custom-select" onChange={(e) => this.handleInputPatternsChange(e)}>
+            <select className="custom-select" onChange={this.handleInputPatternsChange}>
                 {
                     Object.keys(this.state.messagePatterns).map((option, index) => {
                         return (<option key={index} value={option}>{option}</option>)
@@ -130,13 +123,13 @@ class Email extends React.Component {
             <label>
                 <FormattedMessage id={"detail.labels.theme"}/>
             </label>
-            <input type="text" className="form-control" onChange={(e) => this.handleInputThemeChange(e)}
+            <input type="text" className="form-control" onChange={this.handleInputThemeChange}
                    value={this.state.messageTheme}/>
 
             <label>
                 <FormattedMessage id={"detail.labels.messageContent"}/>
             </label>
-            <textarea cols={90} rows={10} onChange={(e) => this.handleMessageTextChange(e)}
+            <textarea cols={90} rows={10} onChange={this.handleMessageTextChange}
                       value={this.state.messageText}/>
 
             <div>

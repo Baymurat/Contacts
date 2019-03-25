@@ -16,7 +16,10 @@ create table persons
   country            varchar(50),
   city               varchar(50),
   street_house_apart varchar(50),
-  p_index            varchar(50)
+  p_index            varchar(50),
+  user_id int
+		constraint persons_users_id_fk
+			references users
 );
 
 alter table persons
