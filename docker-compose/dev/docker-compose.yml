@@ -1,0 +1,20 @@
+version: '3'
+services:
+    myapp:
+        image: baymuratorazov/myapp:dev
+        ports:
+            - 1234:8080
+        links:
+            - db
+        volumes:
+            - //c/data:/usr/local/data
+    db:
+        image: postgres:10.1
+        restart: always
+        ports:
+            - 5432:5432
+        environment:
+            POSTGRES_PASSWORD: root
+            POSTGRES_USER: postgres
+            POSTGRES_DB: contacts_db
+      

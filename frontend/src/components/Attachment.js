@@ -1,6 +1,8 @@
 import React from "react";
 import {Button, Modal, ModalBody, ModalFooter, ModalHeader} from "reactstrap";
 import {FormattedMessage} from "react-intl";
+import {ACCESS_TOKEN} from "./constants";
+import { saveAs } from 'file-saver';
 
 class Attachment extends React.Component {
 
@@ -113,6 +115,22 @@ class Attachment extends React.Component {
         }));
     }
 
+    download = (e) => {
+        e.preventDefault();
+        const headers = new Headers();
+
+        if (localStorage.getItem(ACCESS_TOKEN)) {
+            headers.append('Authorization', 'Bearer ' + localStorage.getItem(ACCESS_TOKEN))
+        }
+
+        let url = e.target.getAttribute('href');
+        fetch(url, {headers: headers})
+            .then(response => response.blob())
+            .then(blob => {
+                saveAs(blob);
+            })
+    };
+
     renderTable(attachment, index) {
         let href = window.location.href.split("/");
         let pId = href[href.length - 1];
@@ -125,7 +143,7 @@ class Attachment extends React.Component {
             div = <div className="col-md-4">{attachment.fileName}</div>
         } else {
             div = <div className="col-md-4"><a
-                href={`http://localhost:8080/api/attachment/${pId}/${attId}`}>{attachment.fileName}</a></div>
+                href={`/api/attachment/${pId}/${attId}`} onClick={(e) => this.download(e)}>{attachment.fileName}</a></div>
         }
 
         let loadDate;

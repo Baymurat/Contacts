@@ -63,6 +63,7 @@ export default {
                 password: "Password",
                 oldPassword: "Old Password",
                 newPassword: "New Password",
+                badCredentials: "The username or password you entered is incorrect",
             }
         }
     },
@@ -129,6 +130,7 @@ export default {
                 password: "Пароль",
                 oldPassword: "Старый пароль",
                 newPassword: "Новый пароль",
+                badCredentials: "Введеный вами логин или пароль не вырный",
             }
         }
     }

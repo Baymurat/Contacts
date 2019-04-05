@@ -119,6 +119,6 @@
     </dependencyManagement>
 
     <build>
-        <finalName>DemoApplication</finalName>
+        <finalName>myapp</finalName>
     </build>
 </project>

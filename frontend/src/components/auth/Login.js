@@ -1,9 +1,12 @@
 import * as React from "react";
-import {request} from "../Utils";
 import {ACCESS_TOKEN} from "../constants";
 import {FormattedMessage} from "react-intl";
 
 class Login extends React.Component {
+
+    state = {
+        badCred: false,
+    };
 
     handleUsernameChange = (e) => {
         this.setState({
@@ -32,14 +35,26 @@ class Login extends React.Component {
             method: "POST",
             body: formData,
         }).then(response => {
-            return response.json();
-        }).then(jsonResponse => {
-            localStorage.setItem(ACCESS_TOKEN, jsonResponse.accessToken);
-            this.props.history.push("/index");
+            if (response.status === 200) {
+                return response.json().then(jsonResponse => {
+                    localStorage.setItem(ACCESS_TOKEN, jsonResponse.accessToken);
+                    this.props.history.push("/index");
+                });
+            } else {
+                this.setState({
+                    badCred: true,
+                });
+            }
         })
     };
 
     render() {
+        let bc = <div>
+            <label>
+                <FormattedMessage id={"detail.labels.badCredentials"}/>
+            </label>
+        </div>;
+
         return (
             <form className="form-signin center animated fadeInUp" id="login-form">
                 <span style={{color: 'red'}} id="error-span"/>
@@ -59,6 +74,9 @@ class Login extends React.Component {
                        className="form-control"
                        placeholder="Пароль" required={true}
                        onChange={this.handlePasswordChange}/>
+                {
+                    this.state.badCred ? bc : ""
+                }
                 <button className="btn btn-lg btn-secondary"
                         type="button"
                         onClick={this.handleButtonClick}>

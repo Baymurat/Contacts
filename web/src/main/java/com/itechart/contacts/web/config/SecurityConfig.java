@@ -27,9 +27,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsServiceImpl userDetailsServiceImpl;
-
     private final JwtAuthenticationEntryPoint unauthorizedHandler;
-
     private final CustomAuthenticationProvider authenticationProvider;
 
     @Autowired
@@ -80,9 +78,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin().loginProcessingUrl("/api/auth/signin").permitAll().usernameParameter("usernameOrEmail").passwordParameter("password")
                 .successHandler(new JwtSuccessHandler()).and()
                 .authorizeRequests()
-                .antMatchers("/api/auth/signin")
+                //.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+                .antMatchers("/",  "/static/**", "/error/**", "/api/auth/signup")
                 .permitAll()
-                .anyRequest().authenticated()
+                .antMatchers("/api/**").authenticated()
                 .and().cors().configurationSource(source)
                 .and()
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
